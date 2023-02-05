@@ -1,5 +1,13 @@
 #include "include/header.hpp"
 
+// https://codeforces.com/blog/entry/61587
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+mt19937_64 rng_64(chrono::steady_clock::now().time_since_epoch().count());
+// mt19937& rng_to_use = rng;
+
+int n = 0;
+ld current_time = 0.0L;
+
 int main(int argc, const char* argv[]) {
 
     ios_base::sync_with_stdio(false); cin.tie(0);
@@ -20,7 +28,7 @@ int main(int argc, const char* argv[]) {
 
     auto result = options.parse(argc, argv);
 
-    int n = result["n"].as<int>();
+    n = result["n"].as<int>();
     ld z0 = result["z0"].as<ld>();
     ld z1 = result["z1"].as<ld>();
     ld Ttx = result["Ttx"].as<ld>();
@@ -28,7 +36,7 @@ int main(int argc, const char* argv[]) {
     int max_ngbrs = result["max_ngbrs"].as<int>();
     int seed = result["seed"].as<int>();
 
-    simulator sim(seed, n, z0, z1, Ttx, min_ngbrs, max_ngbrs);
+    simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs);
     sim.print_graph();
 
 }

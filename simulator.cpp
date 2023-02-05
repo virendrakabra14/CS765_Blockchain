@@ -1,16 +1,29 @@
 #include "include/header.hpp"
 
-simulator::simulator(int seed, int n, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs) {
+simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs) {
     this->seed = seed;
     rng.seed(seed);
     rng_64.seed(seed);
 
-    this->n = n;
-    this->z0 = z0;
-    this->z1 = z1;
+    this->z0 = min(1.0L, max(0.0L, z0));    // fraction in [0,1]
+    this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
 
-    peers_vec = vector<peer>(n, peer(0,0));
+    peers_vec.reserve(n);
+    for (int i=0; i<n; i++) {
+        peers_vec.push_back(peer(i));
+    }
+
+    vector<int> slow_indices = pick_random(n, z0*n);
+    vector<int> lowCPU_indices = pick_random(n, z1*n);
+
+    for(int& i:slow_indices) {
+        peers_vec[i].slow = true;
+    }
+    for(int& i:lowCPU_indices) {
+        peers_vec[i].lowCPU = true;
+    }
+
     adj = vector<vector<int>>(n, vector<int>(0));
     visited = vector<bool>(n, false);
 
@@ -26,15 +39,15 @@ vector<int> simulator::pick_random(int n, int k) {
     unordered_set<int> elems;
 
     for (int r=n-k; r<n; r++) {
-        int v = uniform_int_distribution<>(0, r)(rng_to_use);  // [0,r]
+        int v = uniform_int_distribution<>(0, r)(rng);  // [0,r]
         if (!elems.insert(v).second) {
             elems.insert(r);
         }
     }
 
-    // deterministic order => shuffle it
+    // deterministic order, so shuffle it
     vector<int> result(elems.begin(), elems.end());
-    shuffle(result.begin(), result.end(), rng_to_use);
+    shuffle(result.begin(), result.end(), rng);
 
     return result;
 }
@@ -72,7 +85,7 @@ void simulator::create_graph(int min_ngbrs, int max_ngbrs) {
                 adj_sets[i].clear();
             }
             for (int i=0; i<n; i++) {
-                int req_ngbrs = uniform_int_distribution<>(min_ngbrs,max_ngbrs)(rng_to_use) - adj_sets[i].size();
+                int req_ngbrs = uniform_int_distribution<>(min_ngbrs,max_ngbrs)(rng) - adj_sets[i].size();
                 if(req_ngbrs<0) {
                     done = false;
                     break;
@@ -114,4 +127,19 @@ void simulator::print_graph() {
         }
         cout << '\n';
     }
+}
+
+void simulator::run() {
+    // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
+
+    while(!pq_events.empty()) {
+        event e = pq_events.top();
+        pq_events.pop();
+
+        e.run(*this);
+    }
+}
+
+void simulator::push(event& e) {
+    pq_events.push(e);
 }
