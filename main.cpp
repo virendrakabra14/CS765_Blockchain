@@ -37,6 +37,8 @@ int main(int argc, const char* argv[]) {
     int seed = result["seed"].as<int>();
 
     simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs);
+
     sim.print_graph();
+    sim.run();
 
 }
