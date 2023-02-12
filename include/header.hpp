@@ -95,9 +95,9 @@ class peer {
                             // (used for loop-less fwd-ing)
 
         peer(int id);
-        void generate_txn(simulator& sim);
-        void forward_txn(simulator& sim, txn* txn);
-        void hear_txn(simulator& sim, txn* tran, peer* from);
+        void generate_txn(simulator& sim, event* e);
+        void forward_txn(simulator& sim, event* e);
+        void hear_txn(simulator& sim, event* e);
 };
 
 class simulator {

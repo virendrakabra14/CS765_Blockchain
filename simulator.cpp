@@ -149,6 +149,9 @@ void simulator::print_graph() {
 
 void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
+	//
+	
+	ld Simulation_Time = 10000;
 
     while(!pq_events.empty()) {
         // cout << pq_events.size() << '\n';
@@ -156,7 +159,8 @@ void simulator::run() {
         pq_events.pop();
         
         // if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
-        e->run(*this);
+		if(e->timestamp <= Simulation_Time)
+        	e->run(*this);
     }
 }
 
