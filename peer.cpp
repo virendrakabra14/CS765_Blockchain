@@ -29,17 +29,25 @@ void peer::generate_txn(simulator& sim, event* e) {
     txns_all.insert(t->txn_id);
     txn_sent_to[t->txn_id] = vector<ll>();
 
-    event* fwd_txn = new event(0, 2, this, t);  // 0 (assume no delay within self)
+    event* fwd_txn = new event(e->timestamp + 0, 2, this, t);  // 0 (assume no delay within self)
     sim.push(fwd_txn);
     // cout << "INSIDE PEER: " << sim.pq_events.top()->tran->txn_id << ',' << fwd_txn->tran->txn_id << '\n';
+	
+	
+	// schedule the next transactioin created
+	ld time_txn = exponential_distribution<ld>(1.0L/sim.Ttx)(rng);
+	event* next_gen_event = new event(e->timestamp + time_txn, 1, this);
+	sim.push(next_gen_event);
 
     cout << "generate_txn: node " << this->id << " generated " << t->txn_id << endl;
-
 }
 
-void peer::forward_txn(simulator& sim, event* e) {
+void peer::forward_txn(simulator& sim, event* e ) {
     // fwd txn to peers (except the sender)
     // sets up hear events for peers
+	
+	txn* tran = e->tran;
+	ld timestamp = e->timestamp;
 
     for(int to:sim.adj[this->id]) {
         if(to != this->id || to != e->from->id ||
@@ -52,7 +60,7 @@ void peer::forward_txn(simulator& sim, event* e) {
             ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
             ld latency = sim.rho[this->id][to] + queuing_delay + e->tran->txn_size/link_speed;
 
-            event* hear_tran = new event(latency, 3, &sim.peers_vec[to], e->tran, this);
+            event* hear_tran = new event(timestamp + latency, 3, &sim.peers_vec[to], tran, this);
             sim.push(hear_tran);
         }
     }
@@ -60,6 +68,10 @@ void peer::forward_txn(simulator& sim, event* e) {
 
 void peer::hear_txn(simulator& sim, event* e) {
     // return if already heard
+	//
+	txn* tran = e->tran;
+	peer* from = e->from;
+	ld timestamp = e->timestamp;
 
     if(this->txns_all.find(e->tran->txn_id) != this->txns_all.end()) {
         cout << "hear_txn: node " << this->id << " already heard " << e->tran->txn_id << endl;
@@ -71,7 +83,7 @@ void peer::hear_txn(simulator& sim, event* e) {
         txn_sent_to[e->tran->txn_id] = vector<ll>();
         
         // set up forward event for self
-        event* fwd_txn = new event(0, 2, this, e->tran, e->from);    // 0 (assume no delay within self)
+        event* fwd_txn = new event(timestamp + 0, 2, this, tran);    // 0 (assume no delay within self)
         sim.push(fwd_txn);
     }
 }
