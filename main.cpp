@@ -20,7 +20,7 @@ int main(int argc, const char* argv[]) {
         ("n, nodes", "number of nodes", cxxopts::value<int>()->default_value("10"))
         ("z0, slow", "percentage of slow nodes", cxxopts::value<ld>()->default_value("10"))
         ("z1, low", "percentage of low CPU nodes", cxxopts::value<ld>()->default_value("10"))
-        ("Ttx, txn_interarrival_mean", "transations' mean interarrival time", cxxopts::value<ld>()->default_value("10"))
+        ("Ttx, txn_interarrival_mean", "transactions' mean interarrival time", cxxopts::value<ld>()->default_value("10"))
         ("min_ngbrs", "minimum number of neighbors per node", cxxopts::value<int>()->default_value("4"))
         ("max_ngbrs", "maximum number of neighbors per node", cxxopts::value<int>()->default_value("8"))
         ("seed", "random seed", cxxopts::value<int>()->default_value("0"))
@@ -39,8 +39,10 @@ int main(int argc, const char* argv[]) {
 
 
     simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs);
-
     sim.print_graph();
-    sim.run();
+
+    for(auto&& p:sim.peers_vec) {
+        p.print_all_txns();
+    }
 
 }
