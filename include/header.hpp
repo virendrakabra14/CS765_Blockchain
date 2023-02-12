@@ -29,6 +29,8 @@ struct compare_events;
 struct compare_events_desc;
 class txn;
 struct compare_txns;
+class blk;
+struct compare_blk_ptrs;
 
 class event {
     public:
@@ -37,8 +39,9 @@ class event {
         peer* p;        // can this be done with just `peer& p`?
         txn* tran;
         peer* from;
+        blk* block;
 
-        event(ld timestamp, int type, peer* p=nullptr, txn* tran=nullptr, peer* from=nullptr);
+        event(ld timestamp, int type, peer* p=nullptr, txn* tran=nullptr, peer* from=nullptr, blk* block=nullptr);
         void run(simulator& sim);
 };
 
@@ -70,17 +73,26 @@ class txn {
     public:
         static ll curr_txn_id;
         static ll txn_size;
+        static ll coinbase_fee;
         ll txn_id;
         int IDx, IDy;
         ll C;
         bool coinbase;
-        txn(int IDx, bool coinbase, int IDy, ll C);
+        txn(int IDx, bool coinbase=false, int IDy=-1, ll C=-1);
 };
 
 struct compare_txns {
     // compare events based on id [ascending order]
     inline bool operator() (const txn& txn1, const txn& txn2) {
         return txn1.txn_id<txn2.txn_id;
+    }
+};
+
+struct compare_txn_ptrs {
+    // compare transaction pointers based on txn_id
+    inline bool operator() (const txn* const t1, const txn* const t2) {
+        if(t1->txn_id==t2->txn_id) return t1<t2;
+        else return t1->txn_id<t2->txn_id;
     }
 };
 
@@ -111,8 +123,8 @@ class peer {
         vector<ld> curr_balances;
         bool slow, lowCPU;
         
-        set<txn, compare_txns> txns_not_included;   // txns not included in any block till now
-                                                    // (according to this node)
+        set<txn*, compare_txn_ptrs> txns_not_included;  // txns not included in any block till now
+                                                        // (according to this node)
         set<ll> txns_all;   // IDs of all txns heard by this node till now
                             // (used for loop-less fwd-ing)
         
@@ -126,27 +138,42 @@ class peer {
         peer(int id);
 
         // txn related functions
-        void generate_txn(simulator& sim);
-        void forward_txn(simulator& sim, txn* txn);
-        void hear_txn(simulator& sim, txn* tran, peer* from);
+        void generate_txn(simulator& sim, event* e);
+        void forward_txn(simulator& sim, event* e);
+        void hear_txn(simulator& sim, event* e);
         void print_all_txns();
 
         // blk related functions
-        void generate_blk(simulator& sim);
+        bool is_invalid(vector<ld>& balances);
+        void generate_blk(simulator& sim, event* e);
+        void forward_blk(simulator& sim, event* e);
+        void hear_blk(simulator& sim, event* e);
+        void check_blk(blk* b);
 };
 
 class simulator {
     public:
         int seed;
-        ld z0, z1, Ttx;
+
+        /**
+         * z0:
+         * z1:
+         * Ttx: txn interarrival time
+         * Tblk: block interarrival time
+        */
+        ld z0, z1, Ttx, Tblk;
+        
         ld current_time;
         
         vector<peer> peers_vec;
         vector<vector<int>> adj;    // adjacency list representation
         vector<bool> visited;       // temporary; used for network creation
+
+        // pq for events
         priority_queue<event*, vector<event*>, compare_event_ptrs_desc> pq_events;
                                             // descending for min heap
 
+        // latencies
         ld fast_link_speed, slow_link_speed, queuing_delay_numerator;
         vector<vector<ld>> rho;
 

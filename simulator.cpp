@@ -8,6 +8,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z0 = min(1.0L, max(0.0L, z0));    // fraction in [0,1]
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
+    this->Tblk = 600;
 
     // bits per second
     fast_link_speed = 100*(1<<20);          // 100 Mbps
