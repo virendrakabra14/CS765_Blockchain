@@ -6,6 +6,7 @@
 #include <chrono>
 #include <random>
 #include <vector>
+#include <map>
 #include <set>
 #include <unordered_set>
 #include <queue>
@@ -130,12 +131,15 @@ class peer {
                                                         // (according to this node)
         set<ll> txns_all;   // IDs of all txns heard by this node till now
                             // (used for loop-less fwd-ing)
+        map<ll,vector<ll>> txn_sent_to;
         
         ld fraction_hashing_power;
         
         blk* latest_blk;    // this peer's copy of the blockchain
 
         set<ll> blks_all;
+
+        map<ll,vector<ll>> blk_sent_to;
 
         set<blk*, compare_blk_ptrs> blks_not_included;      // blks heard by this node, but not
                                                             // included in its blockchain copy

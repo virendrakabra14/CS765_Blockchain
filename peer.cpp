@@ -27,6 +27,7 @@ void peer::generate_txn(simulator& sim, event* e) {
     txn* t = new txn(IDx, false, IDy, C);
     txns_not_included.insert(t);
     txns_all.insert(t->txn_id);
+    txn_sent_to[t->txn_id] = vector<ll>();
 
     event* fwd_txn = new event(0, 2, this, t);  // 0 (assume no delay within self)
     sim.push(fwd_txn);
@@ -41,8 +42,11 @@ void peer::forward_txn(simulator& sim, event* e) {
     // sets up hear events for peers
 
     for(int to:sim.adj[this->id]) {
-        if(to != this->id || to != e->from->id) {
+        if(to != this->id || to != e->from->id ||
+            find(txn_sent_to[e->tran->txn_id].begin(),txn_sent_to[e->tran->txn_id].end(),
+            e->from->id) != txn_sent_to[e->tran->txn_id].end()) {
             cout << "forward_txn: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
+            txn_sent_to[e->tran->txn_id].push_back(to);
 
             ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
             ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
@@ -64,6 +68,7 @@ void peer::hear_txn(simulator& sim, event* e) {
     else {
         cout << "hear_txn: node " << this->id << " heard " << e->tran->txn_id << " from " << e->from->id << endl;
         this->txns_all.insert(e->tran->txn_id);
+        txn_sent_to[e->tran->txn_id] = vector<ll>();
         
         // set up forward event for self
         event* fwd_txn = new event(0, 2, this, e->tran, e->from);    // 0 (assume no delay within self)
@@ -155,6 +160,7 @@ void peer::generate_blk(simulator& sim, event* e) {
 
     b->blk_size = curr_blk_size;
     blks_all.insert(b->blk_id);
+    blk_sent_to[b->blk_id] = vector<ll>();
 
     // done creating the block
     // set up forward events
@@ -184,8 +190,11 @@ void peer::forward_blk(simulator& sim, event* e) {
         }
         // broadcast block
         for(int to:sim.adj[this->id]) {
-            if(to != this->id || to != e->from->id) {
+            if(to != this->id || to != e->from->id ||
+                find(blk_sent_to[b->blk_id].begin(),blk_sent_to[b->blk_id].end(),
+                e->from->id) != blk_sent_to[b->blk_id].end()) {
                 cout << "forward_blk: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
+                blk_sent_to[b->blk_id].push_back(to);
 
                 ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
                 ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
@@ -211,6 +220,7 @@ void peer::hear_blk(simulator& sim, event* e) {
 
         cout << "hear_blk: node " << this->id << " heard " << b->blk_id << " from " << e->from->id << endl;
         this->blks_all.insert(b->blk_id);
+        blk_sent_to[b->blk_id] = vector<ll>();
 
         // validate
         bool is_valid = check_blk(b);
@@ -225,6 +235,10 @@ void peer::hear_blk(simulator& sim, event* e) {
                     txns_all.insert(t->txn_id);
                     curr_balances[t->IDx] -= t->C;
                     curr_balances[t->IDy] += t->C;
+
+                    // back to mining
+                    event* e = new event(0, 4, this);
+                    sim.push(e);
                 }
             }
             else {
