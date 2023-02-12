@@ -15,5 +15,6 @@ txn::txn(int IDx, bool coinbase/*=false*/, int IDy/*=-1*/, ll C/*=-1*/) {
     txn_id = txn::curr_txn_id++;
     this->IDx = IDx;
     this->IDy = IDy;
-    this->C = (this->coinbase_fee ? 50 : C);
+    this->coinbase = coinbase;
+    this->C = (coinbase ? this->coinbase_fee : C);
 }

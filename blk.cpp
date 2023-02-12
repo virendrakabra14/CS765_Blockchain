@@ -7,6 +7,7 @@ blk::blk(peer* miner, blk* parent, vector<txn*>& vec_txns) {
     this->blk_id = blk::curr_blk_id++;
     this->miner = miner;
     this->txns = vec_txns;
+    this->blk_size = 0;
     this->update_parent(parent);
 }
 

@@ -167,8 +167,8 @@ void peer::generate_blk(simulator& sim, event* e) {
 
     ld blk_genr_delay = exponential_distribution<ld>(sim.Tblk/this->fraction_hashing_power)(rng);
 
-    event* e = new event(blk_genr_delay, 5, this, nullptr, nullptr, b);
-    sim.push(e);
+    event* fwd_blk = new event(blk_genr_delay, 5, this, nullptr, nullptr, b);
+    sim.push(fwd_blk);
 
 }
 
@@ -251,8 +251,8 @@ void peer::hear_blk(simulator& sim, event* e) {
     }
 
     // back to mining
-    event* e = new event(0, 4, this);
-    sim.push(e);
+    event* mine = new event(0, 4, this);
+    sim.push(mine);
 
 }
 

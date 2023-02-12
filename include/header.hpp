@@ -167,9 +167,8 @@ class simulator {
         /**
          * z0:
          * z1:
-         * Ttx: txn interarrival time
         */
-        ld z0, z1, Ttx;
+        ld z0, z1;
         
         ld current_time;
 
