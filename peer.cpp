@@ -239,6 +239,9 @@ void peer::hear_blk(simulator& sim, event* e) {
             }
             else {
                 blks_not_included.insert(b);
+                for (txn* t:b->txns) {
+                    txns_not_included.insert(t);
+                }
             }
         }
         
