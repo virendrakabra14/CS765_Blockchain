@@ -40,6 +40,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     }
 
     adj = vector<vector<int>>(n, vector<int>(0));
+    rho = vector<vector<ld>>(n, vector<ld>(n, 0.0L));
     visited = vector<bool>(n, false);
 
     this->create_graph(min_ngbrs, max_ngbrs);
@@ -129,6 +130,12 @@ void simulator::create_graph(int min_ngbrs, int max_ngbrs) {
 
     for (int i=0; i<n; i++) {
         adj[i] = vector<int>(adj_sets[i].begin(), adj_sets[i].end());
+    }
+
+    for (int i=0; i<n; i++) {
+        for(auto&& j:adj[i]) {
+            rho[i][j] = (10.0L + (490.0L * uniform_real_distribution<ld>()(rng))) * 0.001;
+        }
     }
 
 }

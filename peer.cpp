@@ -34,7 +34,7 @@ void peer::generate_txn(simulator& sim, event* e) {
     // cout << "INSIDE PEER: " << sim.pq_events.top()->tran->txn_id << ',' << fwd_txn->tran->txn_id << '\n';
 	
 	
-	// schedule the next transactioin created
+	// schedule the next transaction created
 	ld time_txn = exponential_distribution<ld>(1.0L/sim.Ttx)(rng);
 	event* next_gen_event = new event(e->timestamp + time_txn, 1, this);
 	sim.push(next_gen_event);
@@ -110,7 +110,7 @@ void peer::generate_blk(simulator& sim, event* e) {
     bool invalid = uniform_real_distribution<ld>(0.0L,1.0L)(rng) < 0.1L;     // can put prob as cmdline arg
 
     vector<txn*> curr_blk_txns(0);
-    txn* coinbase_txn = new txn(this->id, true, -1, 50);
+    txn* coinbase_txn = new txn(this->id, true, -1, e->tran->coinbase_fee);
     curr_blk_txns.push_back(coinbase_txn); // does this need to be included?
 
     ll curr_blk_size = txn::txn_size;

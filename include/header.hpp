@@ -191,8 +191,7 @@ class simulator {
         vector<vector<ld>> rho; // light propagation delay
 
         ld Tblk; // block interarrival time
-
-        const ld m = 8192; // size of a transaction in bits
+        
         vector<peer> peers_vec;
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
         void print_graph();
