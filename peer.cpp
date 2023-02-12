@@ -152,12 +152,22 @@ void peer::generate_blk(simulator& sim, event* e) {
         }
     }
 
+    b->height = b->parent->height + 1;
+
     // done creating the block
-    // set up forward events
+    // set up forward event
 
     ld blk_genr_delay = exponential_distribution<ld>(sim.Tblk/this->fraction_hashing_power)(rng);
 
     event* e = new event(blk_genr_delay, 5, this, nullptr, nullptr, b);
     sim.push(e);
+
+}
+
+void peer::forward_blk(simulator& sim, event* e) {
+    // forward a mined block
+
+    // // if the block being forwarded doesn't have 
+    // if(e->block->parent->id != this->latest_blk->parent->id) return;
 
 }

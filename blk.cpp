@@ -7,7 +7,9 @@ blk::blk(peer* miner, blk* parent, vector<txn*>& vec_txns) {
     this->blk_id = blk::curr_blk_id++;
     this->miner = miner;
     this->parent = parent;
-    parent->children.push_back(this);
+    if(parent != nullptr) {
+        parent->children.push_back(this);
+        this->height = parent->height+1;
+    }
     this->txns = vec_txns;
-    this->height = parent->height+1;
 }

@@ -7,7 +7,7 @@ ll txn::coinbase_fee = 50;
 
 txn::txn(int IDx, bool coinbase/*=false*/, int IDy/*=-1*/, ll C/*=-1*/) {
     // TxnID: IDx pays IDy C coins
-    // TxnID: IDk mines 50 coins
+    // TxnID: IDx mines 50 coins
 
     assert(IDx>=0 && IDx<=n);
     assert(coinbase || (IDy>=0 && IDy<=n && C>=0));
@@ -15,5 +15,5 @@ txn::txn(int IDx, bool coinbase/*=false*/, int IDy/*=-1*/, ll C/*=-1*/) {
     this->txn_id = txn::curr_txn_id++;
     this->IDx = IDx;
     this->IDy = IDy;
-    this->C = (this->coinbase_fee ? 50 : C);
+    this->C = (coinbase ? txn::coinbase_fee : C);
 }
