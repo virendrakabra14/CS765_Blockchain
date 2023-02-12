@@ -29,7 +29,7 @@ void peer::generate_txn(simulator& sim, event* e) {
     txns_all.insert(t->txn_id);
     txn_sent_to[t->txn_id] = vector<ll>();
 
-    event* fwd_txn = new event(e->timestamp + 0, 2, this, t);  // 0 (assume no delay within self)
+    event* fwd_txn = new event(e->timestamp + 0, 2, this, t, this);  // 0 (assume no delay within self)
     sim.push(fwd_txn);
     // cout << "INSIDE PEER: " << sim.pq_events.top()->tran->txn_id << ',' << fwd_txn->tran->txn_id << '\n';
 	
@@ -42,7 +42,7 @@ void peer::generate_txn(simulator& sim, event* e) {
     cout << "generate_txn: node " << this->id << " generated " << t->txn_id << endl;
 }
 
-void peer::forward_txn(simulator& sim, event* e ) {
+void peer::forward_txn(simulator& sim, event* e) {
     // fwd txn to peers (except the sender)
     // sets up hear events for peers
 	
@@ -50,9 +50,9 @@ void peer::forward_txn(simulator& sim, event* e ) {
 	ld timestamp = e->timestamp;
 
     for(int to:sim.adj[this->id]) {
-        if(to != this->id || to != e->from->id ||
+        if(to != this->id && to != e->from->id &&
             find(txn_sent_to[e->tran->txn_id].begin(),txn_sent_to[e->tran->txn_id].end(),
-            e->from->id) != txn_sent_to[e->tran->txn_id].end()) {
+            to) == txn_sent_to[e->tran->txn_id].end()) {
             cout << "forward_txn: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
             txn_sent_to[e->tran->txn_id].push_back(to);
 
@@ -83,7 +83,7 @@ void peer::hear_txn(simulator& sim, event* e) {
         txn_sent_to[e->tran->txn_id] = vector<ll>();
         
         // set up forward event for self
-        event* fwd_txn = new event(timestamp + 0, 2, this, tran);    // 0 (assume no delay within self)
+        event* fwd_txn = new event(timestamp + 0, 2, this, tran, from);    // 0 (assume no delay within self)
         sim.push(fwd_txn);
     }
 }
@@ -202,9 +202,9 @@ void peer::forward_blk(simulator& sim, event* e) {
         // }
         // broadcast block
         for(int to:sim.adj[this->id]) {
-            if(to != this->id || to != e->from->id ||
+            if(to != this->id && to != e->from->id &&
                 find(blk_sent_to[b->blk_id].begin(),blk_sent_to[b->blk_id].end(),
-                e->from->id) != blk_sent_to[b->blk_id].end()) {
+                to) == blk_sent_to[b->blk_id].end()) {
                 cout << "forward_blk: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
                 blk_sent_to[b->blk_id].push_back(to);
 

@@ -26,7 +26,6 @@ event run: type=3
 hear_txn: node 3 heard 0 from 7
 event run: type=2
 forward_txn: node 3 forwarded 0 to 8
-forward_txn: node 3 forwarded 0 to 7
 forward_txn: node 3 forwarded 0 to 6
 forward_txn: node 3 forwarded 0 to 4
 forward_txn: node 3 forwarded 0 to 5
@@ -47,104 +46,134 @@ forward_txn: node 6 forwarded 3 to 4
 forward_txn: node 6 forwarded 3 to 3
 forward_txn: node 6 forwarded 3 to 0
 event run: type=1
-generate_txn: node 5 generated 4
+generate_txn: node 8 generated 4
 event run: type=2
-forward_txn: node 5 forwarded 4 to 9
-forward_txn: node 5 forwarded 4 to 0
-forward_txn: node 5 forwarded 4 to 2
-forward_txn: node 5 forwarded 4 to 7
-forward_txn: node 5 forwarded 4 to 8
-forward_txn: node 5 forwarded 4 to 4
-forward_txn: node 5 forwarded 4 to 3
-forward_txn: node 5 forwarded 4 to 1
+forward_txn: node 8 forwarded 4 to 5
+forward_txn: node 8 forwarded 4 to 4
+forward_txn: node 8 forwarded 4 to 3
+forward_txn: node 8 forwarded 4 to 2
+forward_txn: node 8 forwarded 4 to 1
 event run: type=1
-generate_txn: node 6 generated 5
+generate_txn: node 5 generated 5
 event run: type=2
-forward_txn: node 6 forwarded 5 to 1
-forward_txn: node 6 forwarded 5 to 4
-forward_txn: node 6 forwarded 5 to 3
-forward_txn: node 6 forwarded 5 to 0
+forward_txn: node 5 forwarded 5 to 9
+forward_txn: node 5 forwarded 5 to 0
+forward_txn: node 5 forwarded 5 to 2
+forward_txn: node 5 forwarded 5 to 7
+forward_txn: node 5 forwarded 5 to 8
+forward_txn: node 5 forwarded 5 to 4
+forward_txn: node 5 forwarded 5 to 3
+forward_txn: node 5 forwarded 5 to 1
 event run: type=1
-generate_txn: node 9 generated 6
+generate_txn: node 5 generated 6
 event run: type=2
-forward_txn: node 9 forwarded 6 to 5
-forward_txn: node 9 forwarded 6 to 2
-forward_txn: node 9 forwarded 6 to 1
-forward_txn: node 9 forwarded 6 to 0
+forward_txn: node 5 forwarded 6 to 9
+forward_txn: node 5 forwarded 6 to 0
+forward_txn: node 5 forwarded 6 to 2
+forward_txn: node 5 forwarded 6 to 7
+forward_txn: node 5 forwarded 6 to 8
+forward_txn: node 5 forwarded 6 to 4
+forward_txn: node 5 forwarded 6 to 3
+forward_txn: node 5 forwarded 6 to 1
 event run: type=1
-generate_txn: node 8 generated 7
+generate_txn: node 6 generated 7
 event run: type=2
-forward_txn: node 8 forwarded 7 to 5
-forward_txn: node 8 forwarded 7 to 4
-forward_txn: node 8 forwarded 7 to 3
-forward_txn: node 8 forwarded 7 to 2
-forward_txn: node 8 forwarded 7 to 1
+forward_txn: node 6 forwarded 7 to 1
+forward_txn: node 6 forwarded 7 to 4
+forward_txn: node 6 forwarded 7 to 3
+forward_txn: node 6 forwarded 7 to 0
+event run: type=1
+generate_txn: node 9 generated 8
+event run: type=2
+forward_txn: node 9 forwarded 8 to 5
+forward_txn: node 9 forwarded 8 to 2
+forward_txn: node 9 forwarded 8 to 1
+forward_txn: node 9 forwarded 8 to 0
+event run: type=1
+generate_txn: node 8 generated 9
+event run: type=2
+forward_txn: node 8 forwarded 9 to 5
+forward_txn: node 8 forwarded 9 to 4
+forward_txn: node 8 forwarded 9 to 3
+forward_txn: node 8 forwarded 9 to 2
+forward_txn: node 8 forwarded 9 to 1
+event run: type=1
+generate_txn: node 6 generated 10
+event run: type=2
+forward_txn: node 6 forwarded 10 to 1
+forward_txn: node 6 forwarded 10 to 4
+forward_txn: node 6 forwarded 10 to 3
+forward_txn: node 6 forwarded 10 to 0
 event run: type=3
-hear_txn: node 0 heard 4 from 5
+hear_txn: node 3 heard 4 from 8
 event run: type=2
-forward_txn: node 0 forwarded 4 to 5
-forward_txn: node 0 forwarded 4 to 2
-forward_txn: node 0 forwarded 4 to 6
-forward_txn: node 0 forwarded 4 to 4
-forward_txn: node 0 forwarded 4 to 1
-forward_txn: node 0 forwarded 4 to 3
-forward_txn: node 0 forwarded 4 to 9
+forward_txn: node 3 forwarded 4 to 7
+forward_txn: node 3 forwarded 4 to 6
+forward_txn: node 3 forwarded 4 to 4
+forward_txn: node 3 forwarded 4 to 5
+forward_txn: node 3 forwarded 4 to 0
+event run: type=3
+hear_txn: node 4 heard 7 from 6
+event run: type=2
+forward_txn: node 4 forwarded 7 to 2
+forward_txn: node 4 forwarded 7 to 5
+forward_txn: node 4 forwarded 7 to 8
+forward_txn: node 4 forwarded 7 to 7
+forward_txn: node 4 forwarded 7 to 3
+forward_txn: node 4 forwarded 7 to 0
+event run: type=3
+hear_txn: node 0 heard 7 from 4
+event run: type=2
+forward_txn: node 0 forwarded 7 to 5
+forward_txn: node 0 forwarded 7 to 2
+forward_txn: node 0 forwarded 7 to 6
+forward_txn: node 0 forwarded 7 to 1
+forward_txn: node 0 forwarded 7 to 3
+forward_txn: node 0 forwarded 7 to 9
+event run: type=3
+hear_txn: node 2 heard 4 from 8
+event run: type=2
+forward_txn: node 2 forwarded 4 to 5
+forward_txn: node 2 forwarded 4 to 4
+forward_txn: node 2 forwarded 4 to 0
+forward_txn: node 2 forwarded 4 to 9
+forward_txn: node 2 forwarded 4 to 1
 event run: type=3
 hear_txn: node 1 heard 1 from 7
 event run: type=2
 forward_txn: node 1 forwarded 1 to 6
-forward_txn: node 1 forwarded 1 to 7
 forward_txn: node 1 forwarded 1 to 9
 forward_txn: node 1 forwarded 1 to 5
 forward_txn: node 1 forwarded 1 to 2
 forward_txn: node 1 forwarded 1 to 8
 forward_txn: node 1 forwarded 1 to 0
 event run: type=1
-generate_txn: node 0 generated 8
+generate_txn: node 0 generated 11
 event run: type=2
-forward_txn: node 0 forwarded 8 to 5
-forward_txn: node 0 forwarded 8 to 2
-forward_txn: node 0 forwarded 8 to 6
-forward_txn: node 0 forwarded 8 to 4
-forward_txn: node 0 forwarded 8 to 1
-forward_txn: node 0 forwarded 8 to 3
-forward_txn: node 0 forwarded 8 to 9
+forward_txn: node 0 forwarded 11 to 5
+forward_txn: node 0 forwarded 11 to 2
+forward_txn: node 0 forwarded 11 to 6
+forward_txn: node 0 forwarded 11 to 4
+forward_txn: node 0 forwarded 11 to 1
+forward_txn: node 0 forwarded 11 to 3
+forward_txn: node 0 forwarded 11 to 9
 event run: type=1
-generate_txn: node 5 generated 9
+generate_txn: node 4 generated 12
 event run: type=2
-forward_txn: node 5 forwarded 9 to 9
-forward_txn: node 5 forwarded 9 to 0
-forward_txn: node 5 forwarded 9 to 2
-forward_txn: node 5 forwarded 9 to 7
-forward_txn: node 5 forwarded 9 to 8
-forward_txn: node 5 forwarded 9 to 4
-forward_txn: node 5 forwarded 9 to 3
-forward_txn: node 5 forwarded 9 to 1
-event run: type=1
-generate_txn: node 4 generated 10
-event run: type=2
-forward_txn: node 4 forwarded 10 to 2
-forward_txn: node 4 forwarded 10 to 5
-forward_txn: node 4 forwarded 10 to 8
-forward_txn: node 4 forwarded 10 to 6
-forward_txn: node 4 forwarded 10 to 7
-forward_txn: node 4 forwarded 10 to 3
-forward_txn: node 4 forwarded 10 to 0
-event run: type=1
-generate_txn: node 8 generated 11
-event run: type=2
-forward_txn: node 8 forwarded 11 to 5
-forward_txn: node 8 forwarded 11 to 4
-forward_txn: node 8 forwarded 11 to 3
-forward_txn: node 8 forwarded 11 to 2
-forward_txn: node 8 forwarded 11 to 1
-IDs of txns heard by 0: 4 8 
+forward_txn: node 4 forwarded 12 to 2
+forward_txn: node 4 forwarded 12 to 5
+forward_txn: node 4 forwarded 12 to 8
+forward_txn: node 4 forwarded 12 to 6
+forward_txn: node 4 forwarded 12 to 7
+forward_txn: node 4 forwarded 12 to 3
+forward_txn: node 4 forwarded 12 to 0
+IDs of txns heard by 0: 7 11 
 IDs of txns heard by 1: 1 
-IDs of txns heard by 2: 
-IDs of txns heard by 3: 0 
-IDs of txns heard by 4: 10 
-IDs of txns heard by 5: 4 9 
-IDs of txns heard by 6: 3 5 
+IDs of txns heard by 2: 4 
+IDs of txns heard by 3: 0 4 
+IDs of txns heard by 4: 7 12 
+IDs of txns heard by 5: 5 6 
+IDs of txns heard by 6: 3 7 10 
 IDs of txns heard by 7: 0 1 
-IDs of txns heard by 8: 2 7 11 
-IDs of txns heard by 9: 6 
+IDs of txns heard by 8: 2 4 9 
+IDs of txns heard by 9: 8 
