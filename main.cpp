@@ -39,4 +39,8 @@ int main(int argc, const char* argv[]) {
     simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs);
     sim.print_graph();
 
+    for(auto&& p:sim.peers_vec) {
+        p.print_all_txns();
+    }
+
 }

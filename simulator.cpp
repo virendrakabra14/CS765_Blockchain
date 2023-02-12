@@ -8,11 +8,21 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z0 = min(1.0L, max(0.0L, z0));    // fraction in [0,1]
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
-    this->rho = uniform_real_distribution<ld>(10,500)(rng) * 0.001; // 10ms to 500ms
+    this->Tblk = 600;
+
+    // bits per second
+    fast_link_speed = 100*(1<<20);          // 100 Mbps
+    slow_link_speed = 5*(1<<20);            // 5 Mbps
+    queuing_delay_numerator = 96*(1<<10);   // 96 kbps
 
     peers_vec.reserve(n);
     for (int i=0; i<n; i++) {
         peers_vec.push_back(peer(i));
+
+        // initialize events (generate_txn)
+        ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
+        event* e = new event(time_txn, 1, &peers_vec[i]);
+        this->push(e);
     }
 
     vector<int> slow_indices = pick_random(n, z0*n);
@@ -23,6 +33,10 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     }
     for(int& i:lowCPU_indices) {
         peers_vec[i].lowCPU = true;
+    }
+    for (int i=0; i<n; i++) {
+        if(peers_vec[i].lowCPU) peers_vec[i].fraction_hashing_power = 1.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
+        else peers_vec[i].fraction_hashing_power = 10.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
     }
 
     adj = vector<vector<int>>(n, vector<int>(0));
@@ -134,13 +148,18 @@ void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
 
     while(!pq_events.empty()) {
-        event e = pq_events.top();
+        // cout << pq_events.size() << '\n';
+        event* e = pq_events.top();
         pq_events.pop();
+        
+        // if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
+        e->run(*this);
 
-        e.run(*this);
+        // clean up (delete event, and probably the associated txn)
+        // (define destructor for event)
     }
 }
 
-void simulator::push(event& e) {
+void simulator::push(event* e) {
     pq_events.push(e);
 }
