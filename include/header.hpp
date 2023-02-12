@@ -58,6 +58,14 @@ struct compare_events_desc {
     }
 };
 
+struct compare_event_ptrs_desc {
+    // compare event pointers based on timestamp [descending order]
+    inline bool operator() (const event* const e1, const event* const e2) {
+        if(e1->timestamp==e2->timestamp) return e1>e2;
+        else return e1->timestamp>e2->timestamp;
+    }
+};
+
 class txn {
     public:
         static ll curr_txn_id;
@@ -101,7 +109,7 @@ class simulator {
         vector<peer> peers_vec;
         vector<vector<int>> adj;    // adjacency list representation
         vector<bool> visited;       // temporary; used for network creation
-        priority_queue<event, vector<event>, compare_events_desc> pq_events;
+        priority_queue<event*, vector<event*>, compare_event_ptrs_desc> pq_events;
                                             // descending for min heap
 
         ld fast_link_speed, slow_link_speed, queuing_delay_numerator;
@@ -114,7 +122,7 @@ class simulator {
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
         void print_graph();
         void run();
-        void push(event& e);
+        void push(event* e);
 
 };
 

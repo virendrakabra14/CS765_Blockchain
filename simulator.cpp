@@ -20,7 +20,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
 
         // initialize events (generate_txn)
         ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
-        event e(time_txn, 1, &peers_vec[i]);
+        event* e = new event(time_txn, 1, &peers_vec[i]);
         this->push(e);
     }
 
@@ -151,13 +151,15 @@ void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
 
     while(!pq_events.empty()) {
-        event e = pq_events.top();
+        cout << pq_events.size() << '\n';
+        event* e = pq_events.top();
         pq_events.pop();
-
-        e.run(*this);
+        
+        if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
+        e->run(*this);
     }
 }
 
-void simulator::push(event& e) {
+void simulator::push(event* e) {
     pq_events.push(e);
 }
