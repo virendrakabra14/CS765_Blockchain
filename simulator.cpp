@@ -1,4 +1,5 @@
 #include "include/header.hpp"
+#include <random>
 
 simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs) {
     this->seed = seed;
@@ -17,7 +18,6 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     peers_vec.reserve(n);
     for (int i=0; i<n; i++) {
         peers_vec.push_back(peer(i));
-
         // initialize events (generate_txn)
         ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
         event* e = new event(time_txn, 1, &peers_vec[i]);
