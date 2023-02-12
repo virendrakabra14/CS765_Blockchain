@@ -1,5 +1,5 @@
 SOURCE=./
-BUILD=./build/
+BUILD=../build/
 
 all: $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)blk.o $(BUILD)main.o ./sim
 

@@ -155,7 +155,7 @@ void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
 	//
 	
-	ld Simulation_Time = 10000;
+	ld Simulation_Time = 10;
 
     while(!pq_events.empty()) {
         // cout << pq_events.size() << '\n';
