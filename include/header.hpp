@@ -35,10 +35,9 @@ class event {
         ld timestamp;
         int type;
         peer* p;        // can this be done with just `peer& p`?
-        txn* tran;
-        peer* from;
+        txn* t;
 
-        event(ld timestamp, int type, peer* p=nullptr, txn* tran=nullptr, peer* from=nullptr);
+        event(ld timestamp, int type, peer* p, txn* t);
         void run(simulator& sim);
 };
 
@@ -60,9 +59,8 @@ struct compare_events_desc {
 
 class txn {
     public:
-        static ll curr_txn_id;
-        static ld txn_size;
-        ll txn_id;
+        static int curr_txn_id;
+        int txn_id;
         int IDx, IDy;
         ll C;
         bool coinbase;
@@ -79,38 +77,36 @@ struct compare_txns {
 class peer {
     public:
         int id;
+        ld next_time;
         vector<ld> curr_balances;
         bool slow, lowCPU;
         set<txn, compare_txns> txns_not_included;   // txns not included in any block till now
                                                     // (according to this node)
-        set<ll> txns_all;   // IDs of all txns heard by this node till now
-                            // (used for loop-less fwd-ing)
 
         peer(int id);
         void generate_txn(simulator& sim);
-        void forward_txn(simulator& sim, txn* txn);
-        void hear_txn(simulator& sim, txn* tran, peer* from);
+        void forward_txn(simulator& sim, txn* t);
 };
 
 class simulator {
-    public:
+    private:
         int seed;
-        ld z0, z1, Ttx;
+        ld z0, z1;
         ld current_time;
         
-        vector<peer> peers_vec;
         vector<vector<int>> adj;    // adjacency list representation
         vector<bool> visited;       // temporary; used for network creation
         priority_queue<event, vector<event>, compare_events_desc> pq_events;
                                             // descending for min heap
 
-        ld fast_link_speed, slow_link_speed, queuing_delay_numerator;
-        vector<vector<ld>> rho;
-
         void create_graph(int a, int b);
         vector<int> pick_random(int n, int k);
         void dfs(int node, vector<unordered_set<int>>& adj_sets);
 
+    public:
+        ld Ttx, rho; // txn mean time and light propagation delay
+        const ld m = 8192; // size of a transaction in bits
+        vector<peer> peers_vec;
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
         void print_graph();
         void run();

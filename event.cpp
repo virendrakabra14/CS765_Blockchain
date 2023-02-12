@@ -1,11 +1,10 @@
 #include "include/header.hpp"
 
-event::event(ld timestamp, int type, peer* p/*=nullptr*/, txn* tran/*=nullptr*/, peer* from/*=nullptr*/) {
+event::event(ld timestamp, int type, peer* p=nullptr, txn* t=nullptr) {
     this->timestamp = timestamp;
     this->type = type;
     this->p = p;
-    this->tran = tran;
-    this->from = from;
+    this->t = t;
 }
 
 void event::run(simulator& sim) {
@@ -15,10 +14,7 @@ void event::run(simulator& sim) {
             p->generate_txn(sim);
             break;
         case 2:
-            p->forward_txn(sim, tran);
-            break;
-        case 3:
-            p->hear_txn(sim, tran, from);
+            p->forward_txn(sim, t);
             break;
         default:
             cout << "incorrect event type: " << type << '\n';

@@ -8,20 +8,11 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z0 = min(1.0L, max(0.0L, z0));    // fraction in [0,1]
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
-
-    // bits per second
-    fast_link_speed = 100*(1<<20);          // 100 Mbps
-    slow_link_speed = 5*(1<<20);            // 5 Mbps
-    queuing_delay_numerator = 96*(1<<10);   // 96 kbps
+    this->rho = uniform_real_distribution<ld>(10,500)(rng) * 0.001; // 10ms to 500ms
 
     peers_vec.reserve(n);
     for (int i=0; i<n; i++) {
         peers_vec.push_back(peer(i));
-
-        // initialize events (generate_txn)
-        ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
-        event e(time_txn, 1, &peers_vec[i]);
-        this->push(e);
     }
 
     vector<int> slow_indices = pick_random(n, z0*n);
@@ -38,14 +29,6 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     visited = vector<bool>(n, false);
 
     this->create_graph(min_ngbrs, max_ngbrs);
-
-    rho = vector<vector<ld>>(n, vector<ld>(n));
-    for (int i=0; i<n; i++) {
-        for (int j=0; j<n; j++) {
-            rho[i][j] = ((ld)uniform_int_distribution<>(10,500)(rng))/1000;     // 10 to 500 ms
-                                                                                // considering steps of 1 ms
-        }
-    }
 }
 
 vector<int> simulator::pick_random(int n, int k) {
