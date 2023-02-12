@@ -178,16 +178,16 @@ void peer::forward_blk(simulator& sim, event* e) {
     blk* b = e->block;
     if (b->height == this->latest_blk->height + 1) {
         // same longest chain so broadcast
-        cout << "Previous block ID: " << this->latest_blk->blk_id << endl;
-        cout << "Transactions in block:" << endl;
-        for (txn* t:b->txns) {
-            if (t->coinbase) {
-                cout << t->txn_id << ": " << t->IDx << " mines " << t->C << " coins" << endl;
-            }
-            else {
-                cout << t->txn_id << ": " << t->IDx << " pays " << t->IDy << " " << t->C << " coins" << endl;
-            }
-        }
+        // cout << "Previous block ID: " << this->latest_blk->blk_id << endl;
+        // cout << "Transactions in block:" << endl;
+        // for (txn* t:b->txns) {
+        //     if (t->coinbase) {
+        //         cout << t->txn_id << ": " << t->IDx << " mines " << t->C << " coins" << endl;
+        //     }
+        //     else {
+        //         cout << t->txn_id << ": " << t->IDx << " pays " << t->IDy << " " << t->C << " coins" << endl;
+        //     }
+        // }
         // broadcast block
         for(int to:sim.adj[this->id]) {
             if(to != this->id || to != e->from->id ||
@@ -235,10 +235,6 @@ void peer::hear_blk(simulator& sim, event* e) {
                     txns_all.insert(t->txn_id);
                     curr_balances[t->IDx] -= t->C;
                     curr_balances[t->IDy] += t->C;
-
-                    // back to mining
-                    event* e = new event(0, 4, this);
-                    sim.push(e);
                 }
             }
             else {
@@ -250,6 +246,10 @@ void peer::hear_blk(simulator& sim, event* e) {
         event* fwd_blk = new event(0, 5, this, nullptr, e->from, b);    // 0 (assume no delay within self)
         sim.push(fwd_blk);
     }
+
+    // back to mining
+    event* e = new event(0, 4, this);
+    sim.push(e);
 
 }
 
