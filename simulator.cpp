@@ -33,6 +33,10 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     for(int& i:lowCPU_indices) {
         peers_vec[i].lowCPU = true;
     }
+    for (int i=0; i<n; i++) {
+        if(peers_vec[i].lowCPU) peers_vec[i].fraction_hashing_power = 1.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
+        else peers_vec[i].fraction_hashing_power = 10.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
+    }
 
     adj = vector<vector<int>>(n, vector<int>(0));
     visited = vector<bool>(n, false);
@@ -157,6 +161,9 @@ void simulator::run() {
         
         // if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
         e->run(*this);
+
+        // clean up (delete event, and probably the associated txn)
+        // (define destructor for event)
     }
 }
 

@@ -69,7 +69,7 @@ struct compare_event_ptrs_desc {
 class txn {
     public:
         static ll curr_txn_id;
-        static ld txn_size;
+        static ll txn_size;
         ll txn_id;
         int IDx, IDy;
         ll C;
@@ -84,20 +84,55 @@ struct compare_txns {
     }
 };
 
+class blk {
+    public:
+        static ll curr_blk_id;
+        static ll max_blk_size;
+        ll blk_id;
+        peer* miner;
+        blk* parent;
+        vector<blk*> children;
+        vector<txn*> txns;
+        ll height;
+        blk(peer* miner, blk* parent, vector<txn*>& vec_txns);
+};
+
+struct compare_blk_ptrs {
+    // compare block pointers based on height
+    inline bool operator() (const blk* const b1, const blk* const b2) {
+        if(b1->height==b2->height) return b1<b2;
+        else return b1->height<b2->height;
+    }
+};
+
 class peer {
     public:
         int id;
         vector<ld> curr_balances;
         bool slow, lowCPU;
+        
         set<txn, compare_txns> txns_not_included;   // txns not included in any block till now
                                                     // (according to this node)
         set<ll> txns_all;   // IDs of all txns heard by this node till now
                             // (used for loop-less fwd-ing)
+        
+        ld fraction_hashing_power;
+        
+        blk* latest_blk;    // this peer's copy of the blockchain
+
+        set<blk*, compare_blk_ptrs> blks_not_included;      // blks heard by this node, but not
+                                                            // included in its blockchain copy
 
         peer(int id);
+
+        // txn related functions
         void generate_txn(simulator& sim);
         void forward_txn(simulator& sim, txn* txn);
         void hear_txn(simulator& sim, txn* tran, peer* from);
+        void print_all_txns();
+
+        // blk related functions
+        void generate_blk(simulator& sim);
 };
 
 class simulator {

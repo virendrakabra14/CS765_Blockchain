@@ -41,4 +41,8 @@ int main(int argc, const char* argv[]) {
     sim.print_graph();
     sim.run();
 
+    for(auto&& p:sim.peers_vec) {
+        p.print_all_txns();
+    }
+
 }

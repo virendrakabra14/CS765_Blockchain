@@ -2,6 +2,8 @@
 
 peer::peer(int id) {
     this->id = id;
+    this->slow = false;
+    this->lowCPU = false;
     curr_balances = vector<ld>(n, 0ll);
 }
 
@@ -23,7 +25,7 @@ void peer::generate_txn(simulator& sim) {
     }
 
     txn* t = new txn(IDx, false, IDy, C);
-    txns_not_included.insert(*t);
+    txns_not_included.insert(*t);       // a _copy_ of the txn is stored at this node
     txns_all.insert(t->txn_id);
 
     event* fwd_txn = new event(0, 2, this, t);  // 0 (assume no delay within self)
@@ -56,6 +58,7 @@ void peer::hear_txn(simulator& sim, txn* tran, peer* from) {
     // return if already heard
 
     if(this->txns_all.find(tran->txn_id) != this->txns_all.end()) {
+        cout << "hear_txn: node " << this->id << " already heard " << tran->txn_id << endl;
         return;
     }
     else {
@@ -66,4 +69,12 @@ void peer::hear_txn(simulator& sim, txn* tran, peer* from) {
         event* fwd_txn = new event(0, 2, this, tran);    // 0 (assume no delay within self)
         sim.push(fwd_txn);
     }
+}
+
+void peer::print_all_txns() {
+    cout << "IDs of txns heard by " << this->id << ": ";
+    for(int i:this->txns_all) {
+        cout << i << ' ';
+    }
+    cout << endl;
 }

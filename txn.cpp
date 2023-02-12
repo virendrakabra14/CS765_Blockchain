@@ -2,7 +2,7 @@
 
 // https://stackoverflow.com/questions/16284629/undefined-reference-to-static-variable-c
 ll txn::curr_txn_id = 0;
-ld txn::txn_size = 8*(1<<10);       // 1 KB (bits)
+ll txn::txn_size = 8*(1<<10);       // 1 KB (bits)
 
 txn::txn(int IDx, bool coinbase=false, int IDy=-1, ll C=-1) {
     // TxnID: IDx pays IDy C coins
