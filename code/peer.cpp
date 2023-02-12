@@ -5,6 +5,7 @@ peer::peer(int id) {
     this->slow = false;
     this->lowCPU = false;
     curr_balances = vector<ld>(n, 0ll);
+    this->latest_blk = nullptr;
 }
 
 void peer::generate_txn(simulator& sim, event* e) {
@@ -96,7 +97,7 @@ void peer::print_all_txns() {
     cout << endl;
 }
 
-bool peer::is_invalid(vector<ld>& balances) {
+bool peer::is_invalid(vector<ld> balances) {
     for (int i=0; i<balances.size(); i++) {
         if(balances[i]<0) return true;
     }
@@ -128,8 +129,13 @@ void peer::generate_blk(simulator& sim, event* e) {
             }
             curr_blk_size += t_ptr->txn_size;
             curr_blk_txns.push_back(t_ptr);
-            tmp_balances[t_ptr->IDx] -= t_ptr->C;
-            tmp_balances[t_ptr->IDy] += t_ptr->C;
+            if (t_ptr->IDy == -1) {
+                tmp_balances[t_ptr->IDx] += t_ptr->C;
+            }
+            else {
+                tmp_balances[t_ptr->IDx] -= t_ptr->C;
+                tmp_balances[t_ptr->IDy] += t_ptr->C;
+            }
         }
         if(b->parent==nullptr) {
             // size wasn't exceeded above, so include all txns
@@ -147,16 +153,26 @@ void peer::generate_blk(simulator& sim, event* e) {
             }
             curr_blk_size += t_ptr->txn_size;
             curr_blk_txns.push_back(t_ptr);
-            tmp_balances[t_ptr->IDx] -= t_ptr->C;
-            tmp_balances[t_ptr->IDy] += t_ptr->C;
+            if (t_ptr->IDy == -1) {
+                tmp_balances[t_ptr->IDx] += t_ptr->C;
+            }
+            else {
+                tmp_balances[t_ptr->IDx] -= t_ptr->C;
+                tmp_balances[t_ptr->IDy] += t_ptr->C;
+            }
 
             if(is_invalid(tmp_balances)) {
                 curr_invalid.insert(t_ptr);
                 // rollback the above changes
                 curr_blk_size -= t_ptr->txn_size;
                 curr_blk_txns.pop_back();
-                tmp_balances[t_ptr->IDx] += t_ptr->C;
-                tmp_balances[t_ptr->IDy] -= t_ptr->C;
+                if (t_ptr->IDy == -1) {
+                    tmp_balances[t_ptr->IDx] += t_ptr->C;
+                }
+                else {
+                    tmp_balances[t_ptr->IDx] -= t_ptr->C;
+                    tmp_balances[t_ptr->IDy] += t_ptr->C;
+                }
             }
         }
         if(b->parent == nullptr) {
@@ -170,6 +186,9 @@ void peer::generate_blk(simulator& sim, event* e) {
         }
     }
 
+    if (this->latest_blk == nullptr) {
+        this->latest_blk = b;
+    }
     b->blk_size = curr_blk_size;
     blks_all.insert(b->blk_id);
     blk_sent_to[b->blk_id] = vector<ll>();
@@ -179,8 +198,10 @@ void peer::generate_blk(simulator& sim, event* e) {
 
     ld blk_genr_delay = exponential_distribution<ld>(sim.Tblk/this->fraction_hashing_power)(rng);
 
-    event* fwd_blk = new event(blk_genr_delay, 5, this, nullptr, nullptr, b);
+    event* fwd_blk = new event(blk_genr_delay, 5, this, nullptr, this, b);
     sim.push(fwd_blk);
+
+    cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
 
 }
 
@@ -188,7 +209,7 @@ void peer::forward_blk(simulator& sim, event* e) {
 
     // check the longest chain and broadcast block accordingly
     blk* b = e->block;
-    if (b->height == this->latest_blk->height + 1) {
+    if (b->height == 0 || b->height == this->latest_blk->height + 1) {
         // same longest chain so broadcast
         // cout << "Previous block ID: " << this->latest_blk->blk_id << endl;
         // cout << "Transactions in block:" << endl;
@@ -205,14 +226,14 @@ void peer::forward_blk(simulator& sim, event* e) {
             if(to != this->id && to != e->from->id &&
                 find(blk_sent_to[b->blk_id].begin(),blk_sent_to[b->blk_id].end(),
                 to) == blk_sent_to[b->blk_id].end()) {
-                cout << "forward_blk: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
+                cout << "forward_blk: node " << this->id << " forwarded " << b->blk_id << " to " << to << endl;
                 blk_sent_to[b->blk_id].push_back(to);
 
                 ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
                 ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
                 ld latency = sim.rho[this->id][to] + queuing_delay + b->blk_size/link_speed;
 
-                event* hear_blk = new event(latency, 6, &sim.peers_vec[to], nullptr, this, b);
+                event* hear_blk = new event(e->timestamp + latency, 6, &sim.peers_vec[to], nullptr, this, b);
                 sim.push(hear_blk);
             }
         }
@@ -239,7 +260,7 @@ void peer::hear_blk(simulator& sim, event* e) {
 
         if (is_valid) {
             // need to check if block needs to be taken or not
-            if (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1) {
+            if (b->height == 0 || (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1)) {
                 b->update_parent(this->latest_blk);
                 this->latest_blk = b;
                 // update txns and balance
@@ -255,11 +276,12 @@ void peer::hear_blk(simulator& sim, event* e) {
                     txns_not_included.insert(t);
                 }
             }
+            if (b->height == 0 || blks_all.find(b->parent->blk_id) != blks_all.end()) {
+                // set up forward event for self
+                event* fwd_blk = new event(e->timestamp + 0, 5, this, nullptr, e->from, b);    // 0 (assume no delay within self)
+                sim.push(fwd_blk);
+            }
         }
-        
-        // set up forward event for self
-        event* fwd_blk = new event(0, 5, this, nullptr, e->from, b);    // 0 (assume no delay within self)
-        sim.push(fwd_blk);
     }
 
     // back to mining
@@ -271,15 +293,20 @@ void peer::hear_blk(simulator& sim, event* e) {
 bool peer::check_blk(blk* b) {
 
     // validating txns in blk
-    vector<ld> tmp_balances = this->curr_balances;
+    vector<ld> tmp_balances = curr_balances;
 
     // loop over txns
     for (txn* t:b->txns) {
         if (is_invalid(tmp_balances)) {
             return false;
         }
-        tmp_balances[t->IDx] -= t->C;
-        tmp_balances[t->IDy] += t->C;
+        if (t->IDy == -1) {
+            tmp_balances[t->IDx] += t->C;
+        }
+        else {
+            tmp_balances[t->IDx] -= t->C;
+            tmp_balances[t->IDy] += t->C;
+        }
     }
 
     // txns valid

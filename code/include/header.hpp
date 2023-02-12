@@ -105,7 +105,7 @@ class blk {
         ll blk_id;
         peer* miner;
         blk* parent;
-        vector<blk*> children;
+        set<blk*> children;
         vector<txn*> txns;
         ll height;
         blk(peer* miner, blk* parent, vector<txn*>& vec_txns);
@@ -153,7 +153,7 @@ class peer {
         void print_all_txns();
 
         // blk related functions
-        bool is_invalid(vector<ld>& balances);
+        bool is_invalid(vector<ld> balances);
         void generate_blk(simulator& sim, event* e);
         void forward_blk(simulator& sim, event* e);
         void hear_blk(simulator& sim, event* e);

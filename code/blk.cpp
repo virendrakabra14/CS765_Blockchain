@@ -15,7 +15,8 @@ void blk::update_parent(blk* new_parent) {
 
     this->parent = new_parent;
     if (new_parent != nullptr) {
-        new_parent->children.push_back(this);
+        cout << this->blk_id << " " << new_parent->blk_id << endl;
+        new_parent->children.insert(this);
         this->height = new_parent->height + 1;
     }
     else {
