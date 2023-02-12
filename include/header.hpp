@@ -135,6 +135,8 @@ class peer {
         
         blk* latest_blk;    // this peer's copy of the blockchain
 
+        set<ll> blks_all;
+
         set<blk*, compare_blk_ptrs> blks_not_included;      // blks heard by this node, but not
                                                             // included in its blockchain copy
 

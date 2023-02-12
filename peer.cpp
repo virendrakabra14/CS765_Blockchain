@@ -41,7 +41,7 @@ void peer::forward_txn(simulator& sim, event* e) {
     // sets up hear events for peers
 
     for(int to:sim.adj[this->id]) {
-        if(to != this->id) {
+        if(to != this->id || to != e->from->id) {
             cout << "forward_txn: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
 
             ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
@@ -66,7 +66,7 @@ void peer::hear_txn(simulator& sim, event* e) {
         this->txns_all.insert(e->tran->txn_id);
         
         // set up forward event for self
-        event* fwd_txn = new event(0, 2, this, e->tran);    // 0 (assume no delay within self)
+        event* fwd_txn = new event(0, 2, this, e->tran, e->from);    // 0 (assume no delay within self)
         sim.push(fwd_txn);
     }
 }
@@ -154,6 +154,7 @@ void peer::generate_blk(simulator& sim, event* e) {
     }
 
     b->blk_size = curr_blk_size;
+    blks_all.insert(b->blk_id);
 
     // done creating the block
     // set up forward events
@@ -183,7 +184,7 @@ void peer::forward_blk(simulator& sim, event* e) {
         }
         // broadcast block
         for(int to:sim.adj[this->id]) {
-            if(to != this->id) {
+            if(to != this->id || to != e->from->id) {
                 cout << "forward_blk: node " << this->id << " forwarded " << e->tran->txn_id << " to " << to << endl;
 
                 ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
@@ -200,25 +201,40 @@ void peer::forward_blk(simulator& sim, event* e) {
 
 void peer::hear_blk(simulator& sim, event* e) {
 
-    // validate
     blk* b = e->block;
-    bool is_valid = check_blk(b);
 
-    if (is_valid) {
-        // need to check if block needs to be taken or not
-        if (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1) {
-            b->update_parent(this->latest_blk);
-            this->latest_blk = b;
-            // update txns and balance
-            for (txn* t:b->txns) {
-                txns_all.insert(t->txn_id);
-                curr_balances[t->IDx] -= t->C;
-                curr_balances[t->IDy] += t->C;
+    if(this->blks_all.find(b->blk_id) != this->blks_all.end()) {
+        cout << "hear_blk: node " << this->id << " already heard " << b->blk_id << endl;
+        return;
+    }
+    else {
+
+        cout << "hear_blk: node " << this->id << " heard " << b->blk_id << " from " << e->from->id << endl;
+        this->blks_all.insert(b->blk_id);
+
+        // validate
+        bool is_valid = check_blk(b);
+
+        if (is_valid) {
+            // need to check if block needs to be taken or not
+            if (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1) {
+                b->update_parent(this->latest_blk);
+                this->latest_blk = b;
+                // update txns and balance
+                for (txn* t:b->txns) {
+                    txns_all.insert(t->txn_id);
+                    curr_balances[t->IDx] -= t->C;
+                    curr_balances[t->IDy] += t->C;
+                }
+            }
+            else {
+                blks_not_included.insert(b);
             }
         }
-        else {
-            blks_not_included.insert(b);
-        }
+        
+        // set up forward event for self
+        event* fwd_blk = new event(0, 5, this, nullptr, e->from, b);    // 0 (assume no delay within self)
+        sim.push(fwd_blk);
     }
 
 }
