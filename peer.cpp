@@ -22,15 +22,15 @@ void peer::generate_txn(simulator& sim) {
         C = uniform_real_distribution<ld>(0,curr_balances[id])(rng_64);
     }
 
-    txn t(IDx, false, IDy, C);
-    txns_not_included.insert(t);
-    txns_all.insert(t.txn_id);
+    txn* t = new txn(IDx, false, IDy, C);
+    txns_not_included.insert(*t);
+    txns_all.insert(t->txn_id);
 
-    event* fwd_txn = new event(0, 2, this, &t);  // 0 (assume no delay within self)
+    event* fwd_txn = new event(0, 2, this, t);  // 0 (assume no delay within self)
     sim.push(fwd_txn);
-    cout << "INSIDE PEER: " << sim.pq_events.top()->tran->txn_id << ',' << fwd_txn->tran->txn_id << '\n';
+    // cout << "INSIDE PEER: " << sim.pq_events.top()->tran->txn_id << ',' << fwd_txn->tran->txn_id << '\n';
 
-    cout << "generate_txn: node " << this->id << " generated " << t.txn_id << endl;
+    cout << "generate_txn: node " << this->id << " generated " << t->txn_id << endl;
 
 }
 

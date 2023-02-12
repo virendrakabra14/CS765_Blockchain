@@ -17,13 +17,13 @@ void event::run(simulator& sim) {
         }
         case 2: {
             // if(tran==nullptr) exit(1);
-            cout << this->tran->txn_id << '\n';
+            // cout << this->tran->txn_id << '\n';
             p->forward_txn(sim, this->tran);
             break;
         }
         case 3: {
             // if(from==nullptr || tran==nullptr) exit(1);
-            cout << this->tran->txn_id << '\n';
+            // cout << this->tran->txn_id << '\n';
             p->hear_txn(sim, this->tran, from);
             break;
         }

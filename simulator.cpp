@@ -151,11 +151,11 @@ void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
 
     while(!pq_events.empty()) {
-        cout << pq_events.size() << '\n';
+        // cout << pq_events.size() << '\n';
         event* e = pq_events.top();
         pq_events.pop();
         
-        if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
+        // if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
         e->run(*this);
     }
 }

@@ -1,7 +1,7 @@
 SOURCE=./
 BUILD=./build/
 
-all: $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)main.o ./simulation
+all: $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)main.o ./sim
 
 $(BUILD)simulator.o : $(SOURCE)simulator.cpp ./include/header.hpp ./include/cxxopts.hpp
 	$(CXX) -c -o $(BUILD)simulator.o $(SOURCE)simulator.cpp
@@ -18,5 +18,5 @@ $(BUILD)txn.o : $(SOURCE)simulator.cpp ./include/header.hpp ./include/cxxopts.hp
 $(BUILD)main.o : $(SOURCE)main.cpp ./include/header.hpp ./include/cxxopts.hpp
 	$(CXX) -c -o $(BUILD)main.o $(SOURCE)main.cpp
 
-./simulation : $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)main.o
-	$(CXX) -o ./simulation $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)main.o
+./sim : $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)main.o
+	$(CXX) -o ./sim $(BUILD)simulator.o $(BUILD)peer.o $(BUILD)event.o $(BUILD)txn.o $(BUILD)main.o

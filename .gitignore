@@ -1,4 +1,5 @@
 .vscode/
 *.exe
 simulation
+sim
 build/
