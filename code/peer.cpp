@@ -178,11 +178,11 @@ void peer::generate_blk(simulator& sim, event* e ) {
                 curr_blk_size -= t_ptr->txn_size;
                 curr_blk_txns.pop_back();
                 if (t_ptr->IDy == -1) {
-                    tmp_balances[t_ptr->IDx] += t_ptr->C;
+                    tmp_balances[t_ptr->IDx] -= t_ptr->C;
                 }
                 else {
-                    tmp_balances[t_ptr->IDx] -= t_ptr->C;
-                    tmp_balances[t_ptr->IDy] += t_ptr->C;
+                    tmp_balances[t_ptr->IDx] += t_ptr->C;
+                    tmp_balances[t_ptr->IDy] -= t_ptr->C;
                 }
             }
         }
@@ -288,6 +288,7 @@ void peer::hear_blk(simulator& sim, event* e) {
                 this->latest_blk = b;
                 // update txns and balance
                 for (txn* t:b->txns) {
+					cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
                     txns_all.insert(t->txn_id);
 					if (t->IDy == -1) {
 						curr_balances[t->IDx] += t->C;
@@ -301,6 +302,7 @@ void peer::hear_blk(simulator& sim, event* e) {
             else {
                 blks_not_included.insert(b);
                 for (txn* t:b->txns) {
+					cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
                     txns_not_included.insert(t);
                 }
             }
