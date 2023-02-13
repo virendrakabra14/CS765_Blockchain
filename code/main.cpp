@@ -41,8 +41,12 @@ int main(int argc, const char* argv[]) {
 
     sim.run();
 
-    for(auto&& p:sim.peers_vec) {
+	cout << "NUMBER OF PEERS SAVED " << sim.peers_vec.size() <<  endl;
+    for(auto&& p : sim.peers_vec) {
+		cout << "START " << endl;
         p.print_all_txns();
+		cout << "ONE DONE" << endl;
     }
+	cout << "PROGRAM ENDING" << endl;
 
 }

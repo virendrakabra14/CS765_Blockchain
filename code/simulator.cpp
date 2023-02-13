@@ -23,7 +23,8 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
         ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
         event* e = new event(time_txn, 1, &peers_vec[i]);
         this->push(e);
-        if (i == 0) {
+ 
+		if (i == 0) {
             event* e = new event(0, 4, &peers_vec[i]);
             this->push(e);
         }
@@ -43,7 +44,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
         else peers_vec[i].fraction_hashing_power = 10.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
     }
 
-    adj = vector<vector<int>>(n, vector<int>(0));
+    adj = vector<vector<int>>(n);
     rho = vector<vector<ld>>(n, vector<ld>(n, 0.0L));
     visited = vector<bool>(n, false);
 

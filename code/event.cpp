@@ -45,4 +45,6 @@ void event::run(simulator& sim) {
             break;
         }
     }
+	int t; 
+	cin >> t;
 }

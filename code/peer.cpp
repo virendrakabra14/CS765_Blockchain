@@ -4,7 +4,7 @@ peer::peer(int id) {
     this->id = id;
     this->slow = false;
     this->lowCPU = false;
-    curr_balances = vector<ld>(n, 0ll);
+    this->curr_balances = vector<ld>(n, 0ll);
     this->latest_blk = nullptr;
 }
 
@@ -41,6 +41,7 @@ void peer::generate_txn(simulator& sim, event* e) {
 	sim.push(next_gen_event);
 
     cout << "generate_txn: node " << this->id << " generated " << t->txn_id << endl;
+	cout << "[TXN] " << t->IDx << " -> " << t->IDy << " : " << t->C << endl;  
 }
 
 void peer::forward_txn(simulator& sim, event* e) {
@@ -104,13 +105,21 @@ bool peer::is_invalid(vector<ld> balances) {
     return false;
 }
 
-void peer::generate_blk(simulator& sim, event* e) {
-    
+void peer::generate_blk(simulator& sim, event* e ) {
+
+	cout << "GENERATING CODE START" << endl;
+	
+
+	cout << "[BALANCE] " << this->id << " : ";
+	for(int i = 0; i < this->curr_balances.size(); i++){
+		cout << this->curr_balances[i] << " ";
+	}
+	cout << endl;
+
     vector<ld> tmp_balances = this->curr_balances;
-    
     bool invalid = uniform_real_distribution<ld>(0.0L,1.0L)(rng) < 0.1L;     // can put prob as cmdline arg
 
-    vector<txn*> curr_blk_txns(0);
+    vector<txn*> curr_blk_txns;
     txn* coinbase_txn = new txn(this->id, true, -1, e->tran->coinbase_fee);
     curr_blk_txns.push_back(coinbase_txn); // does this need to be included?
 
@@ -122,6 +131,7 @@ void peer::generate_blk(simulator& sim, event* e) {
                         // (when blk size exceeds before encountering an invalid txn)
 
         for(txn* t_ptr:txns_not_included) {     // iterate on txns by txn_id
+			cout << "[DEBUG] " << t_ptr->C << " INVALID " << invalid << " IDx " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
             if(is_invalid(tmp_balances) || curr_blk_size+t_ptr->txn_size > blk::max_blk_size) {
                 b->update_parent(this->latest_blk);
                 b->txns = curr_blk_txns;
@@ -146,6 +156,7 @@ void peer::generate_blk(simulator& sim, event* e) {
     else {
         set<txn*, compare_txn_ptrs> curr_invalid;
         for(txn* t_ptr:txns_not_included) {     // iterate on txns by txn_id
+			cout << "[DEBUG] " << t_ptr->C << " INVALID " << invalid <<" IDX " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
             if(curr_blk_size+t_ptr->txn_size > blk::max_blk_size) {
                 b->update_parent(this->latest_blk);
                 b->txns = curr_blk_txns;
@@ -193,12 +204,20 @@ void peer::generate_blk(simulator& sim, event* e) {
     blks_all.insert(b->blk_id);
     blk_sent_to[b->blk_id] = vector<ll>();
 
+	curr_balances = tmp_balances;
+	
+	cout << "[BALANCE] " << this->id << " : ";
+	for(int i = 0; i < this->curr_balances.size(); i++){
+		cout << this->curr_balances[i] << " ";
+	}
+	cout << endl;
+
     // done creating the block
     // set up forward events
 
     ld blk_genr_delay = exponential_distribution<ld>(sim.Tblk/this->fraction_hashing_power)(rng);
 
-    event* fwd_blk = new event(blk_genr_delay, 5, this, nullptr, this, b);
+    event* fwd_blk = new event(e->timestamp + blk_genr_delay, 5, this, nullptr, this, b);
     sim.push(fwd_blk);
 
     cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
@@ -254,20 +273,29 @@ void peer::hear_blk(simulator& sim, event* e) {
         cout << "hear_blk: node " << this->id << " heard " << b->blk_id << " from " << e->from->id << endl;
         this->blks_all.insert(b->blk_id);
         blk_sent_to[b->blk_id] = vector<ll>();
-
+		cout << "[BALANCE] " << this->id << " : ";
+		for(int i = 0; i < this->curr_balances.size(); i++){
+			cout << this->curr_balances[i] << " ";
+		}
+		cout << endl;
         // validate
         bool is_valid = check_blk(b);
 
         if (is_valid) {
             // need to check if block needs to be taken or not
-            if (b->height == 0 || (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1)) {
+            if ((b->height == 0 && this->latest_blk == NULL) || (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1)) {
                 b->update_parent(this->latest_blk);
                 this->latest_blk = b;
                 // update txns and balance
                 for (txn* t:b->txns) {
                     txns_all.insert(t->txn_id);
-                    curr_balances[t->IDx] -= t->C;
-                    curr_balances[t->IDy] += t->C;
+					if (t->IDy == -1) {
+						curr_balances[t->IDx] += t->C;
+					}
+					else {
+						curr_balances[t->IDx] -= t->C;
+						curr_balances[t->IDy] += t->C;
+					}
                 }
             }
             else {
@@ -283,7 +311,11 @@ void peer::hear_blk(simulator& sim, event* e) {
             }
         }
     }
-
+	cout << "[BALANCE] " << this->id << " : ";
+	for(int i = 0; i < this->curr_balances.size(); i++){
+		cout << this->curr_balances[i] << " ";
+	}
+	cout << endl;
     // back to mining
     event* mine = new event(0, 4, this);
     sim.push(mine);
