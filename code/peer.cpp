@@ -124,6 +124,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     curr_blk_txns.push_back(coinbase_txn); // does this need to be included?
 
     ll curr_blk_size = txn::txn_size;
+    tmp_balances[coinbase_txn->IDx] += coinbase_txn->C;
 
     blk* b = new blk(this, nullptr, curr_blk_txns);
 
@@ -319,7 +320,11 @@ void peer::hear_blk(simulator& sim, event* e) {
 	}
 	cout << endl;
     // back to mining
-    event* mine = new event(0, 4, this);
+	
+
+	
+
+    event* mine = new event(e->timestamp, 4, this);
     sim.push(mine);
 
 }
