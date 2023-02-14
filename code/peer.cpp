@@ -355,24 +355,33 @@ bool peer::check_blk(blk* b) {
 
 void peer::update_tree(simulator& sim, event* e) {
 
+    // get longest chain
+    set<blk*> curr_chain;
+    blk* b_iter = latest_blk;
+    while (b_iter != nullptr) {
+        curr_chain.insert(b_iter);
+        b_iter = b_iter->parent;
+    }
+
     // ensure longest chain is in the tree
     if (curr_tree.find(latest_blk) == curr_tree.end()) {
-        blk* b_iter = latest_blk;
-        while (b_iter != nullptr) {
+        for (blk* b_iter:curr_chain) {
             curr_tree.insert(b_iter);
-            b_iter = b_iter->parent;
         }
     }
 
     // update the tree
     bool pending = true;
     while (pending) {
-        for (blk* b:blks_not_included) {
-            if (curr_tree.find(b->parent) != curr_tree.end()) {
+        for (auto it = blks_not_included.begin(); it != blks_not_included.end();) {
+            if (curr_tree.find((*it)->parent) != curr_tree.end()) {
                 // adding block to tree
-                b->update_parent(b->parent);
-                curr_tree.insert(b);
-                blks_not_included.erase(b);
+                (*it)->update_parent((*it)->parent);
+                curr_tree.insert(*it);
+                it = blks_not_included.erase(it);
+            }
+            else {
+                it++;
             }
         }
         pending = false;
@@ -385,7 +394,7 @@ void peer::update_tree(simulator& sim, event* e) {
         }
     }
 
-    // find longest chain
+    // find new longest chain block
     blk* last = latest_blk;
     for (blk* b:curr_tree) {
         if (b->height > last->height) {
@@ -395,8 +404,8 @@ void peer::update_tree(simulator& sim, event* e) {
 
     // txns update
     if (latest_blk != last) {
-        blk* b_iter = latest_blk;
-        while (b_iter != nullptr) {
+        // old chain
+        for (blk* b_iter:curr_chain) {
             for (txn* t:b_iter->txns) {
                 // roll back
                 if (t->IDy == -1) {
@@ -408,11 +417,12 @@ void peer::update_tree(simulator& sim, event* e) {
                 }
                 txns_not_included.insert(t);
             }
-            b_iter = b_iter->parent;
         }
-        b_iter = last;
+        // new chain
+        blk* b_iter = last;
         while (b_iter != nullptr) {
             for (txn* t:b_iter->txns) {
+                // new txns
                 if (t->IDy == -1) {
                     curr_balances[t->IDx] += t->C;
                 }
