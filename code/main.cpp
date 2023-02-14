@@ -46,8 +46,14 @@ int main(int argc, const char* argv[]) {
     for(auto&& p : sim.peers_vec) {
 		cout << "START " << endl;
         p.update_tree(sim,e);
+        cout << "Blocks: Heights:: ";
         for (blk* b:p.curr_tree) {
             cout << b->blk_id << ":" << b->height << " ";
+        }
+        cout << endl;
+        cout << "Txns left: ";
+        for (txn* t:p.txns_not_included) {
+            cout << t->txn_id << " ";
         }
         cout << endl;
         p.print_all_txns();
