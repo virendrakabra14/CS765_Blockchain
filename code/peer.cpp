@@ -40,7 +40,7 @@ void peer::generate_txn(simulator& sim, event* e) {
 	event* next_gen_event = new event(e->timestamp + time_txn, 1, this);
 	sim.push(next_gen_event);
 
-    cout << "generate_txn: node " << this->id << " generated " << t->txn_id << endl;
+    cout << "generate_txn: node " << this->id << " generated " << (invalid ? "invalid " : "valid ") << t->txn_id << endl;
 	cout << "[TXN] " << t->IDx << " -> " << t->IDy << " : " << t->C << endl;  
 }
 

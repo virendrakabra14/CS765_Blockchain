@@ -167,9 +167,11 @@ void simulator::run() {
         event* e = pq_events.top();
         pq_events.pop();
         
+        if(e->timestamp > Simulation_Time && (e->type==1 || e->type==4)) continue;
+
         // if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
-		if(e->timestamp <= Simulation_Time)
-        	e->run(*this);
+        e->run(*this);
+        
         // clean up (delete event, and probably the associated txn)
         // (define destructor for event)
     }
