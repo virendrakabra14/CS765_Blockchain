@@ -18,9 +18,9 @@ int main(int argc, const char* argv[]) {
 
     options.add_options()
         ("n, nodes", "number of nodes", cxxopts::value<int>()->default_value("10"))
-        ("z0, slow", "percentage of slow nodes", cxxopts::value<ld>()->default_value("10"))
-        ("z1, low", "percentage of low CPU nodes", cxxopts::value<ld>()->default_value("10"))
-        ("Ttx, txn_interarrival_mean", "transactions' mean interarrival time", cxxopts::value<ld>()->default_value("10"))
+        ("z0, slow", "percentage of slow nodes", cxxopts::value<ld>()->default_value("0.2"))
+        ("z1, low", "percentage of low CPU nodes", cxxopts::value<ld>()->default_value("0.2"))
+        ("Ttx, txn_interarrival_mean", "transactions' mean interarrival time", cxxopts::value<ld>()->default_value("100"))
         ("min_ngbrs", "minimum number of neighbors per node", cxxopts::value<int>()->default_value("4"))
         ("max_ngbrs", "maximum number of neighbors per node", cxxopts::value<int>()->default_value("8"))
         ("seed", "random seed", cxxopts::value<int>()->default_value("0"))
@@ -39,6 +39,7 @@ int main(int argc, const char* argv[]) {
     simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs);
     sim.print_graph();
 
+	cout << "STARTING" << endl;
     sim.run();
     event* e = new event(0, 7);
 

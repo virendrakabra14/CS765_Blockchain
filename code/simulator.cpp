@@ -16,23 +16,15 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     fast_link_speed = 100*(1<<20);          // 100 Mbps
     slow_link_speed = 5*(1<<20);            // 5 Mbps
     queuing_delay_numerator = 96*(1<<10);   // 96 kbps
-
-    peers_vec.reserve(n);
-    for (int i=0; i<n; i++) {
-        peers_vec.push_back(peer(i));
-        // initialize events (generate_txn)
-        ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
-        event* e = new event(time_txn, 1, &peers_vec[i]);
-        this->push(e);
- 
-		if (i == 0) {
-            event* e = new event(0, 4, &peers_vec[i]);
-            this->push(e);
-        }
-    }
-
+	
     vector<int> slow_indices = pick_random(n, z0*n);
     vector<int> lowCPU_indices = pick_random(n, z1*n);
+
+    peers_vec.reserve(n);
+
+	for(int i = 0; i < n; i++){
+		peers_vec.push_back(peer(i));
+	}
 
     for(int& i:slow_indices) {
         peers_vec[i].slow = true;
@@ -43,7 +35,24 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     for (int i=0; i<n; i++) {
         if(peers_vec[i].lowCPU) peers_vec[i].fraction_hashing_power = 1.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
         else peers_vec[i].fraction_hashing_power = 10.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
+		cout << "FRA " << peers_vec[i].fraction_hashing_power << " n " << n << " size " << lowCPU_indices.size() << endl;
     }
+
+    for (int i=0; i<n; i++) {
+        // peers_vec.push_back(peer(i));
+        // initialize events (generate_txn)
+        ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
+        event* e = new event(time_txn, 1, &peers_vec[i]);
+        this->push(e);
+
+		cout << "SANCHIT " << this->Tblk << " ----- " << peers_vec[i].fraction_hashing_power <<endl;
+		ld time_blk = exponential_distribution<ld>(this->Tblk/peers_vec[i].fraction_hashing_power)(rng);
+
+ 
+        event* blk_gen = new event(time_blk, 4, &peers_vec[i]);
+        this->push(blk_gen);
+    }
+
 
     adj = vector<vector<int>>(n);
     rho = vector<vector<ld>>(n, vector<ld>(n, 0.0L));

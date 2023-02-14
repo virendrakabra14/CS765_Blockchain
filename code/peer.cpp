@@ -10,6 +10,7 @@ peer::peer(int id) {
     this->curr_balances = vector<ld>(n, 0ll);
     this->latest_blk = genesis;
     this->curr_tree.insert(genesis);
+	this->fraction_hashing_power = 0;
 }
 
 void peer::generate_txn(simulator& sim, event* e) {
@@ -250,24 +251,26 @@ void peer::generate_blk(simulator& sim, event* e ) {
     // set up forward events
 
     ld blk_genr_delay = exponential_distribution<ld>(sim.Tblk/this->fraction_hashing_power)(rng);
+	cout << "TBLK " << sim.Tblk << " fraction " << this->fraction_hashing_power << endl;
+	cout << sim.Tblk / this -> fraction_hashing_power << " AVERAGE TIME " << blk_genr_delay << endl;
 
     event* fwd_blk = new event(e->timestamp + blk_genr_delay, 5, this, nullptr, this, b);
     sim.push(fwd_blk);
 
     cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
 
-    // if (e->timestamp + blk_genr_delay < sim.Simulation_Time) {
-    //     event* mine = new event(e->timestamp + blk_genr_delay, 4, this);
-    //     sim.push(mine);
-    // }
-
+    if (e->timestamp + 2 < sim.Simulation_Time) {
+		event* mine = new event(e->timestamp + 2, 4, this);
+		sim.push(mine);
+    } 
 }
+
 
 void peer::forward_blk(simulator& sim, event* e) {
 
     // check the longest chain and broadcast block accordingly
     blk* b = e->block;
-    if (b->height == 0 || curr_tree.find(b->parent) != curr_tree.end()) {
+    if ((b->miner->id==id && b->parent==latest_blk) || (curr_tree.find(b->parent) != curr_tree.end())) {
         // same longest chain so broadcast
         // cout << "Previous block ID: " << this->latest_blk->blk_id << endl;
         // cout << "Transactions in block:" << endl;
@@ -493,7 +496,7 @@ void peer::update_tree(simulator& sim, event* e) {
     }
 
     // back to mining
-    event* mine = new event(e->timestamp, 4, this);
-    sim.push(mine);
+    // event* mine = new event(e->timestamp, 4, this);
+    // sim.push(mine);
 
 }
