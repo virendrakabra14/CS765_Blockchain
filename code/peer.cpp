@@ -37,8 +37,10 @@ void peer::generate_txn(simulator& sim, event* e) {
 	
 	// schedule the next transaction created
 	ld time_txn = exponential_distribution<ld>(1.0L/sim.Ttx)(rng);
-	event* next_gen_event = new event(e->timestamp + time_txn, 1, this);
-	sim.push(next_gen_event);
+    if (e->timestamp + time_txn < sim.Simulation_Time) {
+        event* next_gen_event = new event(e->timestamp + time_txn, 1, this);
+        sim.push(next_gen_event);
+    }
 
     cout << "generate_txn: node " << this->id << " generated " << (invalid ? "invalid " : "valid ") << t->txn_id << endl;
 	cout << "[TXN] " << t->IDx << " -> " << t->IDy << " : " << t->C << endl;  
@@ -160,6 +162,18 @@ void peer::generate_blk(simulator& sim, event* e ) {
                 tmp_balances[t_ptr->IDx] -= t_ptr->C;
                 tmp_balances[t_ptr->IDy] += t_ptr->C;
             }
+            // if(is_invalid(tmp_balances)) {
+            //     // rollback the above changes
+            //     curr_blk_size -= t_ptr->txn_size;
+            //     curr_blk_txns.pop_back();
+            //     if (t_ptr->IDy == -1) {
+            //         tmp_balances[t_ptr->IDx] -= t_ptr->C;
+            //     }
+            //     else {
+            //         tmp_balances[t_ptr->IDx] += t_ptr->C;
+            //         tmp_balances[t_ptr->IDy] -= t_ptr->C;
+            //     }
+            // }
         }
         if(b->parent==nullptr) {
             // size wasn't exceeded above, so include all txns
@@ -185,7 +199,6 @@ void peer::generate_blk(simulator& sim, event* e ) {
                 tmp_balances[t_ptr->IDx] -= t_ptr->C;
                 tmp_balances[t_ptr->IDy] += t_ptr->C;
             }
-
             if(is_invalid(tmp_balances)) {
                 curr_invalid.insert(t_ptr);
                 // rollback the above changes
@@ -238,6 +251,11 @@ void peer::generate_blk(simulator& sim, event* e ) {
     sim.push(fwd_blk);
 
     cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
+
+    // if (e->timestamp + blk_genr_delay < sim.Simulation_Time) {
+    //     event* mine = new event(e->timestamp + blk_genr_delay, 4, this);
+    //     sim.push(mine);
+    // }
 
 }
 
@@ -326,6 +344,14 @@ void peer::hear_blk(simulator& sim, event* e) {
 					cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
                     txns_not_included.insert(t);
                 }
+            }
+        }
+        else {
+            blks_not_included.insert(b);
+            for (txn* t:b->txns) {
+                txns_all.insert(t->txn_id);
+                cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
+                txns_not_included.insert(t);
             }
         }
     }

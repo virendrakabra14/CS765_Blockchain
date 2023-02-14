@@ -10,6 +10,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
     this->Tblk = 600;
+    this->Simulation_Time = 20;
 
     // bits per second
     fast_link_speed = 100*(1<<20);          // 100 Mbps
@@ -159,8 +160,6 @@ void simulator::print_graph() {
 void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
 	//
-	
-	ld Simulation_Time = 10;
 
     while(!pq_events.empty()) {
         // cout << pq_events.size() << '\n';

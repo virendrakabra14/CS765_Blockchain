@@ -203,6 +203,7 @@ class simulator {
         vector<vector<ld>> rho; // light propagation delay
 
         ld Tblk; // block interarrival time
+        ld Simulation_Time;
         
         vector<peer> peers_vec;
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
