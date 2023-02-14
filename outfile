@@ -69,7 +69,7 @@ forward_txn: node 5 forwarded 4 to 1
 event run: type=6
 hear_blk: node 6 heard 0 from 0
 [BALANCE] 6 : 0 0 0 0 0 0 0 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 0 IDy -1
+[DEBUG] 50 VALID 1 IDX 0 IDy -1
 [BALANCE] 6 : 50 0 0 0 0 0 0 0 0 0 
 event run: type=5
 forward_blk: node 6 forwarded 0 to 1
@@ -78,7 +78,6 @@ forward_blk: node 6 forwarded 0 to 3
 event run: type=7
 update_tree: 6 current latest is 0
 update_tree: 6 updated latest block to 0
-incorrect event type: 7
 event run: type=4
 GENERATING CODE START
 [BALANCE] 6 : 50 0 0 0 0 0 0 0 0 0 
@@ -146,11 +145,10 @@ forward_txn: node 9 forwarded 9 to 0
 event run: type=6
 hear_blk: node 3 heard 1 from 6
 [BALANCE] 3 : 0 0 0 0 0 0 0 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 6 IDy -1
-[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 0 VALID 1 IDX 6 IDy 7
 [BALANCE] 3 : 0 0 0 0 0 0 0 0 0 0 
 event run: type=7
-incorrect event type: 7
 event run: type=4
 GENERATING CODE START
 [BALANCE] 3 : 0 0 0 0 0 0 0 0 0 0 
@@ -185,7 +183,7 @@ forward_txn: node 2 forwarded 7 to 1
 event run: type=6
 hear_blk: node 2 heard 0 from 0
 [BALANCE] 2 : 0 0 0 0 0 0 0 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 0 IDy -1
+[DEBUG] 50 VALID 1 IDX 0 IDy -1
 [BALANCE] 2 : 50 0 0 0 0 0 0 0 0 0 
 event run: type=5
 forward_blk: node 2 forwarded 0 to 5
@@ -196,7 +194,6 @@ forward_blk: node 2 forwarded 0 to 1
 event run: type=7
 update_tree: 2 current latest is 0
 update_tree: 2 updated latest block to 0
-incorrect event type: 7
 event run: type=4
 GENERATING CODE START
 [BALANCE] 2 : 50 0 0 0 0 0 0 0 0 0 
@@ -275,15 +272,21 @@ forward_txn: node 7 forwarded 4 to 3
 forward_txn: node 7 forwarded 4 to 1
 NUMBER OF PEERS SAVED 10
 START 
+update_tree: 0 current latest is 0
+update_tree: 0 updated latest block to 0
 IDs of txns heard by 0: 12 13 
 ONE DONE
 START 
 IDs of txns heard by 1: 1 
 ONE DONE
 START 
+update_tree: 2 current latest is 0
+update_tree: 2 updated latest block to 0
 IDs of txns heard by 2: 0 2 7 9 
 ONE DONE
 START 
+update_tree: 3 current latest is 2
+update_tree: 3 updated latest block to 2
 IDs of txns heard by 3: 
 ONE DONE
 START 
@@ -293,6 +296,8 @@ START
 IDs of txns heard by 5: 2 4 
 ONE DONE
 START 
+update_tree: 6 current latest is 0
+update_tree: 6 updated latest block to 0
 IDs of txns heard by 6: 0 3 6 
 ONE DONE
 START 

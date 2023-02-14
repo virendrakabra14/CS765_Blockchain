@@ -42,6 +42,7 @@ void event::run(simulator& sim) {
         }
         case 7: {
             p->update_tree(sim, this);
+            break;
         }
         default: {
             cout << "incorrect event type: " << type << '\n';

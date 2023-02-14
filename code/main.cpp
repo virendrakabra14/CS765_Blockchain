@@ -40,10 +40,12 @@ int main(int argc, const char* argv[]) {
     sim.print_graph();
 
     sim.run();
+    event* e = new event(0, 7);
 
 	cout << "NUMBER OF PEERS SAVED " << sim.peers_vec.size() <<  endl;
     for(auto&& p : sim.peers_vec) {
 		cout << "START " << endl;
+        p.update_tree(sim,e);
         p.print_all_txns();
 		cout << "ONE DONE" << endl;
     }

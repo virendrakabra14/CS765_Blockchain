@@ -294,7 +294,7 @@ void peer::hear_blk(simulator& sim, event* e) {
                 this->latest_blk = b;
                 // update txns and balance
                 for (txn* t:b->txns) {
-					cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
+					cout << "[DEBUG] " << t->C << " VALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
                     txns_all.insert(t->txn_id);
 					if (t->IDy == -1) {
 						curr_balances[t->IDx] += t->C;
@@ -311,7 +311,7 @@ void peer::hear_blk(simulator& sim, event* e) {
             else {
                 blks_not_included.insert(b);
                 for (txn* t:b->txns) {
-					cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
+					cout << "[DEBUG] " << t->C << " VALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
                     txns_not_included.insert(t);
                 }
             }
