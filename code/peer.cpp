@@ -267,7 +267,7 @@ void peer::forward_blk(simulator& sim, event* e) {
 
     // check the longest chain and broadcast block accordingly
     blk* b = e->block;
-    if (b->height == 0 || curr_tree.find(b->parent) != curr_tree.end()) {
+    if ((b->miner->id == id && b->parent == latest_blk) || curr_tree.find(b->parent) != curr_tree.end()) {
         // same longest chain so broadcast
         // cout << "Previous block ID: " << this->latest_blk->blk_id << endl;
         // cout << "Transactions in block:" << endl;
