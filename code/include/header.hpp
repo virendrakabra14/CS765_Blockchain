@@ -137,7 +137,7 @@ class peer {
         
         blk* latest_blk;    // this peer's copy of the blockchain
 
-        set<ll> blks_all;
+        set<blk*> blks_all;
 
         map<ll,vector<ll>> blk_sent_to;
 
@@ -158,6 +158,7 @@ class peer {
         void forward_blk(simulator& sim, event* e);
         void hear_blk(simulator& sim, event* e);
         bool check_blk(blk* b);
+        void update_tree(simulator& sim, event* e);
 };
 
 class simulator {

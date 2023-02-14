@@ -202,10 +202,15 @@ void peer::generate_blk(simulator& sim, event* e ) {
         this->latest_blk = b;
     }
     b->blk_size = curr_blk_size;
-    blks_all.insert(b->blk_id);
+    blks_all.insert(b);
     blk_sent_to[b->blk_id] = vector<ll>();
 
 	curr_balances = tmp_balances;
+
+    // remove included txns
+    for (txn* t:b->txns) {
+        txns_not_included.erase(t);
+    }
 	
 	cout << "[BALANCE] " << this->id << " : ";
 	for(int i = 0; i < this->curr_balances.size(); i++){
@@ -265,14 +270,14 @@ void peer::hear_blk(simulator& sim, event* e) {
 
     blk* b = e->block;
 
-    if(this->blks_all.find(b->blk_id) != this->blks_all.end()) {
+    if(this->blks_all.find(b) != this->blks_all.end()) {
         cout << "hear_blk: node " << this->id << " already heard " << b->blk_id << endl;
         return;
     }
     else {
 
         cout << "hear_blk: node " << this->id << " heard " << b->blk_id << " from " << e->from->id << endl;
-        this->blks_all.insert(b->blk_id);
+        this->blks_all.insert(b);
         blk_sent_to[b->blk_id] = vector<ll>();
 		cout << "[BALANCE] " << this->id << " : ";
 		for(int i = 0; i < this->curr_balances.size(); i++){
@@ -284,7 +289,7 @@ void peer::hear_blk(simulator& sim, event* e) {
 
         if (is_valid) {
             // need to check if block needs to be taken or not
-            if ((b->height == 0 && this->latest_blk == NULL) || (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1)) {
+            if ((b->height == 0 && this->latest_blk == nullptr) || (b->parent == this->latest_blk && b->height == this->latest_blk->height + 1)) {
                 b->update_parent(this->latest_blk);
                 this->latest_blk = b;
                 // update txns and balance
@@ -299,6 +304,9 @@ void peer::hear_blk(simulator& sim, event* e) {
 						curr_balances[t->IDy] += t->C;
 					}
                 }
+                // set up forward event for self
+                event* fwd_blk = new event(e->timestamp + 0, 5, this, nullptr, e->from, b);    // 0 (assume no delay within self)
+                sim.push(fwd_blk);
             }
             else {
                 blks_not_included.insert(b);
@@ -307,11 +315,6 @@ void peer::hear_blk(simulator& sim, event* e) {
                     txns_not_included.insert(t);
                 }
             }
-            if (b->height == 0 || blks_all.find(b->parent->blk_id) != blks_all.end()) {
-                // set up forward event for self
-                event* fwd_blk = new event(e->timestamp + 0, 5, this, nullptr, e->from, b);    // 0 (assume no delay within self)
-                sim.push(fwd_blk);
-            }
         }
     }
 	cout << "[BALANCE] " << this->id << " : ";
@@ -319,10 +322,7 @@ void peer::hear_blk(simulator& sim, event* e) {
 		cout << this->curr_balances[i] << " ";
 	}
 	cout << endl;
-    // back to mining
-	
-
-	
+    // back to mining	
 
     event* mine = new event(e->timestamp, 4, this);
     sim.push(mine);
@@ -350,5 +350,45 @@ bool peer::check_blk(blk* b) {
 
     // txns valid
     return true;
+
+}
+
+void peer::update_tree(simulator& sim, event* e) {
+
+    // checking if longest chain updated
+    set<blk*> curr_tree;
+    blk* b_iter = latest_blk;
+    while (b_iter != nullptr) {
+        curr_tree.insert(b_iter);
+        b_iter = b_iter->parent;
+    }
+
+    // update the tree
+    bool pending = true;
+    while (pending) {
+        for (blk* b:blks_not_included) {
+            if (curr_tree.find(b->parent) != curr_tree.end()) {
+                b->update_parent(b->parent);
+                curr_tree.insert(b);
+                blks_not_included.erase(b);
+            }
+        }
+        pending = false;
+        for (blk* b:blks_not_included) {
+            if (curr_tree.find(b->parent) != curr_tree.end()) {
+                pending = true;
+                break;
+            }
+        }
+    }
+
+    // update longest chain
+    blk* last = latest_blk;
+    for (blk* b:curr_tree) {
+        if (b->height > last->height) {
+            last = b;
+        }
+    }
+    latest_blk = last;
 
 }
