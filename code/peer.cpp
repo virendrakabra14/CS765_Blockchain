@@ -10,6 +10,7 @@ peer::peer(int id) {
     this->curr_balances = vector<ld>(n, 0ll);
     this->latest_blk = genesis;
     this->curr_tree.insert(genesis);
+    this->can_gen = true;
 }
 
 void peer::generate_txn(simulator& sim, event* e) {
@@ -231,6 +232,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     this->latest_blk = b;
     b->blk_size = curr_blk_size;
     blks_all.insert(b);
+    blk_arrivals[b] = e->timestamp;
     blk_sent_to[b->blk_id] = vector<ll>();
 
 	curr_balances = tmp_balances;
@@ -255,9 +257,10 @@ void peer::generate_blk(simulator& sim, event* e ) {
     sim.push(fwd_blk);
 
     cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
+    can_gen = true;
 
-    // if (e->timestamp + blk_genr_delay < sim.Simulation_Time) {
-    //     event* mine = new event(e->timestamp + blk_genr_delay, 4, this);
+    // if (e->timestamp + 5 < sim.Simulation_Time) {
+    //     event* mine = new event(e->timestamp + 5, 4, this);
     //     sim.push(mine);
     // }
 
@@ -311,6 +314,7 @@ void peer::hear_blk(simulator& sim, event* e) {
 
         cout << "hear_blk: node " << this->id << " heard " << b->blk_id << " from " << e->from->id << endl;
         this->blks_all.insert(b);
+        blk_arrivals[b] = e->timestamp;
         blk_sent_to[b->blk_id] = vector<ll>();
 		cout << "[BALANCE] " << this->id << " : ";
 		for(int i = 0; i < this->curr_balances.size(); i++){
@@ -493,7 +497,10 @@ void peer::update_tree(simulator& sim, event* e) {
     }
 
     // back to mining
-    event* mine = new event(e->timestamp, 4, this);
-    sim.push(mine);
+    if (can_gen) {
+        can_gen = false;
+        event* mine = new event(e->timestamp + sim.block_delay, 4, this);
+        sim.push(mine);
+    }
 
 }

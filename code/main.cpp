@@ -1,4 +1,5 @@
 #include "include/header.hpp"
+#include <fstream>
 
 // https://codeforces.com/blog/entry/61587
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
@@ -43,12 +44,16 @@ int main(int argc, const char* argv[]) {
     event* e = new event(0, 7);
 
 	cout << "NUMBER OF PEERS SAVED " << sim.peers_vec.size() <<  endl;
+    ofstream outfile;
+    outfile.open("arrivals.txt");
     for(auto&& p : sim.peers_vec) {
 		cout << "START " << endl;
         p.update_tree(sim,e);
-        cout << "Blocks: Heights:: ";
+        outfile << p.id << endl;
+        cout << "Data: ";
         for (blk* b:p.curr_tree) {
-            cout << b->blk_id << ":" << b->height << "(";
+            cout << b->blk_id << "(" << p.blk_arrivals[b] << ")" << ":" << b->height << "(";
+            outfile << "BlockID:" << b->blk_id << ", Height:" << b->height << ", Arrival:" << p.blk_arrivals[b] << endl;
             for (txn* t:b->txns) {
                 cout << t->txn_id << ",";
             }
