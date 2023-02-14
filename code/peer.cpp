@@ -208,7 +208,6 @@ void peer::generate_blk(simulator& sim, event* e ) {
 
     // remove included txns
     for (txn* t:b->txns) {
-        
         txns_not_included.erase(t);
     }
 	

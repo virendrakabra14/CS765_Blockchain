@@ -48,7 +48,11 @@ int main(int argc, const char* argv[]) {
         p.update_tree(sim,e);
         cout << "Blocks: Heights:: ";
         for (blk* b:p.curr_tree) {
-            cout << b->blk_id << ":" << b->height << " ";
+            cout << b->blk_id << ":" << b->height << "(";
+            for (txn* t:b->txns) {
+                cout << t->txn_id << ",";
+            }
+            cout << ") ";
         }
         cout << endl;
         cout << "Txns left: ";

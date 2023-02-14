@@ -2671,70 +2671,70 @@ NUMBER OF PEERS SAVED 10
 START 
 update_tree: 0 current latest is 1 with height 1
 update_tree: 0 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 5 10 11 12 13 
 IDs of txns heard by 0: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 1 current latest is 1 with height 1
 update_tree: 1 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 5 10 11 
 IDs of txns heard by 1: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 2 current latest is 3 with height 1
 update_tree: 2 updated latest block to 3 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 5 10 
 IDs of txns heard by 2: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 3 current latest is 1 with height 1
 update_tree: 3 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 10 11 
 IDs of txns heard by 3: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 4 current latest is 1 with height 1
 update_tree: 4 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 5 10 11 14 
 IDs of txns heard by 4: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 5 current latest is 1 with height 1
 update_tree: 5 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 4 5 10 11 
 IDs of txns heard by 5: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 6 current latest is 1 with height 1
 update_tree: 6 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 5 6 10 11 
 IDs of txns heard by 6: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 7 current latest is 1 with height 1
 update_tree: 7 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 1 10 11 
 IDs of txns heard by 7: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 8 current latest is 1 with height 1
 update_tree: 8 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 2 3 5 8 10 11 
 IDs of txns heard by 8: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
 START 
 update_tree: 9 current latest is 3 with height 1
 update_tree: 9 updated latest block to 3 with height 1
-Blocks: Heights:: 1:1 0:0 2:0 3:1 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
 Txns left: 3 5 7 9 10 
 IDs of txns heard by 9: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 ONE DONE
