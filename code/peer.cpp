@@ -250,7 +250,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     // done creating the block
     // set up forward events
 
-    ld blk_genr_delay = exponential_distribution<ld>(sim.Tblk/this->fraction_hashing_power)(rng);
+    ld blk_genr_delay = exponential_distribution<ld>(this->fraction_hashing_power /sim.Tblk)(rng);
 	cout << "TBLK " << sim.Tblk << " fraction " << this->fraction_hashing_power << endl;
 	cout << sim.Tblk / this -> fraction_hashing_power << " AVERAGE TIME " << blk_genr_delay << endl;
 
@@ -291,6 +291,7 @@ void peer::forward_blk(simulator& sim, event* e) {
                 blk_sent_to[b->blk_id].push_back(to);
 
                 ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
+				// IS THIS CORRECT????
                 ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
                 ld latency = sim.rho[this->id][to] + queuing_delay + b->blk_size/link_speed;
 

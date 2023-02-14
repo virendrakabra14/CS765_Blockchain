@@ -42,11 +42,13 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
         // peers_vec.push_back(peer(i));
         // initialize events (generate_txn)
         ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
+		cout << "time_txn " << time_txn << endl;
         event* e = new event(time_txn, 1, &peers_vec[i]);
         this->push(e);
 
 		cout << "SANCHIT " << this->Tblk << " ----- " << peers_vec[i].fraction_hashing_power <<endl;
-		ld time_blk = exponential_distribution<ld>(this->Tblk/peers_vec[i].fraction_hashing_power)(rng);
+		ld time_blk = exponential_distribution<ld>(peers_vec[i].fraction_hashing_power/this->Tblk)(rng);
+		cout << time_blk << endl;
 
  
         event* blk_gen = new event(time_blk, 4, &peers_vec[i]);
