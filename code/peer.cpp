@@ -376,6 +376,9 @@ void peer::update_tree(simulator& sim, event* e) {
     blk* b_iter = latest_blk;
     while (b_iter != nullptr) {
         curr_chain.insert(b_iter);
+        for (txn* t:b_iter->txns) {
+            txns_not_included.erase(t);
+        }
         b_iter = b_iter->parent;
     }
 
