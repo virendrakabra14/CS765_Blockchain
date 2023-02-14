@@ -82,6 +82,7 @@ void peer::hear_txn(simulator& sim, event* e) {
     else {
         cout << "hear_txn: node " << this->id << " heard " << e->tran->txn_id << " from " << e->from->id << endl;
         this->txns_all.insert(e->tran->txn_id);
+        this->txns_not_included.insert(e->tran);
         txn_sent_to[e->tran->txn_id] = vector<ll>();
         
         // set up forward event for self
@@ -94,6 +95,17 @@ void peer::print_all_txns() {
     cout << "IDs of txns heard by " << this->id << ": ";
     for(int i:this->txns_all) {
         cout << i << ' ';
+    }
+    cout << endl;
+}
+
+void peer::print_longest_chain() {
+    cout << "Longest chain as seen by " << this->id << ": ";
+    blk* tmp_blk = latest_blk;
+    vector<pair<ll,ll>> edges;
+    while(tmp_blk != nullptr) {
+        cout << tmp_blk->blk_id << "->";
+        tmp_blk = tmp_blk->parent;
     }
     cout << endl;
 }

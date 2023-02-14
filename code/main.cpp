@@ -61,6 +61,7 @@ int main(int argc, const char* argv[]) {
         }
         cout << endl;
         p.print_all_txns();
+        p.print_longest_chain();
 		cout << "ONE DONE" << endl;
     }
 	cout << "PROGRAM ENDING" << endl;

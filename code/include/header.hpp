@@ -168,6 +168,8 @@ class peer {
         void hear_blk(simulator& sim, event* e);
         bool check_blk(blk* b);
         void update_tree(simulator& sim, event* e);
+
+        void print_longest_chain();
 };
 
 class simulator {

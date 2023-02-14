@@ -197,6 +197,8 @@ update_tree: 2 updated latest block to 0 with height 0
 event run: type=4
 GENERATING CODE START
 [BALANCE] 2 : 50 0 0 0 0 0 0 0 0 0 
+[DEBUG] 0 VALID 0 IDX 8 IDy 2
+[DEBUG] 0 VALID 0 IDX 9 IDy 7
 3 0
 [BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
 generate_blk: node 2 generated 3
@@ -969,6 +971,8 @@ event run: type=6
 hear_blk: node 0 heard 3 from 2
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
 [DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
 update_tree: 0 current latest is 1 with height 1
@@ -1097,14 +1101,7 @@ hear_txn: node 1 already heard 13
 event run: type=3
 hear_txn: node 2 already heard 4
 event run: type=3
-hear_txn: node 0 heard 7 from 1
-event run: type=2
-forward_txn: node 0 forwarded 7 to 5
-forward_txn: node 0 forwarded 7 to 2
-forward_txn: node 0 forwarded 7 to 6
-forward_txn: node 0 forwarded 7 to 4
-forward_txn: node 0 forwarded 7 to 3
-forward_txn: node 0 forwarded 7 to 9
+hear_txn: node 0 already heard 7
 event run: type=3
 hear_txn: node 6 already heard 1
 event run: type=3
@@ -1119,8 +1116,6 @@ forward_txn: node 2 forwarded 8 to 4
 forward_txn: node 2 forwarded 8 to 8
 forward_txn: node 2 forwarded 8 to 0
 forward_txn: node 2 forwarded 8 to 9
-event run: type=3
-hear_txn: node 3 already heard 7
 event run: type=3
 hear_txn: node 0 already heard 12
 event run: type=3
@@ -1147,6 +1142,8 @@ event run: type=3
 hear_txn: node 9 already heard 14
 event run: type=3
 hear_txn: node 5 already heard 12
+event run: type=3
+hear_txn: node 9 already heard 8
 event run: type=6
 hear_blk: node 9 heard 0 from 2
 [BALANCE] 9 : 0 0 0 0 0 0 0 0 0 0 
@@ -1159,19 +1156,13 @@ forward_blk: node 9 forwarded 0 to 0
 event run: type=7
 update_tree: 9 current latest is 0 with height 0
 update_tree: 9 updated latest block to 0 with height 0
-event run: type=3
-hear_txn: node 2 already heard 7
-event run: type=3
-hear_txn: node 6 heard 7 from 0
-event run: type=2
-forward_txn: node 6 forwarded 7 to 1
-forward_txn: node 6 forwarded 7 to 4
-forward_txn: node 6 forwarded 7 to 3
 event run: type=6
 hear_blk: node 9 heard 3 from 0
 [BALANCE] 9 : 50 0 0 0 0 0 0 0 0 0 
 3 0
 [DEBUG] 50 VALID 1 IDX 2 IDy -1
+[DEBUG] 0 VALID 1 IDX 8 IDy 2
+[DEBUG] 0 VALID 1 IDX 9 IDy 7
 [BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
 event run: type=5
 forward_blk: node 9 forwarded 3 to 5
@@ -1191,7 +1182,7 @@ hear_txn: node 7 already heard 3
 event run: type=3
 hear_txn: node 3 already heard 8
 event run: type=3
-hear_txn: node 4 already heard 7
+hear_txn: node 8 already heard 8
 event run: type=3
 hear_txn: node 7 heard 9 from 3
 event run: type=2
@@ -1200,6 +1191,8 @@ forward_txn: node 7 forwarded 9 to 4
 forward_txn: node 7 forwarded 9 to 1
 event run: type=3
 hear_txn: node 9 already heard 7
+event run: type=3
+hear_txn: node 4 already heard 8
 event run: type=3
 hear_txn: node 6 already heard 14
 event run: type=3
@@ -1211,13 +1204,13 @@ forward_txn: node 2 forwarded 13 to 0
 forward_txn: node 2 forwarded 13 to 9
 forward_txn: node 2 forwarded 13 to 1
 event run: type=3
-hear_txn: node 1 already heard 9
-event run: type=3
 hear_txn: node 0 already heard 8
+event run: type=3
+hear_txn: node 1 already heard 9
 event run: type=6
 hear_blk: node 9 already heard 0
 event run: type=3
-hear_txn: node 9 already heard 13
+hear_txn: node 8 already heard 1
 event run: type=3
 hear_txn: node 4 already heard 2
 event run: type=3
@@ -1245,13 +1238,11 @@ forward_txn: node 5 forwarded 13 to 4
 forward_txn: node 5 forwarded 13 to 3
 forward_txn: node 5 forwarded 13 to 1
 event run: type=3
-hear_txn: node 2 already heard 3
+hear_txn: node 9 already heard 1
 event run: type=6
 hear_blk: node 4 already heard 2
 event run: type=3
 hear_txn: node 9 already heard 14
-event run: type=3
-hear_txn: node 3 already heard 13
 event run: type=3
 hear_txn: node 9 already heard 4
 event run: type=6
@@ -1310,10 +1301,10 @@ event run: type=2
 forward_txn: node 9 forwarded 12 to 5
 forward_txn: node 9 forwarded 12 to 2
 forward_txn: node 9 forwarded 12 to 1
-event run: type=6
-hear_blk: node 1 already heard 0
 event run: type=3
 hear_txn: node 5 already heard 2
+event run: type=3
+hear_txn: node 6 already heard 2
 event run: type=3
 hear_txn: node 8 heard 13 from 1
 event run: type=2
@@ -1322,17 +1313,25 @@ forward_txn: node 8 forwarded 13 to 4
 forward_txn: node 8 forwarded 13 to 3
 forward_txn: node 8 forwarded 13 to 2
 event run: type=3
-hear_txn: node 3 already heard 7
+hear_txn: node 7 heard 6 from 1
+event run: type=2
+forward_txn: node 7 forwarded 6 to 5
+forward_txn: node 7 forwarded 6 to 4
+forward_txn: node 7 forwarded 6 to 3
 event run: type=3
-hear_txn: node 5 already heard 9
+hear_txn: node 3 already heard 8
 event run: type=3
 hear_txn: node 2 already heard 1
+event run: type=3
+hear_txn: node 1 already heard 9
 event run: type=3
 hear_txn: node 8 already heard 14
 event run: type=6
 hear_blk: node 3 heard 3 from 0
 [BALANCE] 3 : 50 0 0 0 0 0 50 0 0 0 
 [DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
 [BALANCE] 3 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
 update_tree: 3 current latest is 1 with height 1
@@ -1352,21 +1351,19 @@ hear_txn: node 7 already heard 9
 event run: type=3
 hear_txn: node 1 already heard 12
 event run: type=6
-hear_blk: node 3 already heard 1
-event run: type=3
-hear_txn: node 1 already heard 4
-event run: type=6
 hear_blk: node 0 already heard 0
 event run: type=3
 hear_txn: node 8 already heard 14
+event run: type=3
+hear_txn: node 2 already heard 13
+event run: type=6
+hear_blk: node 2 already heard 3
 event run: type=3
 hear_txn: node 7 heard 7 from 4
 event run: type=2
 forward_txn: node 7 forwarded 7 to 5
 forward_txn: node 7 forwarded 7 to 3
 forward_txn: node 7 forwarded 7 to 1
-event run: type=3
-hear_txn: node 1 already heard 12
 event run: type=3
 hear_txn: node 8 already heard 2
 event run: type=3
@@ -1404,13 +1401,27 @@ forward_txn: node 0 forwarded 6 to 9
 event run: type=3
 hear_txn: node 9 already heard 4
 event run: type=3
-hear_txn: node 4 already heard 2
+hear_txn: node 2 already heard 13
 event run: type=3
 hear_txn: node 2 already heard 13
 event run: type=3
 hear_txn: node 0 already heard 9
-event run: type=3
-hear_txn: node 1 already heard 7
+event run: type=6
+hear_blk: node 7 heard 3 from 3
+[BALANCE] 7 : 0 0 0 50 0 0 50 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
+[BALANCE] 7 : 0 0 0 50 0 0 50 0 0 0 
+event run: type=7
+update_tree: 7 current latest is 2 with height 0
+3 0
+update_tree: 7 updated latest block to 3 with height 1
+event run: type=5
+forward_blk: node 7 forwarded 3 to 5
+forward_blk: node 7 forwarded 3 to 4
+forward_blk: node 7 forwarded 3 to 3
+forward_blk: node 7 forwarded 3 to 1
 event run: type=3
 hear_txn: node 0 already heard 2
 event run: type=3
@@ -1428,23 +1439,29 @@ forward_txn: node 2 forwarded 12 to 9
 event run: type=3
 hear_txn: node 4 already heard 2
 event run: type=3
-hear_txn: node 0 already heard 8
+hear_txn: node 1 already heard 12
 event run: type=6
 hear_blk: node 8 already heard 2
-event run: type=6
-hear_blk: node 0 already heard 1
+event run: type=3
+hear_txn: node 5 already heard 9
 event run: type=3
 hear_txn: node 6 already heard 8
 event run: type=3
-hear_txn: node 3 already heard 9
+hear_txn: node 9 heard 6 from 0
+event run: type=2
+forward_txn: node 9 forwarded 6 to 5
+forward_txn: node 9 forwarded 6 to 2
+forward_txn: node 9 forwarded 6 to 1
 event run: type=3
-hear_txn: node 9 already heard 7
+hear_txn: node 0 already heard 12
+event run: type=3
+hear_txn: node 3 already heard 9
 event run: type=3
 hear_txn: node 7 already heard 4
 event run: type=3
-hear_txn: node 3 already heard 8
+hear_txn: node 8 already heard 12
 event run: type=3
-hear_txn: node 4 already heard 12
+hear_txn: node 3 already heard 8
 event run: type=3
 hear_txn: node 3 heard 6 from 6
 event run: type=2
@@ -1458,15 +1475,13 @@ hear_txn: node 4 already heard 9
 event run: type=3
 hear_txn: node 3 already heard 12
 event run: type=3
-hear_txn: node 5 already heard 12
-event run: type=6
-hear_blk: node 8 already heard 1
-event run: type=3
 hear_txn: node 4 already heard 1
 event run: type=3
-hear_txn: node 6 already heard 12
+hear_txn: node 3 already heard 6
 event run: type=3
-hear_txn: node 4 already heard 8
+hear_txn: node 2 already heard 3
+event run: type=3
+hear_txn: node 6 already heard 12
 event run: type=6
 hear_blk: node 0 heard 2 from 3
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
@@ -1487,14 +1502,8 @@ forward_blk: node 0 forwarded 2 to 3
 forward_blk: node 0 forwarded 2 to 9
 event run: type=3
 hear_txn: node 2 already heard 8
-event run: type=6
-hear_blk: node 0 already heard 0
 event run: type=3
-hear_txn: node 9 heard 6 from 0
-event run: type=2
-forward_txn: node 9 forwarded 6 to 5
-forward_txn: node 9 forwarded 6 to 2
-forward_txn: node 9 forwarded 6 to 1
+hear_txn: node 0 already heard 3
 event run: type=3
 hear_txn: node 4 already heard 14
 event run: type=3
@@ -1502,39 +1511,11 @@ hear_txn: node 6 already heard 8
 event run: type=3
 hear_txn: node 2 already heard 1
 event run: type=3
+hear_txn: node 0 already heard 8
+event run: type=6
+hear_blk: node 4 already heard 2
+event run: type=3
 hear_txn: node 3 already heard 2
-event run: type=6
-hear_blk: node 6 heard 3 from 3
-[BALANCE] 6 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 2 IDy -1
-[BALANCE] 6 : 50 0 0 0 0 0 50 0 0 0 
-event run: type=7
-update_tree: 6 current latest is 1 with height 1
-3 0
-update_tree: 6 updated latest block to 1 with height 1
-event run: type=5
-forward_blk: node 6 forwarded 3 to 1
-forward_blk: node 6 forwarded 3 to 4
-forward_blk: node 6 forwarded 3 to 3
-forward_blk: node 6 forwarded 3 to 0
-event run: type=6
-hear_blk: node 1 heard 2 from 0
-[BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 3 IDy -1
-[DEBUG] 0 INVALID 1 IDX 6 IDy 7
-[DEBUG] 50 INVALID 1 IDX 6 IDy -1
-[BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
-event run: type=7
-update_tree: 1 current latest is 1 with height 1
-update_tree: 1 updated latest block to 1 with height 1
-event run: type=5
-forward_blk: node 1 forwarded 2 to 6
-forward_blk: node 1 forwarded 2 to 7
-forward_blk: node 1 forwarded 2 to 9
-forward_blk: node 1 forwarded 2 to 5
-forward_blk: node 1 forwarded 2 to 2
-forward_blk: node 1 forwarded 2 to 8
-forward_blk: node 1 forwarded 2 to 0
 event run: type=3
 hear_txn: node 7 already heard 7
 event run: type=3
@@ -1548,7 +1529,7 @@ hear_txn: node 1 already heard 2
 event run: type=3
 hear_txn: node 2 already heard 2
 event run: type=3
-hear_txn: node 4 already heard 7
+hear_txn: node 4 already heard 12
 event run: type=3
 hear_txn: node 6 already heard 9
 event run: type=3
@@ -1558,7 +1539,13 @@ hear_txn: node 9 already heard 1
 event run: type=3
 hear_txn: node 8 already heard 7
 event run: type=3
+hear_txn: node 1 already heard 7
+event run: type=3
+hear_txn: node 4 already heard 9
+event run: type=3
 hear_txn: node 6 already heard 14
+event run: type=3
+hear_txn: node 9 already heard 13
 event run: type=3
 hear_txn: node 2 already heard 1
 event run: type=3
@@ -1591,29 +1578,46 @@ hear_txn: node 8 already heard 8
 event run: type=3
 hear_txn: node 0 already heard 7
 event run: type=3
-hear_txn: node 2 already heard 4
-event run: type=3
-hear_txn: node 4 already heard 1
+hear_txn: node 1 already heard 4
 event run: type=3
 hear_txn: node 1 already heard 9
-event run: type=3
-hear_txn: node 3 already heard 13
+event run: type=6
+hear_blk: node 5 heard 3 from 9
+[BALANCE] 5 : 50 0 0 0 0 0 0 0 0 0 
+3 0
+[DEBUG] 50 VALID 1 IDX 2 IDy -1
+[DEBUG] 0 VALID 1 IDX 8 IDy 2
+[DEBUG] 0 VALID 1 IDX 9 IDy 7
+[BALANCE] 5 : 50 0 50 0 0 0 0 0 0 0 
+event run: type=5
+forward_blk: node 5 forwarded 3 to 0
+forward_blk: node 5 forwarded 3 to 2
+forward_blk: node 5 forwarded 3 to 7
+forward_blk: node 5 forwarded 3 to 8
+forward_blk: node 5 forwarded 3 to 4
+forward_blk: node 5 forwarded 3 to 3
+forward_blk: node 5 forwarded 3 to 1
+event run: type=7
+update_tree: 5 current latest is 3 with height 1
+update_tree: 5 updated latest block to 3 with height 1
 event run: type=3
 hear_txn: node 2 already heard 8
 event run: type=3
 hear_txn: node 5 already heard 4
+event run: type=6
+hear_blk: node 5 already heard 3
 event run: type=3
 hear_txn: node 2 already heard 9
 event run: type=3
 hear_txn: node 2 already heard 13
 event run: type=3
-hear_txn: node 5 already heard 12
-event run: type=3
-hear_txn: node 1 already heard 3
-event run: type=3
 hear_txn: node 4 already heard 4
 event run: type=6
 hear_blk: node 6 already heard 1
+event run: type=3
+hear_txn: node 1 already heard 1
+event run: type=3
+hear_txn: node 3 already heard 6
 event run: type=3
 hear_txn: node 9 already heard 9
 event run: type=6
@@ -1623,8 +1627,6 @@ hear_txn: node 2 already heard 4
 event run: type=3
 hear_txn: node 7 already heard 7
 event run: type=3
-hear_txn: node 9 already heard 8
-event run: type=3
 hear_txn: node 7 heard 13 from 4
 event run: type=2
 forward_txn: node 7 forwarded 13 to 5
@@ -1633,129 +1635,89 @@ forward_txn: node 7 forwarded 13 to 1
 event run: type=3
 hear_txn: node 4 already heard 7
 event run: type=3
-hear_txn: node 2 heard 6 from 1
-event run: type=2
-forward_txn: node 2 forwarded 6 to 5
-forward_txn: node 2 forwarded 6 to 4
-forward_txn: node 2 forwarded 6 to 8
-forward_txn: node 2 forwarded 6 to 0
-forward_txn: node 2 forwarded 6 to 9
-event run: type=6
-hear_blk: node 4 already heard 2
+hear_txn: node 0 already heard 1
 event run: type=3
 hear_txn: node 2 already heard 1
 event run: type=6
-hear_blk: node 2 heard 1 from 1
-[BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 6 IDy -1
-[DEBUG] 0 INVALID 1 IDX 6 IDy 7
-[BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
-event run: type=7
-update_tree: 2 current latest is 3 with height 1
-1 0
-update_tree: 2 updated latest block to 3 with height 1
-event run: type=5
-forward_blk: node 2 forwarded 1 to 5
-forward_blk: node 2 forwarded 1 to 4
-forward_blk: node 2 forwarded 1 to 8
-forward_blk: node 2 forwarded 1 to 0
-forward_blk: node 2 forwarded 1 to 9
-forward_blk: node 2 forwarded 1 to 1
-event run: type=6
 hear_blk: node 6 already heard 2
 event run: type=3
+hear_txn: node 1 already heard 6
+event run: type=3
 hear_txn: node 4 already heard 8
+event run: type=6
+hear_blk: node 3 already heard 1
 event run: type=3
 hear_txn: node 2 already heard 7
 event run: type=6
 hear_blk: node 7 already heard 0
 event run: type=3
-hear_txn: node 0 already heard 2
-event run: type=6
-hear_blk: node 2 already heard 3
-event run: type=3
 hear_txn: node 1 already heard 9
 event run: type=3
-hear_txn: node 6 already heard 7
+hear_txn: node 6 heard 7 from 3
+event run: type=2
+forward_txn: node 6 forwarded 7 to 1
+forward_txn: node 6 forwarded 7 to 4
+forward_txn: node 6 forwarded 7 to 0
 event run: type=3
 hear_txn: node 5 already heard 4
 event run: type=3
 hear_txn: node 0 already heard 7
+event run: type=3
+hear_txn: node 8 already heard 13
+event run: type=3
+hear_txn: node 4 already heard 13
 event run: type=6
 hear_blk: node 0 already heard 0
 event run: type=6
 hear_blk: node 1 already heard 0
 event run: type=3
-hear_txn: node 5 already heard 13
+hear_txn: node 1 already heard 6
 event run: type=3
 hear_txn: node 3 already heard 1
 event run: type=3
 hear_txn: node 0 already heard 13
-event run: type=3
-hear_txn: node 8 heard 6 from 3
-event run: type=2
-forward_txn: node 8 forwarded 6 to 5
-forward_txn: node 8 forwarded 6 to 4
-forward_txn: node 8 forwarded 6 to 2
-forward_txn: node 8 forwarded 6 to 1
-event run: type=3
-hear_txn: node 3 already heard 13
-event run: type=3
-hear_txn: node 8 already heard 8
 event run: type=6
 hear_blk: node 6 already heard 0
+event run: type=3
+hear_txn: node 4 already heard 1
 event run: type=3
 hear_txn: node 3 already heard 14
 event run: type=6
 hear_blk: node 2 already heard 0
 event run: type=3
 hear_txn: node 4 already heard 13
-event run: type=6
-hear_blk: node 5 heard 1 from 8
-[BALANCE] 5 : 50 0 0 0 0 0 0 0 0 0 
-1 0
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[BALANCE] 5 : 50 0 0 0 0 0 50 0 0 0 
-event run: type=5
-forward_blk: node 5 forwarded 1 to 9
-forward_blk: node 5 forwarded 1 to 0
-forward_blk: node 5 forwarded 1 to 2
-forward_blk: node 5 forwarded 1 to 7
-forward_blk: node 5 forwarded 1 to 4
-forward_blk: node 5 forwarded 1 to 3
-forward_blk: node 5 forwarded 1 to 1
-event run: type=7
-update_tree: 5 current latest is 1 with height 1
-update_tree: 5 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 4 already heard 4
 event run: type=3
 hear_txn: node 3 already heard 8
 event run: type=3
-hear_txn: node 9 already heard 6
-event run: type=3
 hear_txn: node 1 already heard 8
+event run: type=3
+hear_txn: node 3 already heard 13
+event run: type=3
+hear_txn: node 0 already heard 2
 event run: type=6
 hear_blk: node 3 already heard 0
 event run: type=3
 hear_txn: node 7 already heard 8
-event run: type=6
-hear_blk: node 5 already heard 1
 event run: type=3
 hear_txn: node 0 already heard 8
 event run: type=3
 hear_txn: node 2 already heard 14
+event run: type=3
+hear_txn: node 4 already heard 13
+event run: type=3
+hear_txn: node 1 already heard 7
 event run: type=6
 hear_blk: node 7 heard 1 from 4
-[BALANCE] 7 : 0 0 0 50 0 0 50 0 0 0 
+[BALANCE] 7 : 50 0 50 0 0 0 0 0 0 0 
 [DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [DEBUG] 0 INVALID 1 IDX 6 IDy 7
-[BALANCE] 7 : 0 0 0 50 0 0 50 0 0 0 
+[BALANCE] 7 : 50 0 50 0 0 0 0 0 0 0 
 event run: type=7
-update_tree: 7 current latest is 2 with height 0
+update_tree: 7 current latest is 3 with height 1
 1 0
-update_tree: 7 updated latest block to 1 with height 1
+update_tree: 7 updated latest block to 3 with height 1
 event run: type=5
 forward_blk: node 7 forwarded 1 to 5
 forward_blk: node 7 forwarded 1 to 4
@@ -1773,141 +1735,43 @@ event run: type=6
 hear_blk: node 8 already heard 0
 event run: type=3
 hear_txn: node 8 already heard 4
-event run: type=6
-hear_blk: node 8 heard 3 from 3
-[BALANCE] 8 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 2 IDy -1
-[BALANCE] 8 : 50 0 0 0 0 0 50 0 0 0 
-event run: type=7
-update_tree: 8 current latest is 1 with height 1
-3 0
-update_tree: 8 updated latest block to 1 with height 1
-event run: type=5
-forward_blk: node 8 forwarded 3 to 5
-forward_blk: node 8 forwarded 3 to 4
-forward_blk: node 8 forwarded 3 to 3
-forward_blk: node 8 forwarded 3 to 2
-forward_blk: node 8 forwarded 3 to 1
 event run: type=3
 hear_txn: node 4 already heard 9
 event run: type=3
-hear_txn: node 4 heard 6 from 3
-event run: type=2
-forward_txn: node 4 forwarded 6 to 2
-forward_txn: node 4 forwarded 6 to 5
-forward_txn: node 4 forwarded 6 to 8
-forward_txn: node 4 forwarded 6 to 6
-forward_txn: node 4 forwarded 6 to 7
-forward_txn: node 4 forwarded 6 to 0
-event run: type=3
-hear_txn: node 2 already heard 13
+hear_txn: node 7 already heard 6
 event run: type=3
 hear_txn: node 5 already heard 13
+event run: type=3
+hear_txn: node 5 already heard 7
 event run: type=6
 hear_blk: node 8 already heard 1
 event run: type=6
-hear_blk: node 3 already heard 1
-event run: type=6
 hear_blk: node 0 already heard 2
-event run: type=3
-hear_txn: node 3 already heard 6
+event run: type=6
+hear_blk: node 0 already heard 3
 event run: type=3
 hear_txn: node 2 already heard 4
 event run: type=6
 hear_blk: node 2 already heard 3
 event run: type=3
-hear_txn: node 4 already heard 6
+hear_txn: node 4 heard 6 from 6
+event run: type=2
+forward_txn: node 4 forwarded 6 to 2
+forward_txn: node 4 forwarded 6 to 5
+forward_txn: node 4 forwarded 6 to 8
+forward_txn: node 4 forwarded 6 to 7
+forward_txn: node 4 forwarded 6 to 3
+forward_txn: node 4 forwarded 6 to 0
+event run: type=6
+hear_blk: node 4 already heard 1
 event run: type=3
 hear_txn: node 4 already heard 13
 event run: type=3
 hear_txn: node 1 already heard 1
-event run: type=6
-hear_blk: node 2 already heard 3
 event run: type=3
 hear_txn: node 4 already heard 4
-event run: type=6
-hear_blk: node 5 heard 3 from 9
-[BALANCE] 5 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 2 IDy -1
-[BALANCE] 5 : 50 0 0 0 0 0 50 0 0 0 
-event run: type=7
-update_tree: 5 current latest is 1 with height 1
-3 0
-update_tree: 5 updated latest block to 1 with height 1
-event run: type=5
-forward_blk: node 5 forwarded 3 to 9
-forward_blk: node 5 forwarded 3 to 0
-forward_blk: node 5 forwarded 3 to 2
-forward_blk: node 5 forwarded 3 to 7
-forward_blk: node 5 forwarded 3 to 8
-forward_blk: node 5 forwarded 3 to 4
-forward_blk: node 5 forwarded 3 to 3
-forward_blk: node 5 forwarded 3 to 1
-event run: type=6
-hear_blk: node 7 already heard 1
 event run: type=3
-hear_txn: node 5 already heard 8
-event run: type=3
-hear_txn: node 8 already heard 9
-event run: type=3
-hear_txn: node 1 already heard 2
-event run: type=6
-hear_blk: node 7 already heard 1
-event run: type=3
-hear_txn: node 3 already heard 1
-event run: type=6
-hear_blk: node 3 already heard 0
-event run: type=6
-hear_blk: node 9 heard 1 from 1
-[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 6 IDy -1
-[DEBUG] 0 INVALID 1 IDX 6 IDy 7
-[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
-event run: type=7
-update_tree: 9 current latest is 3 with height 1
-1 0
-update_tree: 9 updated latest block to 3 with height 1
-event run: type=5
-forward_blk: node 9 forwarded 1 to 5
-forward_blk: node 9 forwarded 1 to 2
-forward_blk: node 9 forwarded 1 to 1
-forward_blk: node 9 forwarded 1 to 0
-event run: type=3
-hear_txn: node 0 already heard 1
-event run: type=3
-hear_txn: node 1 already heard 1
-event run: type=6
-hear_blk: node 9 already heard 3
-event run: type=3
-hear_txn: node 3 already heard 12
-event run: type=3
-hear_txn: node 1 already heard 14
-event run: type=6
-hear_blk: node 3 already heard 3
-event run: type=6
-hear_blk: node 3 already heard 0
-event run: type=6
-hear_blk: node 7 already heard 2
-event run: type=3
-hear_txn: node 2 already heard 12
-event run: type=3
-hear_txn: node 2 already heard 6
-event run: type=3
-hear_txn: node 9 already heard 4
-event run: type=3
-hear_txn: node 0 already heard 4
-event run: type=3
-hear_txn: node 2 already heard 9
-event run: type=3
-hear_txn: node 9 already heard 14
-event run: type=6
-hear_blk: node 1 already heard 2
-event run: type=6
-hear_blk: node 0 already heard 2
-event run: type=3
-hear_txn: node 3 already heard 12
-event run: type=3
-hear_txn: node 5 already heard 8
+hear_txn: node 5 already heard 12
 event run: type=3
 hear_txn: node 5 heard 6 from 0
 event run: type=2
@@ -1919,87 +1783,73 @@ forward_txn: node 5 forwarded 6 to 4
 forward_txn: node 5 forwarded 6 to 3
 forward_txn: node 5 forwarded 6 to 1
 event run: type=3
-hear_txn: node 7 heard 6 from 3
-event run: type=2
-forward_txn: node 7 forwarded 6 to 5
-forward_txn: node 7 forwarded 6 to 4
-forward_txn: node 7 forwarded 6 to 1
-event run: type=3
-hear_txn: node 9 already heard 1
-event run: type=6
-hear_blk: node 4 already heard 0
-event run: type=3
-hear_txn: node 3 already heard 14
-event run: type=6
-hear_blk: node 5 already heard 1
-event run: type=3
-hear_txn: node 4 already heard 14
-event run: type=3
-hear_txn: node 0 already heard 14
-event run: type=3
-hear_txn: node 2 already heard 8
-event run: type=6
-hear_blk: node 7 already heard 2
-event run: type=6
-hear_blk: node 7 heard 3 from 5
-[BALANCE] 7 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 2 IDy -1
-[BALANCE] 7 : 50 0 0 0 0 0 50 0 0 0 
-event run: type=7
-update_tree: 7 current latest is 1 with height 1
-3 0
-update_tree: 7 updated latest block to 1 with height 1
-event run: type=5
-forward_blk: node 7 forwarded 3 to 5
-forward_blk: node 7 forwarded 3 to 4
-forward_blk: node 7 forwarded 3 to 3
-forward_blk: node 7 forwarded 3 to 1
-event run: type=3
-hear_txn: node 5 already heard 12
-event run: type=6
-hear_blk: node 0 already heard 1
-event run: type=3
-hear_txn: node 2 already heard 14
-event run: type=3
-hear_txn: node 5 already heard 14
-event run: type=6
-hear_blk: node 2 already heard 1
-event run: type=3
-hear_txn: node 9 already heard 3
-event run: type=3
-hear_txn: node 0 already heard 6
-event run: type=3
-hear_txn: node 5 already heard 14
+hear_txn: node 5 already heard 8
 event run: type=3
 hear_txn: node 8 already heard 9
+event run: type=3
+hear_txn: node 5 already heard 13
+event run: type=3
+hear_txn: node 1 already heard 2
+event run: type=3
+hear_txn: node 3 already heard 1
 event run: type=6
-hear_blk: node 8 already heard 3
+hear_blk: node 3 already heard 0
 event run: type=3
-hear_txn: node 0 already heard 6
+hear_txn: node 2 heard 6 from 0
+event run: type=2
+forward_txn: node 2 forwarded 6 to 5
+forward_txn: node 2 forwarded 6 to 4
+forward_txn: node 2 forwarded 6 to 8
+forward_txn: node 2 forwarded 6 to 9
+forward_txn: node 2 forwarded 6 to 1
 event run: type=3
-hear_txn: node 3 already heard 3
-event run: type=3
-hear_txn: node 9 already heard 13
-event run: type=3
-hear_txn: node 1 already heard 13
-event run: type=3
-hear_txn: node 6 already heard 6
-event run: type=3
-hear_txn: node 5 already heard 6
+hear_txn: node 0 already heard 1
 event run: type=6
-hear_blk: node 5 already heard 1
+hear_blk: node 9 already heard 3
 event run: type=6
-hear_blk: node 5 already heard 0
-event run: type=6
-hear_blk: node 5 already heard 3
+hear_blk: node 0 already heard 0
 event run: type=3
-hear_txn: node 8 already heard 13
+hear_txn: node 3 already heard 12
 event run: type=3
-hear_txn: node 6 already heard 12
+hear_txn: node 1 already heard 14
 event run: type=6
-hear_blk: node 1 heard 3 from 0
+hear_blk: node 3 already heard 0
+event run: type=6
+hear_blk: node 7 already heard 2
+event run: type=3
+hear_txn: node 2 already heard 12
+event run: type=3
+hear_txn: node 9 already heard 4
+event run: type=3
+hear_txn: node 2 already heard 9
+event run: type=3
+hear_txn: node 9 already heard 14
+event run: type=6
+hear_blk: node 1 heard 2 from 7
+[BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
+[BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
+event run: type=7
+update_tree: 1 current latest is 1 with height 1
+update_tree: 1 updated latest block to 1 with height 1
+event run: type=5
+forward_blk: node 1 forwarded 2 to 6
+forward_blk: node 1 forwarded 2 to 7
+forward_blk: node 1 forwarded 2 to 9
+forward_blk: node 1 forwarded 2 to 5
+forward_blk: node 1 forwarded 2 to 2
+forward_blk: node 1 forwarded 2 to 8
+forward_blk: node 1 forwarded 2 to 0
+event run: type=3
+hear_txn: node 3 already heard 6
+event run: type=6
+hear_blk: node 1 heard 3 from 9
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
 [DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
 update_tree: 1 current latest is 1 with height 1
@@ -2014,21 +1864,154 @@ forward_blk: node 1 forwarded 3 to 2
 forward_blk: node 1 forwarded 3 to 8
 forward_blk: node 1 forwarded 3 to 0
 event run: type=3
-hear_txn: node 8 already heard 7
+hear_txn: node 3 already heard 12
 event run: type=3
-hear_txn: node 5 already heard 3
+hear_txn: node 5 already heard 8
+event run: type=3
+hear_txn: node 8 heard 6 from 3
+event run: type=2
+forward_txn: node 8 forwarded 6 to 5
+forward_txn: node 8 forwarded 6 to 4
+forward_txn: node 8 forwarded 6 to 2
+forward_txn: node 8 forwarded 6 to 1
+event run: type=3
+hear_txn: node 9 already heard 1
 event run: type=6
-hear_blk: node 0 already heard 3
+hear_blk: node 5 already heard 3
+event run: type=6
+hear_blk: node 4 already heard 0
+event run: type=3
+hear_txn: node 3 already heard 14
+event run: type=6
+hear_blk: node 9 heard 2 from 5
+[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
+[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
+event run: type=7
+update_tree: 9 current latest is 3 with height 1
+update_tree: 9 updated latest block to 3 with height 1
+event run: type=5
+forward_blk: node 9 forwarded 2 to 5
+forward_blk: node 9 forwarded 2 to 2
+forward_blk: node 9 forwarded 2 to 1
+forward_blk: node 9 forwarded 2 to 0
+event run: type=3
+hear_txn: node 4 already heard 14
+event run: type=3
+hear_txn: node 0 already heard 14
+event run: type=6
+hear_blk: node 1 already heard 3
 event run: type=3
 hear_txn: node 2 already heard 8
 event run: type=3
+hear_txn: node 5 already heard 12
+event run: type=3
+hear_txn: node 2 already heard 14
+event run: type=3
+hear_txn: node 5 already heard 14
+event run: type=6
+hear_blk: node 2 heard 1 from 4
+[BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
+event run: type=7
+update_tree: 2 current latest is 3 with height 1
+1 0
+update_tree: 2 updated latest block to 3 with height 1
+event run: type=5
+forward_blk: node 2 forwarded 1 to 5
+forward_blk: node 2 forwarded 1 to 4
+forward_blk: node 2 forwarded 1 to 8
+forward_blk: node 2 forwarded 1 to 0
+forward_blk: node 2 forwarded 1 to 9
+forward_blk: node 2 forwarded 1 to 1
+event run: type=3
+hear_txn: node 5 already heard 6
+event run: type=3
+hear_txn: node 9 already heard 3
+event run: type=6
+hear_blk: node 5 already heard 3
+event run: type=3
+hear_txn: node 5 already heard 14
+event run: type=6
+hear_blk: node 7 already heard 2
+event run: type=3
+hear_txn: node 8 already heard 9
+event run: type=6
+hear_blk: node 8 heard 3 from 2
+[BALANCE] 8 : 50 0 0 0 0 0 50 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
+[BALANCE] 8 : 50 0 0 0 0 0 50 0 0 0 
+event run: type=7
+update_tree: 8 current latest is 1 with height 1
+3 0
+update_tree: 8 updated latest block to 1 with height 1
+event run: type=5
+forward_blk: node 8 forwarded 3 to 5
+forward_blk: node 8 forwarded 3 to 4
+forward_blk: node 8 forwarded 3 to 3
+forward_blk: node 8 forwarded 3 to 2
+forward_blk: node 8 forwarded 3 to 1
+event run: type=3
+hear_txn: node 3 already heard 3
+event run: type=6
+hear_blk: node 1 already heard 1
+event run: type=3
+hear_txn: node 9 already heard 13
+event run: type=3
+hear_txn: node 1 already heard 6
+event run: type=3
+hear_txn: node 1 already heard 13
+event run: type=3
+hear_txn: node 3 already heard 13
+event run: type=3
 hear_txn: node 4 already heard 6
+event run: type=6
+hear_blk: node 9 already heard 3
+event run: type=6
+hear_blk: node 5 heard 1 from 4
+[BALANCE] 5 : 50 0 50 0 0 0 0 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[BALANCE] 5 : 50 0 50 0 0 0 0 0 0 0 
+event run: type=7
+update_tree: 5 current latest is 3 with height 1
+1 0
+update_tree: 5 updated latest block to 3 with height 1
+event run: type=5
+forward_blk: node 5 forwarded 1 to 9
+forward_blk: node 5 forwarded 1 to 0
+forward_blk: node 5 forwarded 1 to 2
+forward_blk: node 5 forwarded 1 to 7
+forward_blk: node 5 forwarded 1 to 8
+forward_blk: node 5 forwarded 1 to 4
+forward_blk: node 5 forwarded 1 to 3
+forward_blk: node 5 forwarded 1 to 1
+event run: type=6
+hear_blk: node 5 already heard 0
+event run: type=3
+hear_txn: node 6 already heard 12
+event run: type=6
+hear_blk: node 1 already heard 3
+event run: type=3
+hear_txn: node 8 already heard 7
+event run: type=3
+hear_txn: node 5 already heard 3
+event run: type=3
+hear_txn: node 2 already heard 8
 event run: type=3
 hear_txn: node 3 already heard 13
 event run: type=6
 hear_blk: node 4 heard 3 from 0
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
 [DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
 update_tree: 4 current latest is 1 with height 1
@@ -2047,29 +2030,23 @@ hear_txn: node 3 already heard 9
 event run: type=3
 hear_txn: node 4 already heard 14
 event run: type=3
-hear_txn: node 8 already heard 13
-event run: type=6
-hear_blk: node 0 already heard 3
-event run: type=3
 hear_txn: node 7 already heard 2
+event run: type=6
+hear_blk: node 0 already heard 2
 event run: type=3
 hear_txn: node 9 already heard 12
-event run: type=3
-hear_txn: node 4 already heard 6
 event run: type=6
-hear_blk: node 9 already heard 3
+hear_blk: node 5 already heard 1
 event run: type=6
 hear_blk: node 9 already heard 0
 event run: type=3
-hear_txn: node 1 already heard 6
-event run: type=6
-hear_blk: node 4 already heard 1
-event run: type=3
 hear_txn: node 5 already heard 13
 event run: type=3
-hear_txn: node 2 already heard 6
+hear_txn: node 3 already heard 13
+event run: type=6
+hear_blk: node 1 already heard 3
 event run: type=3
-hear_txn: node 9 already heard 13
+hear_txn: node 0 already heard 6
 event run: type=6
 hear_blk: node 2 already heard 0
 event run: type=6
@@ -2078,129 +2055,143 @@ event run: type=3
 hear_txn: node 0 already heard 1
 event run: type=3
 hear_txn: node 4 already heard 9
+event run: type=3
+hear_txn: node 8 already heard 6
 event run: type=6
-hear_blk: node 1 already heard 3
+hear_blk: node 5 already heard 2
 event run: type=3
 hear_txn: node 4 already heard 9
-event run: type=6
-hear_blk: node 2 already heard 1
 event run: type=3
 hear_txn: node 2 already heard 3
 event run: type=3
-hear_txn: node 6 already heard 2
+hear_txn: node 5 already heard 6
+event run: type=6
+hear_blk: node 4 already heard 1
 event run: type=6
 hear_blk: node 0 already heard 2
 event run: type=6
 hear_blk: node 5 already heard 1
-event run: type=6
-hear_blk: node 4 already heard 3
-event run: type=6
-hear_blk: node 4 already heard 3
 event run: type=3
-hear_txn: node 8 already heard 6
+hear_txn: node 2 already heard 12
+event run: type=6
+hear_blk: node 2 already heard 3
 event run: type=3
 hear_txn: node 1 already heard 7
 event run: type=3
 hear_txn: node 2 already heard 3
-event run: type=3
-hear_txn: node 0 already heard 3
 event run: type=6
-hear_blk: node 9 heard 2 from 2
-[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
-[DEBUG] 50 INVALID 1 IDX 3 IDy -1
-[DEBUG] 0 INVALID 1 IDX 6 IDy 7
-[DEBUG] 50 INVALID 1 IDX 6 IDy -1
-[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
-event run: type=7
-update_tree: 9 current latest is 3 with height 1
-update_tree: 9 updated latest block to 3 with height 1
-event run: type=5
-forward_blk: node 9 forwarded 2 to 5
-forward_blk: node 9 forwarded 2 to 2
-forward_blk: node 9 forwarded 2 to 1
-forward_blk: node 9 forwarded 2 to 0
+hear_blk: node 9 already heard 2
 event run: type=3
-hear_txn: node 9 already heard 1
+hear_txn: node 2 already heard 4
+event run: type=6
+hear_blk: node 0 already heard 1
+event run: type=6
+hear_blk: node 1 already heard 0
 event run: type=3
-hear_txn: node 5 already heard 13
+hear_txn: node 4 already heard 6
 event run: type=3
 hear_txn: node 4 already heard 12
+event run: type=6
+hear_blk: node 6 heard 3 from 1
+[BALANCE] 6 : 50 0 0 0 0 0 50 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
+[DEBUG] 0 INVALID 1 IDX 8 IDy 2
+[DEBUG] 0 INVALID 1 IDX 9 IDy 7
+[BALANCE] 6 : 50 0 0 0 0 0 50 0 0 0 
+event run: type=7
+update_tree: 6 current latest is 1 with height 1
+3 0
+update_tree: 6 updated latest block to 1 with height 1
+event run: type=5
+forward_blk: node 6 forwarded 3 to 1
+forward_blk: node 6 forwarded 3 to 4
+forward_blk: node 6 forwarded 3 to 3
+forward_blk: node 6 forwarded 3 to 0
+event run: type=3
+hear_txn: node 0 already heard 6
 event run: type=3
 hear_txn: node 0 already heard 14
+event run: type=6
+hear_blk: node 5 already heard 2
+event run: type=6
+hear_blk: node 7 already heard 1
 event run: type=3
 hear_txn: node 6 already heard 14
 event run: type=6
 hear_blk: node 8 already heard 0
 event run: type=6
 hear_blk: node 5 already heard 2
-event run: type=6
-hear_blk: node 5 already heard 2
-event run: type=6
-hear_blk: node 1 already heard 1
-event run: type=6
-hear_blk: node 3 already heard 3
+event run: type=3
+hear_txn: node 4 already heard 6
 event run: type=3
 hear_txn: node 7 already heard 13
 event run: type=3
 hear_txn: node 8 already heard 12
-event run: type=6
-hear_blk: node 3 already heard 3
 event run: type=3
 hear_txn: node 2 already heard 9
-event run: type=6
-hear_blk: node 1 already heard 1
-event run: type=6
-hear_blk: node 2 already heard 3
-event run: type=6
-hear_blk: node 1 already heard 1
-event run: type=6
-hear_blk: node 0 already heard 1
-event run: type=3
-hear_txn: node 3 already heard 8
 event run: type=3
 hear_txn: node 3 already heard 2
 event run: type=3
 hear_txn: node 7 already heard 14
 event run: type=6
-hear_blk: node 2 already heard 1
+hear_blk: node 0 already heard 1
 event run: type=3
 hear_txn: node 6 already heard 2
+event run: type=6
+hear_blk: node 9 heard 1 from 5
+[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
+event run: type=7
+update_tree: 9 current latest is 3 with height 1
+1 0
+update_tree: 9 updated latest block to 3 with height 1
+event run: type=5
+forward_blk: node 9 forwarded 1 to 5
+forward_blk: node 9 forwarded 1 to 2
+forward_blk: node 9 forwarded 1 to 1
+forward_blk: node 9 forwarded 1 to 0
+event run: type=3
+hear_txn: node 1 already heard 13
+event run: type=6
+hear_blk: node 8 already heard 2
+event run: type=6
+hear_blk: node 2 already heard 2
 event run: type=3
 hear_txn: node 1 already heard 4
-event run: type=6
-hear_blk: node 7 already heard 3
 event run: type=3
 hear_txn: node 5 already heard 6
 event run: type=3
 hear_txn: node 1 already heard 12
-event run: type=6
-hear_blk: node 1 already heard 3
 event run: type=3
 hear_txn: node 6 already heard 12
 event run: type=3
 hear_txn: node 7 already heard 1
-event run: type=6
-hear_blk: node 5 already heard 0
-event run: type=6
-hear_blk: node 9 already heard 1
-event run: type=6
-hear_blk: node 8 already heard 3
+event run: type=3
+hear_txn: node 0 already heard 13
 event run: type=3
 hear_txn: node 9 already heard 6
+event run: type=3
+hear_txn: node 3 already heard 7
+event run: type=3
+hear_txn: node 4 already heard 8
 event run: type=3
 hear_txn: node 5 already heard 2
 event run: type=3
 hear_txn: node 0 already heard 8
+event run: type=6
+hear_blk: node 7 already heard 3
 event run: type=3
 hear_txn: node 1 already heard 12
-event run: type=6
-hear_blk: node 9 already heard 2
-event run: type=3
-hear_txn: node 8 already heard 1
 event run: type=3
 hear_txn: node 0 already heard 2
 event run: type=6
-hear_blk: node 3 already heard 2
+hear_blk: node 1 already heard 2
+event run: type=3
+hear_txn: node 0 already heard 4
+event run: type=6
+hear_blk: node 5 already heard 1
 event run: type=3
 hear_txn: node 8 already heard 14
 event run: type=6
@@ -2218,51 +2209,59 @@ hear_blk: node 3 already heard 2
 event run: type=3
 hear_txn: node 5 already heard 13
 event run: type=6
-hear_blk: node 0 already heard 2
+hear_blk: node 8 already heard 1
 event run: type=6
-hear_blk: node 6 already heard 3
-event run: type=3
-hear_txn: node 1 already heard 6
+hear_blk: node 0 already heard 3
+event run: type=6
+hear_blk: node 5 already heard 3
+event run: type=6
+hear_blk: node 1 already heard 1
+event run: type=6
+hear_blk: node 1 already heard 3
 event run: type=3
 hear_txn: node 9 already heard 9
 event run: type=6
+hear_blk: node 6 already heard 3
+event run: type=6
 hear_blk: node 0 already heard 0
-event run: type=3
-hear_txn: node 0 already heard 1
-event run: type=3
-hear_txn: node 8 already heard 12
 event run: type=6
 hear_blk: node 4 already heard 3
+event run: type=3
+hear_txn: node 9 already heard 12
 event run: type=3
 hear_txn: node 0 already heard 7
 event run: type=3
 hear_txn: node 0 already heard 4
+event run: type=6
+hear_blk: node 5 already heard 0
 event run: type=3
 hear_txn: node 5 already heard 9
-event run: type=6
-hear_blk: node 1 already heard 3
 event run: type=3
 hear_txn: node 8 already heard 1
 event run: type=3
-hear_txn: node 1 already heard 13
-event run: type=3
 hear_txn: node 5 already heard 9
-event run: type=3
-hear_txn: node 4 already heard 9
+event run: type=6
+hear_blk: node 4 already heard 3
 event run: type=3
 hear_txn: node 8 already heard 13
 event run: type=3
 hear_txn: node 3 already heard 12
-event run: type=3
-hear_txn: node 0 already heard 14
 event run: type=6
-hear_blk: node 2 already heard 1
-event run: type=3
-hear_txn: node 3 already heard 4
-event run: type=6
-hear_blk: node 5 already heard 1
+hear_blk: node 9 already heard 2
 event run: type=6
 hear_blk: node 4 already heard 3
+event run: type=3
+hear_txn: node 4 already heard 6
+event run: type=3
+hear_txn: node 0 already heard 14
+event run: type=3
+hear_txn: node 3 already heard 4
+event run: type=3
+hear_txn: node 4 already heard 2
+event run: type=6
+hear_blk: node 2 already heard 2
+event run: type=3
+hear_txn: node 2 already heard 6
 event run: type=3
 hear_txn: node 3 already heard 7
 event run: type=6
@@ -2270,37 +2269,37 @@ hear_blk: node 3 already heard 2
 event run: type=6
 hear_blk: node 1 already heard 3
 event run: type=6
-hear_blk: node 0 already heard 2
+hear_blk: node 3 already heard 1
 event run: type=3
-hear_txn: node 9 already heard 6
+hear_txn: node 7 already heard 6
 event run: type=6
 hear_blk: node 5 already heard 3
-event run: type=6
-hear_blk: node 9 already heard 3
-event run: type=6
-hear_blk: node 1 already heard 3
-event run: type=6
-hear_blk: node 8 already heard 2
+event run: type=3
+hear_txn: node 7 already heard 13
 event run: type=3
 hear_txn: node 4 already heard 4
-event run: type=3
-hear_txn: node 7 already heard 12
-event run: type=3
-hear_txn: node 1 already heard 6
 event run: type=6
 hear_blk: node 3 already heard 3
 event run: type=3
+hear_txn: node 7 already heard 12
+event run: type=3
 hear_txn: node 3 already heard 2
+event run: type=6
+hear_blk: node 3 already heard 3
 event run: type=3
 hear_txn: node 3 already heard 14
+event run: type=6
+hear_blk: node 1 already heard 1
+event run: type=6
+hear_blk: node 9 already heard 1
+event run: type=6
+hear_blk: node 2 already heard 3
 event run: type=6
 hear_blk: node 4 already heard 2
 event run: type=3
 hear_txn: node 6 already heard 13
 event run: type=3
 hear_txn: node 1 already heard 13
-event run: type=6
-hear_blk: node 1 already heard 2
 event run: type=3
 hear_txn: node 9 already heard 8
 event run: type=3
@@ -2308,155 +2307,153 @@ hear_txn: node 4 already heard 4
 event run: type=3
 hear_txn: node 9 already heard 12
 event run: type=6
-hear_blk: node 4 already heard 3
-event run: type=3
-hear_txn: node 7 already heard 6
-event run: type=3
-hear_txn: node 7 already heard 2
-event run: type=6
 hear_blk: node 5 already heard 2
+event run: type=3
+hear_txn: node 5 already heard 12
+event run: type=6
+hear_blk: node 7 already heard 1
 event run: type=3
 hear_txn: node 2 already heard 3
 event run: type=3
 hear_txn: node 8 already heard 4
 event run: type=3
-hear_txn: node 0 already heard 6
-event run: type=3
-hear_txn: node 1 already heard 7
-event run: type=6
-hear_blk: node 5 already heard 1
+hear_txn: node 4 already heard 6
 event run: type=3
 hear_txn: node 1 already heard 9
 event run: type=6
 hear_blk: node 4 already heard 2
+event run: type=6
+hear_blk: node 2 already heard 3
 event run: type=3
 hear_txn: node 6 already heard 9
 event run: type=6
-hear_blk: node 0 already heard 3
+hear_blk: node 0 already heard 1
 event run: type=3
-hear_txn: node 5 already heard 7
+hear_txn: node 9 already heard 6
 event run: type=6
-hear_blk: node 4 already heard 1
+hear_blk: node 2 already heard 1
 event run: type=3
-hear_txn: node 2 already heard 6
-event run: type=6
-hear_blk: node 5 already heard 3
+hear_txn: node 0 already heard 7
 event run: type=3
 hear_txn: node 4 already heard 7
+event run: type=6
+hear_blk: node 0 already heard 3
 event run: type=3
 hear_txn: node 5 already heard 13
 event run: type=3
 hear_txn: node 1 already heard 1
 event run: type=6
-hear_blk: node 7 already heard 3
+hear_blk: node 4 already heard 1
 event run: type=6
 hear_blk: node 5 already heard 0
-event run: type=3
-hear_txn: node 2 already heard 13
 event run: type=3
 hear_txn: node 2 already heard 12
 event run: type=3
 hear_txn: node 0 already heard 9
-event run: type=6
-hear_blk: node 1 already heard 1
 event run: type=3
 hear_txn: node 0 already heard 8
 event run: type=3
-hear_txn: node 6 already heard 4
+hear_txn: node 2 already heard 6
 event run: type=3
-hear_txn: node 5 already heard 6
+hear_txn: node 6 already heard 4
+event run: type=6
+hear_blk: node 5 already heard 1
+event run: type=6
+hear_blk: node 2 already heard 2
 event run: type=3
 hear_txn: node 5 already heard 9
 event run: type=3
-hear_txn: node 2 already heard 12
-event run: type=3
-hear_txn: node 5 already heard 6
-event run: type=3
-hear_txn: node 7 already heard 4
+hear_txn: node 2 already heard 6
 event run: type=3
 hear_txn: node 1 already heard 6
 event run: type=3
+hear_txn: node 7 already heard 4
+event run: type=3
 hear_txn: node 8 already heard 12
+event run: type=6
+hear_blk: node 8 already heard 3
 event run: type=6
 hear_blk: node 1 already heard 0
 event run: type=6
 hear_blk: node 5 already heard 2
 event run: type=6
+hear_blk: node 8 already heard 3
+event run: type=6
 hear_blk: node 8 already heard 0
+event run: type=6
+hear_blk: node 0 already heard 2
 event run: type=3
 hear_txn: node 5 already heard 2
 event run: type=3
 hear_txn: node 1 already heard 7
 event run: type=3
+hear_txn: node 0 already heard 6
+event run: type=3
 hear_txn: node 0 already heard 3
-event run: type=3
-hear_txn: node 4 already heard 6
 event run: type=6
-hear_blk: node 4 already heard 3
-event run: type=3
-hear_txn: node 5 already heard 6
+hear_blk: node 9 already heard 2
+event run: type=6
+hear_blk: node 3 already heard 3
 event run: type=3
 hear_txn: node 7 already heard 9
 event run: type=6
-hear_blk: node 1 already heard 3
-event run: type=6
 hear_blk: node 5 already heard 0
 event run: type=6
-hear_blk: node 4 already heard 1
+hear_blk: node 0 already heard 1
+event run: type=6
+hear_blk: node 7 already heard 2
 event run: type=3
 hear_txn: node 6 already heard 7
-event run: type=3
-hear_txn: node 7 already heard 6
+event run: type=6
+hear_blk: node 0 already heard 2
+event run: type=6
+hear_blk: node 0 already heard 3
 event run: type=6
 hear_blk: node 9 already heard 0
-event run: type=6
-hear_blk: node 8 already heard 1
 event run: type=6
 hear_blk: node 0 already heard 2
 event run: type=6
 hear_blk: node 4 already heard 1
-event run: type=3
-hear_txn: node 0 already heard 13
-event run: type=3
-hear_txn: node 5 already heard 6
+event run: type=6
+hear_blk: node 1 already heard 3
+event run: type=6
+hear_blk: node 8 already heard 3
 event run: type=3
 hear_txn: node 2 already heard 14
-event run: type=3
-hear_txn: node 2 already heard 6
-event run: type=3
-hear_txn: node 5 already heard 8
-event run: type=3
-hear_txn: node 5 already heard 13
+event run: type=6
+hear_blk: node 4 already heard 3
 event run: type=3
 hear_txn: node 1 already heard 13
+event run: type=3
+hear_txn: node 1 already heard 3
 event run: type=3
 hear_txn: node 7 already heard 12
 event run: type=3
 hear_txn: node 1 already heard 14
 event run: type=6
-hear_blk: node 0 already heard 1
+hear_blk: node 6 already heard 3
 event run: type=6
-hear_blk: node 5 already heard 3
+hear_blk: node 8 already heard 1
 event run: type=3
 hear_txn: node 3 already heard 12
-event run: type=3
-hear_txn: node 5 already heard 2
+event run: type=6
+hear_blk: node 6 already heard 2
 event run: type=3
 hear_txn: node 4 already heard 9
 event run: type=3
 hear_txn: node 1 already heard 14
 event run: type=3
+hear_txn: node 5 already heard 13
+event run: type=3
 hear_txn: node 4 already heard 14
 event run: type=3
 hear_txn: node 0 already heard 4
 event run: type=3
-hear_txn: node 1 already heard 9
-event run: type=3
 hear_txn: node 2 already heard 13
 event run: type=3
-hear_txn: node 1 already heard 6
-event run: type=3
 hear_txn: node 3 already heard 2
+event run: type=3
+hear_txn: node 9 already heard 6
 event run: type=3
 hear_txn: node 6 already heard 7
 event run: type=3
@@ -2464,37 +2461,35 @@ hear_txn: node 0 already heard 14
 event run: type=3
 hear_txn: node 3 already heard 2
 event run: type=6
+hear_blk: node 3 already heard 1
+event run: type=6
 hear_blk: node 1 already heard 2
 event run: type=3
 hear_txn: node 7 already heard 2
 event run: type=6
 hear_blk: node 2 already heard 2
 event run: type=6
-hear_blk: node 6 already heard 2
+hear_blk: node 4 already heard 3
+event run: type=6
+hear_blk: node 2 already heard 2
+event run: type=3
+hear_txn: node 8 already heard 13
 event run: type=3
 hear_txn: node 1 already heard 9
 event run: type=3
 hear_txn: node 3 already heard 9
 event run: type=3
 hear_txn: node 7 already heard 4
+event run: type=6
+hear_blk: node 5 already heard 1
 event run: type=3
 hear_txn: node 4 already heard 7
 event run: type=3
-hear_txn: node 5 already heard 7
-event run: type=6
-hear_blk: node 2 already heard 3
-event run: type=3
-hear_txn: node 8 already heard 6
-event run: type=3
-hear_txn: node 8 already heard 6
+hear_txn: node 5 already heard 8
 event run: type=3
 hear_txn: node 6 already heard 1
 event run: type=3
-hear_txn: node 4 already heard 6
-event run: type=6
-hear_blk: node 5 already heard 3
-event run: type=6
-hear_blk: node 8 already heard 3
+hear_txn: node 5 already heard 6
 event run: type=3
 hear_txn: node 3 already heard 7
 event run: type=3
@@ -2504,9 +2499,13 @@ hear_txn: node 8 already heard 2
 event run: type=3
 hear_txn: node 3 already heard 9
 event run: type=3
-hear_txn: node 3 already heard 7
-event run: type=3
 hear_txn: node 9 already heard 2
+event run: type=6
+hear_blk: node 8 already heard 1
+event run: type=6
+hear_blk: node 1 already heard 1
+event run: type=6
+hear_blk: node 1 already heard 2
 event run: type=3
 hear_txn: node 6 already heard 13
 event run: type=3
@@ -2515,70 +2514,78 @@ event run: type=3
 hear_txn: node 3 already heard 3
 event run: type=3
 hear_txn: node 0 already heard 4
-event run: type=3
-hear_txn: node 4 already heard 13
-event run: type=6
-hear_blk: node 5 already heard 2
 event run: type=6
 hear_blk: node 1 already heard 2
+event run: type=6
+hear_blk: node 5 already heard 1
+event run: type=3
+hear_txn: node 5 already heard 6
 event run: type=3
 hear_txn: node 2 already heard 4
+event run: type=3
+hear_txn: node 7 already heard 2
+event run: type=3
+hear_txn: node 5 already heard 6
+event run: type=3
+hear_txn: node 2 already heard 6
+event run: type=6
+hear_blk: node 2 already heard 3
 event run: type=3
 hear_txn: node 9 already heard 2
 event run: type=3
 hear_txn: node 7 already heard 7
 event run: type=6
 hear_blk: node 5 already heard 3
-event run: type=6
-hear_blk: node 3 already heard 3
 event run: type=3
 hear_txn: node 7 already heard 12
 event run: type=3
-hear_txn: node 7 already heard 13
+hear_txn: node 2 already heard 6
 event run: type=3
-hear_txn: node 9 already heard 12
+hear_txn: node 8 already heard 6
+event run: type=6
+hear_blk: node 5 already heard 3
 event run: type=3
 hear_txn: node 0 already heard 4
 event run: type=3
 hear_txn: node 0 already heard 13
 event run: type=6
-hear_blk: node 3 already heard 1
-event run: type=6
-hear_blk: node 9 already heard 2
-event run: type=6
-hear_blk: node 6 already heard 3
-event run: type=6
-hear_blk: node 0 already heard 3
-event run: type=3
-hear_txn: node 0 already heard 6
-event run: type=6
-hear_blk: node 6 already heard 3
-event run: type=6
-hear_blk: node 9 already heard 1
-event run: type=6
-hear_blk: node 8 already heard 2
-event run: type=3
-hear_txn: node 2 already heard 6
-event run: type=3
-hear_txn: node 4 already heard 8
-event run: type=6
-hear_blk: node 8 already heard 2
-event run: type=6
 hear_blk: node 3 already heard 2
-event run: type=3
-hear_txn: node 4 already heard 6
 event run: type=6
-hear_blk: node 5 already heard 3
+hear_blk: node 6 already heard 3
+event run: type=6
+hear_blk: node 8 already heard 2
+event run: type=3
+hear_txn: node 9 already heard 13
+event run: type=6
+hear_blk: node 8 already heard 2
+event run: type=6
+hear_blk: node 3 already heard 3
+event run: type=6
+hear_blk: node 8 already heard 3
 event run: type=3
 hear_txn: node 0 already heard 7
 event run: type=3
+hear_txn: node 8 already heard 6
+event run: type=6
+hear_blk: node 9 already heard 1
+event run: type=6
+hear_blk: node 1 already heard 1
+event run: type=3
+hear_txn: node 1 already heard 6
+event run: type=3
+hear_txn: node 7 already heard 6
+event run: type=3
 hear_txn: node 0 already heard 9
 event run: type=3
-hear_txn: node 0 already heard 12
+hear_txn: node 4 already heard 7
+event run: type=3
+hear_txn: node 5 already heard 6
 event run: type=3
 hear_txn: node 0 already heard 7
 event run: type=3
 hear_txn: node 4 already heard 12
+event run: type=3
+hear_txn: node 3 already heard 6
 event run: type=6
 hear_blk: node 3 already heard 1
 event run: type=6
@@ -2586,61 +2593,55 @@ hear_blk: node 1 already heard 0
 event run: type=3
 hear_txn: node 5 already heard 4
 event run: type=6
-hear_blk: node 1 already heard 1
-event run: type=6
-hear_blk: node 1 already heard 2
-event run: type=6
-hear_blk: node 4 already heard 2
+hear_blk: node 6 already heard 2
 event run: type=6
 hear_blk: node 7 already heard 1
-event run: type=6
-hear_blk: node 2 already heard 3
 event run: type=3
 hear_txn: node 8 already heard 7
+event run: type=3
+hear_txn: node 8 already heard 6
 event run: type=6
-hear_blk: node 2 already heard 2
+hear_blk: node 0 already heard 3
 event run: type=3
 hear_txn: node 0 already heard 14
 event run: type=3
-hear_txn: node 5 already heard 6
-event run: type=3
 hear_txn: node 8 already heard 2
-event run: type=6
-hear_blk: node 2 already heard 2
 event run: type=3
 hear_txn: node 8 already heard 13
+event run: type=6
+hear_blk: node 7 already heard 3
 event run: type=3
-hear_txn: node 3 already heard 6
+hear_txn: node 4 already heard 6
 event run: type=6
 hear_blk: node 4 already heard 0
+event run: type=6
+hear_blk: node 2 already heard 1
 event run: type=3
 hear_txn: node 4 already heard 4
 event run: type=6
-hear_blk: node 0 already heard 3
+hear_blk: node 4 already heard 2
 event run: type=3
 hear_txn: node 7 already heard 13
 event run: type=3
 hear_txn: node 7 already heard 9
-event run: type=6
-hear_blk: node 5 already heard 2
-event run: type=6
-hear_blk: node 2 already heard 2
+event run: type=3
+hear_txn: node 5 already heard 13
 event run: type=3
 hear_txn: node 8 already heard 1
-event run: type=3
-hear_txn: node 8 already heard 6
 event run: type=6
-hear_blk: node 8 already heard 3
+hear_blk: node 2 already heard 1
+event run: type=6
+hear_blk: node 2 already heard 1
 event run: type=6
 hear_blk: node 2 already heard 0
 event run: type=6
-hear_blk: node 2 already heard 2
-event run: type=6
-hear_blk: node 7 already heard 2
-event run: type=6
-hear_blk: node 7 already heard 3
+hear_blk: node 5 already heard 2
 event run: type=3
 hear_txn: node 0 already heard 3
+event run: type=6
+hear_blk: node 7 already heard 3
+event run: type=6
+hear_blk: node 1 already heard 2
 event run: type=3
 hear_txn: node 3 already heard 1
 event run: type=6
@@ -2648,94 +2649,104 @@ hear_blk: node 5 already heard 2
 event run: type=6
 hear_blk: node 1 already heard 2
 event run: type=3
-hear_txn: node 7 already heard 6
+hear_txn: node 5 already heard 2
 event run: type=3
 hear_txn: node 7 already heard 14
 event run: type=3
 hear_txn: node 2 already heard 1
 event run: type=3
 hear_txn: node 5 already heard 1
-event run: type=3
-hear_txn: node 4 already heard 13
 event run: type=6
-hear_blk: node 6 already heard 2
+hear_blk: node 4 already heard 3
+event run: type=6
+hear_blk: node 3 already heard 2
 event run: type=3
 hear_txn: node 6 already heard 4
 event run: type=3
 hear_txn: node 4 already heard 2
 event run: type=6
-hear_blk: node 9 already heard 2
+hear_blk: node 3 already heard 3
 event run: type=3
 hear_txn: node 4 already heard 1
 NUMBER OF PEERS SAVED 10
 START 
 update_tree: 0 current latest is 1 with height 1
 update_tree: 0 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 5 10 11 12 13 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 IDs of txns heard by 0: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 0: 1->0->
 ONE DONE
 START 
 update_tree: 1 current latest is 1 with height 1
 update_tree: 1 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 5 10 11 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 IDs of txns heard by 1: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 1: 1->0->
 ONE DONE
 START 
 update_tree: 2 current latest is 3 with height 1
 update_tree: 2 updated latest block to 3 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 5 10 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 3 4 5 6 8 9 10 12 13 14 
 IDs of txns heard by 2: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 2: 3->0->
 ONE DONE
 START 
 update_tree: 3 current latest is 1 with height 1
 update_tree: 3 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 10 11 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 4 6 7 8 9 10 11 12 13 14 
 IDs of txns heard by 3: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 3: 1->0->
 ONE DONE
 START 
 update_tree: 4 current latest is 1 with height 1
 update_tree: 4 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 5 10 11 14 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 IDs of txns heard by 4: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 4: 1->0->
 ONE DONE
 START 
-update_tree: 5 current latest is 1 with height 1
-update_tree: 5 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 4 5 10 11 
+update_tree: 5 current latest is 3 with height 1
+update_tree: 5 updated latest block to 3 with height 1
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 12 13 14 
 IDs of txns heard by 5: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 5: 3->0->
 ONE DONE
 START 
 update_tree: 6 current latest is 1 with height 1
 update_tree: 6 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 5 6 10 11 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 IDs of txns heard by 6: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 6: 1->0->
 ONE DONE
 START 
-update_tree: 7 current latest is 1 with height 1
-update_tree: 7 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 1 10 11 
+update_tree: 7 current latest is 3 with height 1
+update_tree: 7 updated latest block to 3 with height 1
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 3 4 5 6 8 9 10 12 13 14 
 IDs of txns heard by 7: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 7: 3->0->
 ONE DONE
 START 
 update_tree: 8 current latest is 1 with height 1
 update_tree: 8 updated latest block to 1 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 2 3 5 8 10 11 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 IDs of txns heard by 8: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 8: 1->0->
 ONE DONE
 START 
 update_tree: 9 current latest is 3 with height 1
 update_tree: 9 updated latest block to 3 with height 1
-Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,) 
-Txns left: 3 5 7 9 10 
+Blocks: Heights:: 1:1(5,3,) 0:0(0,) 2:0(10,3,5,) 3:1(11,2,7,) 
+Txns left: 1 2 3 4 5 6 7 8 9 10 12 13 14 
 IDs of txns heard by 9: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Longest chain as seen by 9: 3->0->
 ONE DONE
 PROGRAM ENDING
