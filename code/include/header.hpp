@@ -6,6 +6,7 @@
 #include <chrono>
 #include <random>
 #include <vector>
+#include <map>
 #include <set>
 #include <unordered_set>
 #include <queue>
@@ -100,13 +101,15 @@ class blk {
     public:
         static ll curr_blk_id;
         static ll max_blk_size;
+        ll blk_size;
         ll blk_id;
         peer* miner;
         blk* parent;
-        vector<blk*> children;
+        set<blk*> children;
         vector<txn*> txns;
         ll height;
         blk(peer* miner, blk* parent, vector<txn*>& vec_txns);
+        void update_parent(blk* new_parent);
 };
 
 struct compare_blk_ptrs {
@@ -120,6 +123,7 @@ struct compare_blk_ptrs {
 class peer {
     public:
         int id;
+        ld next_time;
         vector<ld> curr_balances;
         bool slow, lowCPU;
         
@@ -127,13 +131,19 @@ class peer {
                                                         // (according to this node)
         set<ll> txns_all;   // IDs of all txns heard by this node till now
                             // (used for loop-less fwd-ing)
+        map<ll,vector<ll>> txn_sent_to;
         
         ld fraction_hashing_power;
         
         blk* latest_blk;    // this peer's copy of the blockchain
 
+        set<blk*> blks_all;
+
+        map<ll,vector<ll>> blk_sent_to;
+
         set<blk*, compare_blk_ptrs> blks_not_included;      // blks heard by this node, but not
                                                             // included in its blockchain copy
+        set<blk*> curr_tree; // tree of the peer
 
         peer(int id);
 
@@ -144,43 +154,47 @@ class peer {
         void print_all_txns();
 
         // blk related functions
-        bool is_invalid(vector<ld>& balances);
+        bool is_invalid(vector<ld> balances);
         void generate_blk(simulator& sim, event* e);
         void forward_blk(simulator& sim, event* e);
         void hear_blk(simulator& sim, event* e);
-        void check_blk(blk* b);
+        bool check_blk(blk* b);
+        void update_tree(simulator& sim, event* e);
 };
 
 class simulator {
-    public:
+    private:
         int seed;
 
         /**
          * z0:
          * z1:
-         * Ttx: txn interarrival time
-         * Tblk: block interarrival time
         */
-        ld z0, z1, Ttx, Tblk;
+        ld z0, z1;
         
         ld current_time;
-        
-        vector<peer> peers_vec;
-        vector<vector<int>> adj;    // adjacency list representation
-        vector<bool> visited;       // temporary; used for network creation
 
         // pq for events
         priority_queue<event*, vector<event*>, compare_event_ptrs_desc> pq_events;
                                             // descending for min heap
 
-        // latencies
-        ld fast_link_speed, slow_link_speed, queuing_delay_numerator;
-        vector<vector<ld>> rho;
-
         void create_graph(int a, int b);
         vector<int> pick_random(int n, int k);
         void dfs(int node, vector<unordered_set<int>>& adj_sets);
 
+    public:
+        ld Ttx; // txn mean time
+
+        vector<vector<int>> adj;    // adjacency list representation
+        vector<bool> visited;       // temporary; used for network creation
+
+        // latencies
+        ld fast_link_speed, slow_link_speed, queuing_delay_numerator;
+        vector<vector<ld>> rho; // light propagation delay
+
+        ld Tblk; // block interarrival time
+        
+        vector<peer> peers_vec;
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
         void print_graph();
         void run();

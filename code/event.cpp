@@ -40,6 +40,10 @@ void event::run(simulator& sim) {
             p->hear_blk(sim, this);
             break;
         }
+        case 7: {
+            p->update_tree(sim, this);
+            break;
+        }
         default: {
             cout << "incorrect event type: " << type << '\n';
             break;

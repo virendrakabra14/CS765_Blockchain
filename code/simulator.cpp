@@ -1,4 +1,5 @@
 #include "include/header.hpp"
+#include <random>
 
 simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs) {
     this->seed = seed;
@@ -18,11 +19,15 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     peers_vec.reserve(n);
     for (int i=0; i<n; i++) {
         peers_vec.push_back(peer(i));
-
         // initialize events (generate_txn)
         ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
         event* e = new event(time_txn, 1, &peers_vec[i]);
         this->push(e);
+ 
+		if (i == 0) {
+            event* e = new event(0, 4, &peers_vec[i]);
+            this->push(e);
+        }
     }
 
     vector<int> slow_indices = pick_random(n, z0*n);
@@ -39,18 +44,11 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
         else peers_vec[i].fraction_hashing_power = 10.0L/(10.0L*(n-lowCPU_indices.size())+lowCPU_indices.size());
     }
 
-    adj = vector<vector<int>>(n, vector<int>(0));
+    adj = vector<vector<int>>(n);
+    rho = vector<vector<ld>>(n, vector<ld>(n, 0.0L));
     visited = vector<bool>(n, false);
 
     this->create_graph(min_ngbrs, max_ngbrs);
-
-    rho = vector<vector<ld>>(n, vector<ld>(n));
-    for (int i=0; i<n; i++) {
-        for (int j=0; j<n; j++) {
-            rho[i][j] = ((ld)uniform_int_distribution<>(10,500)(rng))/1000;     // 10 to 500 ms
-                                                                                // considering steps of 1 ms
-        }
-    }
 }
 
 vector<int> simulator::pick_random(int n, int k) {
@@ -139,6 +137,12 @@ void simulator::create_graph(int min_ngbrs, int max_ngbrs) {
         adj[i] = vector<int>(adj_sets[i].begin(), adj_sets[i].end());
     }
 
+    for (int i=0; i<n; i++) {
+        for(auto&& j:adj[i]) {
+            rho[i][j] = (10.0L + (490.0L * uniform_real_distribution<ld>()(rng))) * 0.001;
+        }
+    }
+
 }
 
 void simulator::print_graph() {
@@ -154,15 +158,20 @@ void simulator::print_graph() {
 
 void simulator::run() {
     // https://www.cs.cmu.edu/~music/cmsip/readings/intro-discrete-event-sim.html
+	//
+	
+	ld Simulation_Time = 10;
 
     while(!pq_events.empty()) {
         // cout << pq_events.size() << '\n';
         event* e = pq_events.top();
         pq_events.pop();
         
+        if(e->timestamp > Simulation_Time && (e->type==1 || e->type==4)) continue;
+
         // if(e->tran) cout << "SIM TXN: " << e->tran->txn_id << '\n';
         e->run(*this);
-
+        
         // clean up (delete event, and probably the associated txn)
         // (define destructor for event)
     }

@@ -12,8 +12,9 @@ txn::txn(int IDx, bool coinbase/*=false*/, int IDy/*=-1*/, ll C/*=-1*/) {
     assert(IDx>=0 && IDx<=n);
     assert(coinbase || (IDy>=0 && IDy<=n && C>=0));
 
-    this->txn_id = txn::curr_txn_id++;
+    txn_id = txn::curr_txn_id++;
     this->IDx = IDx;
     this->IDy = IDy;
-    this->C = (coinbase ? txn::coinbase_fee : C);
+    this->coinbase = coinbase;
+    this->C = (coinbase ? this->coinbase_fee : C);
 }
