@@ -232,6 +232,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     this->latest_blk = b;
     b->blk_size = curr_blk_size;
     blks_all.insert(b);
+    blk_arrivals[b] = e->timestamp;
     blk_sent_to[b->blk_id] = vector<ll>();
 
 	curr_balances = tmp_balances;
@@ -258,6 +259,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     sim.push(fwd_blk);
 
     cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
+    can_gen = true;
 
     if (e->timestamp + 2 < sim.Simulation_Time) {
 		event* mine = new event(e->timestamp + 2, 4, this);
@@ -315,6 +317,7 @@ void peer::hear_blk(simulator& sim, event* e) {
 
         cout << "hear_blk: node " << this->id << " heard " << b->blk_id << " from " << e->from->id << endl;
         this->blks_all.insert(b);
+        blk_arrivals[b] = e->timestamp;
         blk_sent_to[b->blk_id] = vector<ll>();
 		cout << "[BALANCE] " << this->id << " : ";
 		for(int i = 0; i < this->curr_balances.size(); i++){

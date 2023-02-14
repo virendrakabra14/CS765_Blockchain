@@ -127,6 +127,7 @@ class peer {
         ld next_time;
         vector<ld> curr_balances;
         bool slow, lowCPU;
+        bool can_gen;
         
         set<txn*, compare_txn_ptrs> txns_not_included;  // txns not included in any block till now
                                                         // (according to this node)
@@ -139,6 +140,7 @@ class peer {
         blk* latest_blk;    // this peer's copy of the blockchain
 
         set<blk*> blks_all;
+        map<blk*,ld> blk_arrivals;
 
         map<ll,vector<ll>> blk_sent_to;
 
@@ -197,6 +199,7 @@ class simulator {
 
         ld Tblk; // block interarrival time
         ld Simulation_Time;
+        ld block_delay;
         
         vector<peer> peers_vec;
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
