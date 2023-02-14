@@ -143,6 +143,7 @@ class peer {
 
         set<blk*, compare_blk_ptrs> blks_not_included;      // blks heard by this node, but not
                                                             // included in its blockchain copy
+        set<blk*> curr_tree; // tree of the peer
 
         peer(int id);
 

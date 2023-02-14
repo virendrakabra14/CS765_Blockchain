@@ -355,12 +355,13 @@ bool peer::check_blk(blk* b) {
 
 void peer::update_tree(simulator& sim, event* e) {
 
-    // checking if longest chain updated
-    set<blk*> curr_tree;
-    blk* b_iter = latest_blk;
-    while (b_iter != nullptr) {
-        curr_tree.insert(b_iter);
-        b_iter = b_iter->parent;
+    // ensure longest chain is in the tree
+    if (curr_tree.find(latest_blk) == curr_tree.end()) {
+        blk* b_iter = latest_blk;
+        while (b_iter != nullptr) {
+            curr_tree.insert(b_iter);
+            b_iter = b_iter->parent;
+        }
     }
 
     // update the tree
@@ -368,6 +369,7 @@ void peer::update_tree(simulator& sim, event* e) {
     while (pending) {
         for (blk* b:blks_not_included) {
             if (curr_tree.find(b->parent) != curr_tree.end()) {
+                // adding block to tree
                 b->update_parent(b->parent);
                 curr_tree.insert(b);
                 blks_not_included.erase(b);
@@ -376,6 +378,7 @@ void peer::update_tree(simulator& sim, event* e) {
         pending = false;
         for (blk* b:blks_not_included) {
             if (curr_tree.find(b->parent) != curr_tree.end()) {
+                // more blocks can be added
                 pending = true;
                 break;
             }
