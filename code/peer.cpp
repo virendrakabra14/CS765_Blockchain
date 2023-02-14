@@ -121,6 +121,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
 
     vector<txn*> curr_blk_txns;
     txn* coinbase_txn = new txn(this->id, true, -1, e->tran->coinbase_fee);
+    txns_all.insert(coinbase_txn->txn_id);
     curr_blk_txns.push_back(coinbase_txn); // does this need to be included?
 
     ll curr_blk_size = txn::txn_size;
@@ -132,7 +133,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
                         // (when blk size exceeds before encountering an invalid txn)
 
         for(txn* t_ptr:txns_not_included) {     // iterate on txns by txn_id
-			cout << "[DEBUG] " << t_ptr->C << " INVALID " << invalid << " IDx " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
+			cout << "[DEBUG] " << t_ptr->C << " VALID " << invalid << " IDx " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
             if(is_invalid(tmp_balances) || curr_blk_size+t_ptr->txn_size > blk::max_blk_size) {
                 b->update_parent(this->latest_blk);
                 b->txns = curr_blk_txns;
@@ -157,7 +158,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     else {
         set<txn*, compare_txn_ptrs> curr_invalid;
         for(txn* t_ptr:txns_not_included) {     // iterate on txns by txn_id
-			cout << "[DEBUG] " << t_ptr->C << " INVALID " << invalid <<" IDX " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
+			cout << "[DEBUG] " << t_ptr->C << " VALID " << invalid <<" IDX " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
             if(curr_blk_size+t_ptr->txn_size > blk::max_blk_size) {
                 b->update_parent(this->latest_blk);
                 b->txns = curr_blk_txns;
@@ -198,9 +199,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
         }
     }
 
-    if (this->latest_blk == nullptr) {
-        this->latest_blk = b;
-    }
+    this->latest_blk = b;
     b->blk_size = curr_blk_size;
     blks_all.insert(b);
     blk_sent_to[b->blk_id] = vector<ll>();
@@ -209,6 +208,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
 
     // remove included txns
     for (txn* t:b->txns) {
+        
         txns_not_included.erase(t);
     }
 	
@@ -234,7 +234,7 @@ void peer::forward_blk(simulator& sim, event* e) {
 
     // check the longest chain and broadcast block accordingly
     blk* b = e->block;
-    if (b->height == 0 || b->height == this->latest_blk->height + 1) {
+    if (b->height == 0 || curr_tree.find(b->parent) != curr_tree.end()) {
         // same longest chain so broadcast
         // cout << "Previous block ID: " << this->latest_blk->blk_id << endl;
         // cout << "Transactions in block:" << endl;
@@ -311,6 +311,7 @@ void peer::hear_blk(simulator& sim, event* e) {
             else {
                 blks_not_included.insert(b);
                 for (txn* t:b->txns) {
+                    txns_all.insert(t->txn_id);
 					cout << "[DEBUG] " << t->C << " INVALID " << is_valid <<" IDX " << t -> IDx <<  " IDy " << t->IDy << endl;;
                     txns_not_included.insert(t);
                 }
@@ -382,6 +383,8 @@ void peer::update_tree(simulator& sim, event* e) {
                 // adding block to tree
                 (*it)->update_parent((*it)->parent);
                 curr_tree.insert(*it);
+                event* fwd_blk = new event(e->timestamp, 5, this, nullptr, this, *it);
+                sim.push(fwd_blk);
                 it = blks_not_included.erase(it);
             }
             else {
