@@ -322,10 +322,10 @@ void peer::hear_blk(simulator& sim, event* e) {
 		cout << this->curr_balances[i] << " ";
 	}
 	cout << endl;
-    // back to mining	
 
-    event* mine = new event(e->timestamp, 4, this);
-    sim.push(mine);
+    // update tree
+    event* tree = new event(e->timestamp, 7, this);
+    sim.push(tree);
 
 }
 
@@ -385,13 +385,50 @@ void peer::update_tree(simulator& sim, event* e) {
         }
     }
 
-    // update longest chain
+    // find longest chain
     blk* last = latest_blk;
     for (blk* b:curr_tree) {
         if (b->height > last->height) {
             last = b;
         }
     }
-    latest_blk = last;
+
+    // txns update
+    if (latest_blk != last) {
+        blk* b_iter = latest_blk;
+        while (b_iter != nullptr) {
+            for (txn* t:b_iter->txns) {
+                // roll back
+                if (t->IDy == -1) {
+                    curr_balances[t->IDx] -= t->C;
+                }
+                else {
+                    curr_balances[t->IDx] += t->C;
+                    curr_balances[t->IDy] -= t->C;
+                }
+                txns_not_included.insert(t);
+            }
+            b_iter = b_iter->parent;
+        }
+        b_iter = last;
+        while (b_iter != nullptr) {
+            for (txn* t:b_iter->txns) {
+                if (t->IDy == -1) {
+                    curr_balances[t->IDx] += t->C;
+                }
+                else {
+                    curr_balances[t->IDx] -= t->C;
+                    curr_balances[t->IDy] += t->C;
+                }
+                txns_not_included.erase(t);
+            }
+            b_iter = b_iter->parent;
+        }
+        latest_blk = last;
+    }
+
+    // back to mining
+    event* mine = new event(e->timestamp, 4, this);
+    sim.push(mine);
 
 }
