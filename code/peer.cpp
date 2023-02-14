@@ -356,6 +356,10 @@ bool peer::check_blk(blk* b) {
 void peer::update_tree(simulator& sim, event* e) {
 
     // get longest chain
+    if (latest_blk != nullptr) {
+        cout << "update_tree: " << id << " current latest is " << latest_blk->blk_id << endl;
+    }
+    
     set<blk*> curr_chain;
     blk* b_iter = latest_blk;
     while (b_iter != nullptr) {
@@ -435,6 +439,10 @@ void peer::update_tree(simulator& sim, event* e) {
             b_iter = b_iter->parent;
         }
         latest_blk = last;
+    }
+    
+    if (last != nullptr) {
+        cout << "update_tree: " << id << " updated latest block to " << last->blk_id << endl;
     }
 
     // back to mining
