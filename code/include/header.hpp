@@ -120,6 +120,14 @@ struct compare_blk_ptrs {
     }
 };
 
+struct compare_blk_ids {
+    // compare block pointers based on height
+    inline bool operator() (const blk* const b1, const blk* const b2) {
+        if(b1->blk_id==b2->blk_id) return true;
+        else return false;
+    }
+};
+
 class peer {
     public:
         int id;

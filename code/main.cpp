@@ -46,6 +46,10 @@ int main(int argc, const char* argv[]) {
     for(auto&& p : sim.peers_vec) {
 		cout << "START " << endl;
         p.update_tree(sim,e);
+        for (blk* b:p.curr_tree) {
+            cout << b->blk_id << ":" << b->height << " ";
+        }
+        cout << endl;
         p.print_all_txns();
 		cout << "ONE DONE" << endl;
     }

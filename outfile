@@ -76,8 +76,8 @@ forward_blk: node 6 forwarded 0 to 1
 forward_blk: node 6 forwarded 0 to 4
 forward_blk: node 6 forwarded 0 to 3
 event run: type=7
-update_tree: 6 current latest is 0
-update_tree: 6 updated latest block to 0
+update_tree: 6 current latest is 0 with height 0
+update_tree: 6 updated latest block to 0 with height 0
 event run: type=4
 GENERATING CODE START
 [BALANCE] 6 : 50 0 0 0 0 0 0 0 0 0 
@@ -145,8 +145,8 @@ forward_txn: node 9 forwarded 9 to 0
 event run: type=6
 hear_blk: node 3 heard 1 from 6
 [BALANCE] 3 : 0 0 0 0 0 0 0 0 0 0 
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
 [BALANCE] 3 : 0 0 0 0 0 0 0 0 0 0 
 event run: type=7
 event run: type=4
@@ -192,8 +192,8 @@ forward_blk: node 2 forwarded 0 to 8
 forward_blk: node 2 forwarded 0 to 9
 forward_blk: node 2 forwarded 0 to 1
 event run: type=7
-update_tree: 2 current latest is 0
-update_tree: 2 updated latest block to 0
+update_tree: 2 current latest is 0 with height 0
+update_tree: 2 updated latest block to 0 with height 0
 event run: type=4
 GENERATING CODE START
 [BALANCE] 2 : 50 0 0 0 0 0 0 0 0 0 
@@ -321,11 +321,12 @@ forward_txn: node 5 forwarded 14 to 1
 event run: type=6
 hear_blk: node 3 heard 0 from 6
 [BALANCE] 3 : 0 0 0 50 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 0 IDy -1
+[DEBUG] 50 INVALID 1 IDX 0 IDy -1
 [BALANCE] 3 : 0 0 0 50 0 0 50 0 0 0 
 event run: type=7
-update_tree: 3 current latest is 2
-update_tree: 3 updated latest block to 2
+update_tree: 3 current latest is 2 with height 0
+1 0
+update_tree: 3 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 1 already heard 1
 event run: type=6
@@ -351,8 +352,8 @@ forward_blk: node 7 forwarded 2 to 5
 forward_blk: node 7 forwarded 2 to 4
 forward_blk: node 7 forwarded 2 to 1
 event run: type=7
-update_tree: 7 current latest is 2
-update_tree: 7 updated latest block to 2
+update_tree: 7 current latest is 2 with height 0
+update_tree: 7 updated latest block to 2 with height 0
 event run: type=3
 hear_txn: node 6 heard 12 from 0
 event run: type=2
@@ -372,8 +373,8 @@ forward_blk: node 4 forwarded 0 to 7
 forward_blk: node 4 forwarded 0 to 3
 forward_blk: node 4 forwarded 0 to 0
 event run: type=7
-update_tree: 4 current latest is 0
-update_tree: 4 updated latest block to 0
+update_tree: 4 current latest is 0 with height 0
+update_tree: 4 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 4 heard 3 from 6
 event run: type=2
@@ -415,8 +416,8 @@ forward_blk: node 5 forwarded 0 to 8
 forward_blk: node 5 forwarded 0 to 3
 forward_blk: node 5 forwarded 0 to 1
 event run: type=7
-update_tree: 5 current latest is 0
-update_tree: 5 updated latest block to 0
+update_tree: 5 current latest is 0 with height 0
+update_tree: 5 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 3 heard 14 from 5
 event run: type=2
@@ -448,13 +449,13 @@ forward_txn: node 1 forwarded 4 to 0
 event run: type=6
 hear_blk: node 6 heard 2 from 3
 [BALANCE] 6 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 3 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [BALANCE] 6 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 6 current latest is 0
-update_tree: 6 updated latest block to 0
+update_tree: 6 current latest is 0 with height 0
+update_tree: 6 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 9 heard 14 from 1
 event run: type=2
@@ -638,8 +639,8 @@ hear_blk: node 0 heard 1 from 6
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=5
 event run: type=7
-update_tree: 0 current latest is 1
-update_tree: 0 updated latest block to 1
+update_tree: 0 current latest is 1 with height 1
+update_tree: 0 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 3 heard 9 from 6
 event run: type=2
@@ -661,8 +662,8 @@ hear_blk: node 4 heard 1 from 6
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=5
 event run: type=7
-update_tree: 4 current latest is 1
-update_tree: 4 updated latest block to 1
+update_tree: 4 current latest is 1 with height 1
+update_tree: 4 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 5 already heard 2
 event run: type=3
@@ -676,13 +677,13 @@ hear_blk: node 4 already heard 0
 event run: type=6
 hear_blk: node 4 heard 2 from 3
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 3 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 4 current latest is 1
-update_tree: 4 updated latest block to 1
+update_tree: 4 current latest is 1 with height 1
+update_tree: 4 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 3 heard 4 from 7
 event run: type=2
@@ -800,16 +801,16 @@ forward_blk: node 8 forwarded 2 to 4
 forward_blk: node 8 forwarded 2 to 2
 forward_blk: node 8 forwarded 2 to 1
 event run: type=7
-update_tree: 8 current latest is 2
-update_tree: 8 updated latest block to 2
+update_tree: 8 current latest is 2 with height 0
+update_tree: 8 updated latest block to 2 with height 0
 event run: type=6
 hear_blk: node 7 heard 0 from 4
 [BALANCE] 7 : 0 0 0 50 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 0 IDy -1
+[DEBUG] 50 INVALID 1 IDX 0 IDy -1
 [BALANCE] 7 : 0 0 0 50 0 0 50 0 0 0 
 event run: type=7
-update_tree: 7 current latest is 2
-update_tree: 7 updated latest block to 2
+update_tree: 7 current latest is 2 with height 0
+update_tree: 7 updated latest block to 2 with height 0
 event run: type=3
 hear_txn: node 4 heard 9 from 6
 event run: type=2
@@ -875,8 +876,8 @@ forward_blk: node 9 forwarded 0 to 2
 forward_blk: node 9 forwarded 0 to 1
 forward_blk: node 9 forwarded 0 to 0
 event run: type=7
-update_tree: 9 current latest is 0
-update_tree: 9 updated latest block to 0
+update_tree: 9 current latest is 0 with height 0
+update_tree: 9 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 6 heard 7 from 4
 event run: type=2
@@ -896,12 +897,12 @@ forward_txn: node 9 forwarded 13 to 1
 event run: type=6
 hear_blk: node 0 heard 3 from 2
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 2 IDy -1
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 0 current latest is 1
+update_tree: 0 current latest is 1 with height 1
 3 0
-update_tree: 0 updated latest block to 1
+update_tree: 0 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 2 already heard 7
 event run: type=3
@@ -927,11 +928,11 @@ hear_blk: node 3 already heard 0
 event run: type=6
 hear_blk: node 8 heard 0 from 4
 [BALANCE] 8 : 0 0 0 50 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 0 IDy -1
+[DEBUG] 50 INVALID 1 IDX 0 IDy -1
 [BALANCE] 8 : 0 0 0 50 0 0 50 0 0 0 
 event run: type=7
-update_tree: 8 current latest is 2
-update_tree: 8 updated latest block to 2
+update_tree: 8 current latest is 2 with height 0
+update_tree: 8 updated latest block to 2 with height 0
 event run: type=3
 hear_txn: node 6 already heard 4
 event run: type=3
@@ -975,8 +976,8 @@ forward_blk: node 1 forwarded 0 to 5
 forward_blk: node 1 forwarded 0 to 2
 forward_blk: node 1 forwarded 0 to 8
 event run: type=7
-update_tree: 1 current latest is 0
-update_tree: 1 updated latest block to 0
+update_tree: 1 current latest is 0 with height 0
+update_tree: 1 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 9 heard 8 from 1
 event run: type=2
@@ -1206,8 +1207,8 @@ hear_blk: node 1 heard 1 from 6
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=5
 event run: type=7
-update_tree: 1 current latest is 1
-update_tree: 1 updated latest block to 1
+update_tree: 1 current latest is 1 with height 1
+update_tree: 1 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 7 heard 13 from 5
 event run: type=2
@@ -1292,13 +1293,13 @@ forward_txn: node 9 forwarded 6 to 1
 event run: type=6
 hear_blk: node 0 heard 2 from 3
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 3 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [BALANCE] 0 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 0 current latest is 1
-update_tree: 0 updated latest block to 1
+update_tree: 0 current latest is 1 with height 1
+update_tree: 0 updated latest block to 1 with height 1
 event run: type=6
 hear_blk: node 2 already heard 0
 event run: type=3
@@ -1426,13 +1427,13 @@ hear_txn: node 0 already heard 1
 event run: type=6
 hear_blk: node 1 heard 2 from 7
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 3 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 1 current latest is 1
-update_tree: 1 updated latest block to 1
+update_tree: 1 current latest is 1 with height 1
+update_tree: 1 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 0 already heard 12
 event run: type=3
@@ -1452,13 +1453,13 @@ hear_txn: node 2 already heard 12
 event run: type=6
 hear_blk: node 5 heard 2 from 8
 [BALANCE] 5 : 50 0 0 0 0 0 0 0 0 0 
-[DEBUG] 50 VALID 1 IDX 3 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [BALANCE] 5 : 50 0 0 0 0 0 0 0 0 0 
 event run: type=7
-update_tree: 5 current latest is 0
-update_tree: 5 updated latest block to 0
+update_tree: 5 current latest is 0 with height 0
+update_tree: 5 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 4 already heard 3
 event run: type=3
@@ -1581,8 +1582,8 @@ hear_blk: node 9 heard 3 from 2
 [BALANCE] 9 : 50 0 50 0 0 0 0 0 0 0 
 event run: type=5
 event run: type=7
-update_tree: 9 current latest is 3
-update_tree: 9 updated latest block to 3
+update_tree: 9 current latest is 3 with height 1
+update_tree: 9 updated latest block to 3 with height 1
 event run: type=3
 hear_txn: node 0 already heard 9
 event run: type=3
@@ -1653,11 +1654,12 @@ hear_blk: node 1 already heard 0
 event run: type=6
 hear_blk: node 8 heard 3 from 2
 [BALANCE] 8 : 0 0 0 50 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 2 IDy -1
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
 [BALANCE] 8 : 0 0 0 50 0 0 50 0 0 0 
 event run: type=7
-update_tree: 8 current latest is 2
-update_tree: 8 updated latest block to 2
+update_tree: 8 current latest is 2 with height 0
+3 0
+update_tree: 8 updated latest block to 3 with height 1
 event run: type=3
 hear_txn: node 4 already heard 7
 event run: type=3
@@ -1799,12 +1801,12 @@ hear_txn: node 7 already heard 7
 event run: type=6
 hear_blk: node 4 heard 3 from 2
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 2 IDy -1
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
 [BALANCE] 4 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 4 current latest is 1
+update_tree: 4 current latest is 1 with height 1
 3 0
-update_tree: 4 updated latest block to 1
+update_tree: 4 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 4 already heard 8
 event run: type=3
@@ -1826,12 +1828,12 @@ hear_txn: node 3 already heard 4
 event run: type=6
 hear_blk: node 1 heard 3 from 2
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
-[DEBUG] 50 VALID 1 IDX 2 IDy -1
+[DEBUG] 50 INVALID 1 IDX 2 IDy -1
 [BALANCE] 1 : 50 0 0 0 0 0 50 0 0 0 
 event run: type=7
-update_tree: 1 current latest is 1
+update_tree: 1 current latest is 1 with height 1
 3 0
-update_tree: 1 updated latest block to 1
+update_tree: 1 updated latest block to 1 with height 1
 event run: type=3
 hear_txn: node 5 already heard 12
 event run: type=3
@@ -1847,13 +1849,13 @@ hear_txn: node 1 already heard 6
 event run: type=6
 hear_blk: node 2 heard 2 from 8
 [BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
-[DEBUG] 50 VALID 1 IDX 3 IDy -1
-[DEBUG] 0 VALID 1 IDX 6 IDy 7
-[DEBUG] 50 VALID 1 IDX 6 IDy -1
+[DEBUG] 50 INVALID 1 IDX 3 IDy -1
+[DEBUG] 0 INVALID 1 IDX 6 IDy 7
+[DEBUG] 50 INVALID 1 IDX 6 IDy -1
 [BALANCE] 2 : 50 0 50 0 0 0 0 0 0 0 
 event run: type=7
-update_tree: 2 current latest is 0
-update_tree: 2 updated latest block to 0
+update_tree: 2 current latest is 0 with height 0
+update_tree: 2 updated latest block to 0 with height 0
 event run: type=3
 hear_txn: node 3 already heard 9
 event run: type=3
@@ -2050,8 +2052,8 @@ hear_blk: node 5 heard 3 from 2
 [BALANCE] 5 : 50 0 50 0 0 0 0 0 0 0 
 event run: type=5
 event run: type=7
-update_tree: 5 current latest is 3
-update_tree: 5 updated latest block to 3
+update_tree: 5 current latest is 3 with height 1
+update_tree: 5 updated latest block to 3 with height 1
 event run: type=3
 hear_txn: node 0 already heard 7
 event run: type=3
@@ -2138,53 +2140,63 @@ event run: type=3
 hear_txn: node 5 already heard 4
 NUMBER OF PEERS SAVED 10
 START 
-update_tree: 0 current latest is 1
-update_tree: 0 updated latest block to 1
+update_tree: 0 current latest is 1 with height 1
+update_tree: 0 updated latest block to 1 with height 1
+1:1 0:0 2:0 3:1 
 IDs of txns heard by 0: 1 2 3 4 5 6 7 8 9 12 13 14 
 ONE DONE
 START 
-update_tree: 1 current latest is 1
-update_tree: 1 updated latest block to 1
+update_tree: 1 current latest is 1 with height 1
+update_tree: 1 updated latest block to 1 with height 1
+1:1 0:0 2:0 3:1 
 IDs of txns heard by 1: 0 1 2 3 4 5 6 7 8 9 12 13 14 
 ONE DONE
 START 
-update_tree: 2 current latest is 0
-update_tree: 2 updated latest block to 0
+update_tree: 2 current latest is 0 with height 0
+update_tree: 2 updated latest block to 0 with height 0
+0:0 2:0 
 IDs of txns heard by 2: 0 1 2 3 4 6 7 8 9 12 13 14 
 ONE DONE
 START 
-update_tree: 3 current latest is 2
-update_tree: 3 updated latest block to 2
+update_tree: 3 current latest is 1 with height 1
+update_tree: 3 updated latest block to 1 with height 1
+1:1 0:0 2:0 
 IDs of txns heard by 3: 1 2 3 4 6 7 8 9 12 13 14 
 ONE DONE
 START 
-update_tree: 4 current latest is 1
-update_tree: 4 updated latest block to 1
+update_tree: 4 current latest is 1 with height 1
+update_tree: 4 updated latest block to 1 with height 1
+1:1 0:0 2:0 3:1 
 IDs of txns heard by 4: 0 1 2 3 4 5 6 7 8 9 12 13 14 
 ONE DONE
 START 
-update_tree: 5 current latest is 3
-update_tree: 5 updated latest block to 3
+update_tree: 5 current latest is 3 with height 1
+update_tree: 5 updated latest block to 3 with height 1
+0:0 2:0 3:1 
 IDs of txns heard by 5: 0 1 2 3 4 6 7 8 9 11 12 13 14 
 ONE DONE
 START 
-update_tree: 6 current latest is 0
-update_tree: 6 updated latest block to 0
+update_tree: 6 current latest is 0 with height 0
+update_tree: 6 updated latest block to 0 with height 0
+0:0 2:0 
 IDs of txns heard by 6: 0 1 2 3 4 6 7 8 9 12 13 14 
 ONE DONE
 START 
-update_tree: 7 current latest is 2
-update_tree: 7 updated latest block to 2
+update_tree: 7 current latest is 2 with height 0
+update_tree: 7 updated latest block to 2 with height 0
+0:0 2:0 
 IDs of txns heard by 7: 1 2 3 4 5 6 7 8 9 10 12 13 14 
 ONE DONE
 START 
-update_tree: 8 current latest is 2
-update_tree: 8 updated latest block to 2
+update_tree: 8 current latest is 3 with height 1
+update_tree: 8 updated latest block to 3 with height 1
+0:0 2:0 3:1 
 IDs of txns heard by 8: 1 2 3 4 5 6 7 8 9 10 12 13 14 
 ONE DONE
 START 
-update_tree: 9 current latest is 3
-update_tree: 9 updated latest block to 3
+update_tree: 9 current latest is 3 with height 1
+update_tree: 9 updated latest block to 3 with height 1
+0:0 3:1 
 IDs of txns heard by 9: 0 1 2 3 4 6 7 8 9 11 12 13 14 
 ONE DONE
 PROGRAM ENDING
