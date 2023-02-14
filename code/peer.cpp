@@ -1,11 +1,15 @@
 #include "include/header.hpp"
 
+vector<txn*> t;
+blk* peer::genesis = new blk(nullptr, nullptr, t);
+
 peer::peer(int id) {
     this->id = id;
     this->slow = false;
     this->lowCPU = false;
     this->curr_balances = vector<ld>(n, 0ll);
-    this->latest_blk = nullptr;
+    this->latest_blk = genesis;
+    this->curr_tree.insert(genesis);
 }
 
 void peer::generate_txn(simulator& sim, event* e) {
