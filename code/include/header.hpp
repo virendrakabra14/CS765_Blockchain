@@ -127,8 +127,7 @@ class peer {
         ld next_time;
         vector<ld> curr_balances;
         bool slow, lowCPU;
-        bool can_gen;
-        
+                
         set<txn*, compare_txn_ptrs> txns_not_included;  // txns not included in any block till now
                                                         // (according to this node)
         set<ll> txns_all;   // IDs of all txns heard by this node till now
@@ -199,7 +198,6 @@ class simulator {
 
         ld Tblk; // block interarrival time
         ld Simulation_Time;
-        ld block_delay;
         
         vector<peer> peers_vec;
         simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);

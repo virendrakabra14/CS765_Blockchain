@@ -10,25 +10,13 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
     this->Tblk = 600;
-    this->Simulation_Time = 20;
-    this->block_delay = 20;
+    this->Simulation_Time = 10000;
 
     // bits per second
     fast_link_speed = 100*(1<<20);          // 100 Mbps
     slow_link_speed = 5*(1<<20);            // 5 Mbps
     queuing_delay_numerator = 96*(1<<10);   // 96 kbps
-
-    peers_vec.reserve(n);
-    for (int i=0; i<n; i++) {
-        peers_vec.push_back(peer(i));
-        // initialize events (generate_txn)
-        ld time_txn = exponential_distribution<ld>(1.0L/Ttx)(rng);
-        event* e = new event(time_txn, 1, &peers_vec[i]);
-        this->push(e);
-        event* e1 = new event(0, 4, &peers_vec[i]);
-        this->push(e1);
-    }
-
+	
     vector<int> slow_indices = pick_random(n, z0*n);
     vector<int> lowCPU_indices = pick_random(n, z1*n);
 

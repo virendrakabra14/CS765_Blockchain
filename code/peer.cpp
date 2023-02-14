@@ -259,10 +259,9 @@ void peer::generate_blk(simulator& sim, event* e ) {
     sim.push(fwd_blk);
 
     cout << "generate_blk: node " << this->id << " generated " << b->blk_id << endl;
-    can_gen = true;
 
-    if (e->timestamp + 2 < sim.Simulation_Time) {
-		event* mine = new event(e->timestamp + 2, 4, this);
+    if (e->timestamp + blk_genr_delay < sim.Simulation_Time) {
+		event* mine = new event(e->timestamp + blk_genr_delay, 4, this);
 		sim.push(mine);
     } 
 }
