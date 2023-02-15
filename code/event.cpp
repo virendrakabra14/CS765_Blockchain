@@ -1,5 +1,15 @@
 #include "include/header.hpp"
 
+/**
+ * @brief Constructor for the Event Class
+ *
+ * @param timestamp Timestamp of the event
+ * @param type Type of event (Code given from 1 to 7)
+ * @param p Peer associated with the event (may be generator, sender or reciever)
+ * @param tran Transaction associated with the event
+ * @param from Peer who sent the event (iff applicable)
+ * @param block Block Associated with the event
+ */
 event::event(ld timestamp, int type, peer* p/*=nullptr*/, txn* tran/*=nullptr*/, peer* from/*=nullptr*/, blk* block/*=nullptr*/) {
     this->timestamp = timestamp;
     this->type = type;
@@ -9,7 +19,14 @@ event::event(ld timestamp, int type, peer* p/*=nullptr*/, txn* tran/*=nullptr*/,
     this->block = block;
 }
 
+/**
+ * @brief Function to run the event
+ * Checks the type of event it is and run the appropriate functions 
+ *
+ * @param sim Simulation which has the global variables
+ */
 void event::run(simulator& sim) {
+	
     cout << "event run: type=" << type << '\n';
     switch (type) {
         case 1: {
