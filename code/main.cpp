@@ -25,6 +25,7 @@ int main(int argc, const char* argv[]) {
         ("min_ngbrs", "minimum number of neighbors per node", cxxopts::value<int>()->default_value("4"))
         ("max_ngbrs", "maximum number of neighbors per node", cxxopts::value<int>()->default_value("8"))
         ("seed", "random seed", cxxopts::value<int>()->default_value("0"))
+        ("sim_time", "simulation time", cxxopts::value<int>()->default_value("10000"))
     ;
 
     auto result = options.parse(argc, argv);
@@ -36,8 +37,9 @@ int main(int argc, const char* argv[]) {
     int min_ngbrs = result["min_ngbrs"].as<int>();
     int max_ngbrs = result["max_ngbrs"].as<int>();
     int seed = result["seed"].as<int>();
+    ld sim_time = result["sim_time"].as<ld>();
 
-    simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs);
+    simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs, sim_time);
     sim.print_graph();
 
 	cout << "STARTING" << endl;

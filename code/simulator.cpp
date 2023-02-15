@@ -1,7 +1,7 @@
 #include "include/header.hpp"
 #include <random>
 
-simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs) {
+simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs, ld sim_time) {
     this->seed = seed;
     rng.seed(seed);
     rng_64.seed(seed);
@@ -10,7 +10,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
     this->Tblk = 600;
-    this->Simulation_Time = 10000;
+    this->Simulation_Time = sim_time;
 
     // bits per second
     fast_link_speed = 100*(1<<20);          // 100 Mbps

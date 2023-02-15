@@ -200,7 +200,7 @@ class simulator {
         ld Simulation_Time;
         
         vector<peer> peers_vec;
-        simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs);
+        simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs, ld sim_time);
         void print_graph();
         void run();
         void push(event* e);

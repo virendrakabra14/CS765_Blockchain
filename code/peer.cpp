@@ -66,7 +66,7 @@ void peer::forward_txn(simulator& sim, event* e) {
             txn_sent_to[e->tran->txn_id].push_back(to);
 
             ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
-            ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
+            ld queuing_delay = exponential_distribution<ld>(link_speed/sim.queuing_delay_numerator)(rng);
             ld latency = sim.rho[this->id][to] + queuing_delay + e->tran->txn_size/link_speed;
 
             event* hear_tran = new event(timestamp + latency, 3, &sim.peers_vec[to], tran, this);
@@ -292,8 +292,8 @@ void peer::forward_blk(simulator& sim, event* e) {
                 blk_sent_to[b->blk_id].push_back(to);
 
                 ld link_speed = ((this->slow || sim.peers_vec[to].slow) ? sim.slow_link_speed : sim.fast_link_speed);
-				// IS THIS CORRECT????
-                ld queuing_delay = exponential_distribution<ld>(sim.queuing_delay_numerator/link_speed)(rng);
+				// IS THIS CORRECT???? [wasn't, now it is]
+                ld queuing_delay = exponential_distribution<ld>(link_speed/sim.queuing_delay_numerator)(rng);
                 ld latency = sim.rho[this->id][to] + queuing_delay + b->blk_size/link_speed;
 
                 event* hear_blk = new event(e->timestamp + latency, 6, &sim.peers_vec[to], nullptr, this, b);
