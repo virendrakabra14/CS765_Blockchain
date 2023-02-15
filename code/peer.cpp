@@ -430,7 +430,7 @@ void peer::update_tree(simulator& sim, event* e) {
     bool pending = true;
     while (pending) {
         for (auto it = blks_not_included.begin(); it != blks_not_included.end();) {
-            if ((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end()) {
+            if (check_blk(*it) && ((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end())) {
                 // adding block to tree
                 (*it)->update_parent((*it)->parent);
                 curr_tree.insert(*it);
@@ -444,7 +444,7 @@ void peer::update_tree(simulator& sim, event* e) {
         }
         pending = false;
         for (blk* b:blks_not_included) {
-            if (b->parent == nullptr || curr_tree.find(b->parent) != curr_tree.end()) {
+            if (check_blk(b) && (b->parent == nullptr || curr_tree.find(b->parent) != curr_tree.end())) {
                 // more blocks can be added
                 pending = true;
                 break;
