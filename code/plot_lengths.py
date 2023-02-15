@@ -6,9 +6,7 @@ directory = "./outputs"
 plots_dir = "./plots/"
 pathlib.Path(plots_dir).mkdir(exist_ok=True)
 
-i = 1
-
-mean_lens = []
+mean_lens = {}
 
 for dir in os.listdir(directory):
     j = int(dir)
@@ -20,15 +18,17 @@ for dir in os.listdir(directory):
         for line in f:
             sum_len += int(line.strip())
             cnt += 1
-        mean_lens.append(sum_len/cnt)
+        mean_lens[int(dir)] = (sum_len/cnt)
 
-    i += 1
+mean_lens = dict(sorted(mean_lens.items()))
 
 fig, ax = plt.subplots()
 
-ax.scatter(list(range(1,i)), mean_lens, edgecolors='b', facecolors='none')
+ax.scatter(mean_lens.keys(), mean_lens.values(), edgecolors='b', facecolors='none')
 
-ax.set_xticks(list(range(i)))
+l = list(mean_lens.keys())
+
+ax.set_xticks(l)
 
 ax.set_xlabel('Experiment Number')
 ax.set_ylabel('Mean branch length')
