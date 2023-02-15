@@ -72,6 +72,12 @@ int main(int argc, const char* argv[]) {
         p.print_longest_chain();
 		cout << "ONE DONE" << endl;
     }
+    outfile.close();
+
+    outfile.open("tree.txt");
+    // sim.print_entire_tree(outfile);
+    outfile.close();
+
 	cout << "PROGRAM ENDING" << endl;
 
 }

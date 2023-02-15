@@ -101,6 +101,7 @@ class blk {
     public:
         static ll curr_blk_id;
         static ll max_blk_size;
+        static map<ll,blk*> blk_id_to_blk_ptr;
         ll blk_size;
         ll blk_id;
         peer* miner;
@@ -204,6 +205,8 @@ class simulator {
         void print_graph();
         void run();
         void push(event* e);
+
+        void print_entire_tree(ostream& out);
 
 };
 

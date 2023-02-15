@@ -190,3 +190,15 @@ void simulator::run() {
 void simulator::push(event* e) {
     pq_events.push(e);
 }
+
+void simulator::print_entire_tree(ostream& out) {
+    for (ll i=0; i<blk::curr_blk_id; i++) {
+        auto it = blk::blk_id_to_blk_ptr.find(i);
+        if(it == blk::blk_id_to_blk_ptr.end() || it->second==nullptr) continue;
+
+        for(blk* child:it->second->children) {
+            if(child==nullptr) continue;
+            out << it->first << ' ' << child->blk_id << endl;
+        }
+    }
+}

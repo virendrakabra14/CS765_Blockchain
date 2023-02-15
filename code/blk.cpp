@@ -2,6 +2,7 @@
 
 ll blk::curr_blk_id = 0;
 ll blk::max_blk_size = 8*(1<<20);       // 1 MB (bits)
+map<ll,blk*> blk::blk_id_to_blk_ptr;
 
 blk::blk(peer* miner, blk* parent, vector<txn*>& vec_txns) {
     this->blk_id = blk::curr_blk_id++;
@@ -9,6 +10,7 @@ blk::blk(peer* miner, blk* parent, vector<txn*>& vec_txns) {
     this->txns = vec_txns;
     this->blk_size = 0;
     this->update_parent(parent);
+    // if(this!=nullptr) blk::blk_id_to_blk_ptr.insert({this->blk_id,this});
 }
 
 void blk::update_parent(blk* new_parent) {
