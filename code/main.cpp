@@ -75,7 +75,7 @@ int main(int argc, const char* argv[]) {
     outfile.close();
 
     outfile.open("tree.txt");
-    // sim.print_entire_tree(outfile);
+    sim.print_entire_tree(outfile);
     outfile.close();
 
 	cout << "PROGRAM ENDING" << endl;

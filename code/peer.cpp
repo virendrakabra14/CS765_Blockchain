@@ -147,6 +147,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
     tmp_balances[coinbase_txn->IDx] += coinbase_txn->C;
 
     blk* b = new blk(this, nullptr, curr_blk_txns);
+    blk::blk_id_to_blk_ptr.insert(make_pair(b->blk_id,b));
 
     if(invalid) {       // doesn't necessarily generate an invalid block
                         // (when blk size exceeds before encountering an invalid txn)

@@ -10,7 +10,7 @@ blk::blk(peer* miner, blk* parent, vector<txn*>& vec_txns) {
     this->txns = vec_txns;
     this->blk_size = 0;
     this->update_parent(parent);
-    // if(this!=nullptr) blk::blk_id_to_blk_ptr.insert({this->blk_id,this});
+    // cout << "[MAP] " << this->blk_id << ":" << this << endl; blk::blk_id_to_blk_ptr[this->blk_id] = this;
 }
 
 void blk::update_parent(blk* new_parent) {

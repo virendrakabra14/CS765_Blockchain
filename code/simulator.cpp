@@ -61,6 +61,8 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     visited = vector<bool>(n, false);
 
     this->create_graph(min_ngbrs, max_ngbrs);
+
+    blk::blk_id_to_blk_ptr.insert(make_pair(peer::genesis->blk_id,peer::genesis));
 }
 
 vector<int> simulator::pick_random(int n, int k) {
