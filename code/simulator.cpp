@@ -61,6 +61,8 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     visited = vector<bool>(n, false);
 
     this->create_graph(min_ngbrs, max_ngbrs);
+
+    blk::blk_id_to_blk_ptr.insert(make_pair(peer::genesis->blk_id,peer::genesis));
 }
 
 vector<int> simulator::pick_random(int n, int k) {
@@ -189,4 +191,16 @@ void simulator::run() {
 
 void simulator::push(event* e) {
     pq_events.push(e);
+}
+
+void simulator::print_entire_tree(ostream& out) {
+    for (ll i=0; i<blk::curr_blk_id; i++) {
+        auto it = blk::blk_id_to_blk_ptr.find(i);
+        if(it == blk::blk_id_to_blk_ptr.end() || it->second==nullptr) continue;
+
+        for(blk* child:it->second->children) {
+            if(child==nullptr) continue;
+            out << it->first << ' ' << child->blk_id << endl;
+        }
+    }
 }
