@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, top=3cm, bottom=3cm, left=2cm, right=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{200020120, 200050129, 200050157}
+\rhead{CS765 Project Part-1}
+\cfoot{\thepage}
+
+\newcommand{\B}[1]{\textbf{#1}}
+\newcommand{\I}[1]{\textit{#1}}
+
+\title{\textbf{CS765 Project Part-1 \\ {\ Simulation of a P2P Cryptocurrency Network}}}
+\author{Sanchit Jindal (200020120), Sarthak Mittal (200050129), Virendra Kabra (200050157)}
+\date{Spring 2023}
+
+\begin{document}
+\begin{sloppypar}       % for overfull, etc.
+
+    \maketitle
+    \tableofcontents
+    \thispagestyle{empty}
+
+    \newpage
+    % \setcounter{page}{1}
+
+    \section{Questions}
+        
+    \noindent \B{2. What are the theoretical reasons of choosing an exponential distribution for generating transactions?}
+    \begin{itemize}
+        \item The Poisson distribution models events occurring with a constant mean rate ($\lambda$) and independent of the time since the last event. Transactions follow this memorylessness property. So, the inter-arrival time of generating transactions follows an exponential distribution (with mean inter-arrival time $\frac{1}{\lambda}$).
+    \end{itemize}
+
+    \noindent \B{4. Why is the mean of $d_{ij}$ inversely related to $c_{ij}$? Give justification for this choice.}
+    \begin{itemize}
+        \item Link speed ($c_{ij}$) measures the number of bits that any of the two nodes can push through their connection. Queuing delay ($d_{ij}$) is the time for which a message waits in a queue at the respective node. If the link speed is less, then a message takes longer to transmit, and longer the waiting time of other messages at that node. Hence the inverse proportionality.
+    \end{itemize}
+
+\end{sloppypar}
+\end{document}
