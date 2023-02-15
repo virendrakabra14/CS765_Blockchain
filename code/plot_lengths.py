@@ -11,6 +11,7 @@ i = 1
 mean_lens = []
 
 for dir in os.listdir(directory):
+    j = int(dir)
     filename = os.path.join(directory, dir, 'lengths.txt')
 
     with open(filename, 'r' , encoding='utf-8') as f:
