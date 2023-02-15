@@ -407,10 +407,29 @@ bool peer::check_blk(blk* b) {
 }
 
 bool compare(blk* a, blk* b) {
-    if (a->height >= b->height) {
+    if (a->height == b->height) return a>b;
+    if (a->height > b->height) {
         return true;
     }
     return false;
+}
+
+bool peer::check_blk_from_genesis(blk* b) {
+    vector<ld> tmp_balances(n, 0);
+    while(b != nullptr) {
+        cout << "in loop for node " << this->id << " with blk_id " << b->blk_id << endl;
+        for (txn* t:b->txns) {
+            if (t->IDy == -1) {
+                tmp_balances[t->IDx] += t->C;
+            }
+            else {
+                tmp_balances[t->IDx] -= t->C;
+                tmp_balances[t->IDy] += t->C;
+            }
+        }
+        b = b->parent;
+    }
+    return !is_invalid(tmp_balances);
 }
 
 void peer::update_tree(simulator& sim, event* e) {
@@ -460,7 +479,8 @@ void peer::update_tree(simulator& sim, event* e) {
     bool pending = true;
     while (pending) {
         for (auto it = blks_not_included.begin(); it != blks_not_included.end();) {
-            if (check_blk(*it) && ((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end())) {
+            if(!check_blk_from_genesis(*it)) continue;
+            if (((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end())) {
                 // adding block to tree
                 (*it)->update_parent((*it)->parent);
                 curr_tree.insert(*it);
@@ -474,7 +494,8 @@ void peer::update_tree(simulator& sim, event* e) {
         }
         pending = false;
         for (blk* b:blks_not_included) {
-            if (check_blk(b) && (b->parent == nullptr || curr_tree.find(b->parent) != curr_tree.end())) {
+            if(!check_blk_from_genesis(b)) continue;
+            if ((b->parent == nullptr || curr_tree.find(b->parent) != curr_tree.end())) {
                 // more blocks can be added
                 pending = true;
                 break;
