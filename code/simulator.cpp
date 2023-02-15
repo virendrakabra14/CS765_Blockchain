@@ -200,7 +200,12 @@ void simulator::print_entire_tree(ostream& out) {
 
         for(blk* child:it->second->children) {
             if(child==nullptr) continue;
-            out << it->first << ' ' << child->blk_id << endl;
+            out << "id" << it->first << "miner";
+            if(it->second->miner == nullptr) out << "G";
+            else out << it->second->miner->id;
+            out << "invalid" << it->second->originally_invalid;
+            out << " ";
+            out << "id" << child->blk_id << "miner" << child->miner->id << "invalid" << child->originally_invalid << endl;
         }
     }
 }

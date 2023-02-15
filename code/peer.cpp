@@ -155,6 +155,7 @@ void peer::generate_blk(simulator& sim, event* e ) {
         for(txn* t_ptr:txns_not_included) {     // iterate on txns by txn_id
 			cout << "[DEBUG] " << t_ptr->C << " VALID " << invalid << " IDx " << t_ptr -> IDx <<  " IDy " << t_ptr->IDy << endl;;
             if(is_invalid(tmp_balances) || curr_blk_size+t_ptr->txn_size > blk::max_blk_size) {
+                if(is_invalid(tmp_balances)) b->originally_invalid = true;
                 b->update_parent(this->latest_blk);
                 b->txns = curr_blk_txns;
                 break;

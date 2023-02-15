@@ -109,6 +109,7 @@ class blk {
         set<blk*> children;
         vector<txn*> txns;
         ll height;
+        bool originally_invalid;
         blk(peer* miner, blk* parent, vector<txn*>& vec_txns);
         void update_parent(blk* new_parent);
 };
