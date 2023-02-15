@@ -46,8 +46,9 @@ int main(int argc, const char* argv[]) {
     event* e = new event(0, 7);
 
 	cout << "NUMBER OF PEERS SAVED " << sim.peers_vec.size() <<  endl;
-    ofstream outfile;
+    ofstream outfile, outfile2;
     outfile.open("peers.txt");
+    outfile2.open("ratios.txt");
     for(auto&& p : sim.peers_vec) {
 		cout << "START " << endl;
         p.update_tree(sim,e);
@@ -61,6 +62,26 @@ int main(int argc, const char* argv[]) {
                 cout << t->txn_id << ",";
             }
             cout << ") ";
+        }
+        int present = 0;
+        blk* b_iter = p.latest_blk;
+        while (b_iter->parent != nullptr) {
+            if (b_iter->miner->id == p.id) {
+                present++;
+            }
+            b_iter = b_iter->parent;
+        }
+        int total = 0;
+        for (blk* b:p.blks_all) {
+            if (b->miner->id == p.id) {
+                total++;
+            }
+        }
+        if (total != 0) {
+            outfile2 << p.id << " (" << p.slow << "|" << p.lowCPU << "):" << float(present) / total << endl;
+        }
+        else {
+            outfile2 << p.id << " (" << p.slow << "|" << p.lowCPU << "):" << -1 << endl;
         }
         cout << endl;
         cout << "Txns left: ";
