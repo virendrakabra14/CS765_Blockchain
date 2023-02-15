@@ -47,15 +47,16 @@ int main(int argc, const char* argv[]) {
 
 	cout << "NUMBER OF PEERS SAVED " << sim.peers_vec.size() <<  endl;
     ofstream outfile;
-    outfile.open("arrivals.txt");
+    outfile.open("peers.txt");
     for(auto&& p : sim.peers_vec) {
 		cout << "START " << endl;
         p.update_tree(sim,e);
         outfile << p.id << endl;
-        cout << "Data: ";
         for (blk* b:p.curr_tree) {
             cout << b->blk_id << "(" << p.blk_arrivals[b] << ")" << ":" << b->height << "(";
-            outfile << "BlockID:" << b->blk_id << ", Height:" << b->height << ", Arrival:" << p.blk_arrivals[b] << endl;
+            if (b->parent != nullptr) {
+                outfile << "id" <<  b->blk_id << "time" << p.blk_arrivals[b] << " id" << b->parent->blk_id << "time" << p.blk_arrivals[b->parent] << endl;
+            }
             for (txn* t:b->txns) {
                 cout << t->txn_id << ",";
             }
