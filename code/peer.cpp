@@ -417,7 +417,7 @@ bool compare(blk* a, blk* b) {
 bool peer::check_blk_from_genesis(blk* b) {
     vector<ld> tmp_balances(n, 0);
     while(b != nullptr) {
-        cout << "in loop for node " << this->id << " with blk_id " << b->blk_id << endl;
+        // cout << "in loop for node " << this->id << " with blk_id " << b->blk_id << endl;
         for (txn* t:b->txns) {
             if (t->IDy == -1) {
                 tmp_balances[t->IDx] += t->C;
@@ -479,7 +479,10 @@ void peer::update_tree(simulator& sim, event* e) {
     bool pending = true;
     while (pending) {
         for (auto it = blks_not_included.begin(); it != blks_not_included.end();) {
-            if(!check_blk_from_genesis(*it)) continue;
+            if(!check_blk_from_genesis(*it)) {
+                it++;
+                continue;
+            };
             if (((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end())) {
                 // adding block to tree
                 (*it)->update_parent((*it)->parent);
