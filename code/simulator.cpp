@@ -13,7 +13,7 @@
  * @param max_ngbrs Max number of Neighbors
  * @param sim_time The Simulation time Limit
  */
-simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbrs, ld sim_time) {
+simulator::simulator(int seed, ld z0, ld z1, ld Ttx, ld Tblk, int min_ngbrs, int max_ngbrs, ld sim_time) {
 
 	// Set the seeds
     this->seed = seed;
@@ -25,7 +25,7 @@ simulator::simulator(int seed, ld z0, ld z1, ld Ttx, int min_ngbrs, int max_ngbr
     this->z0 = min(1.0L, max(0.0L, z0));    // fraction in [0,1]
     this->z1 = min(1.0L, max(0.0L, z1));
     this->Ttx = Ttx;
-    this->Tblk = 600;
+    this->Tblk = Tblk;
     this->Simulation_Time = sim_time;
 
     // bits per second

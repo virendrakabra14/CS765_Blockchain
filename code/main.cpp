@@ -21,6 +21,7 @@ int main(int argc, const char* argv[]) {
         ("z0, slow", "percentage of slow nodes", cxxopts::value<ld>()->default_value("0.2"))
         ("z1, low", "percentage of low CPU nodes", cxxopts::value<ld>()->default_value("0.2"))
         ("Ttx, txn_interarrival_mean", "transactions' mean interarrival time", cxxopts::value<ld>()->default_value("100"))
+        ("Tblk, blk_interarrival_mean", "blocks' mean interarrival time", cxxopts::value<ld>()->default_value("600"))
         ("min_ngbrs", "minimum number of neighbors per node", cxxopts::value<int>()->default_value("4"))
         ("max_ngbrs", "maximum number of neighbors per node", cxxopts::value<int>()->default_value("8"))
         ("seed", "random seed", cxxopts::value<int>()->default_value("0"))
@@ -33,12 +34,13 @@ int main(int argc, const char* argv[]) {
     ld z0 = result["z0"].as<ld>();
     ld z1 = result["z1"].as<ld>();
     ld Ttx = result["Ttx"].as<ld>();
+    ld Tblk = result["Tblk"].as<ld>();
     int min_ngbrs = result["min_ngbrs"].as<int>();
     int max_ngbrs = result["max_ngbrs"].as<int>();
     int seed = result["seed"].as<int>();
     ld sim_time = result["sim_time"].as<ld>();
 
-    simulator sim(seed, z0, z1, Ttx, min_ngbrs, max_ngbrs, sim_time);
+    simulator sim(seed, z0, z1, Ttx, Tblk, min_ngbrs, max_ngbrs, sim_time);
     sim.print_graph();
 
 	cout << "STARTING" << endl;
