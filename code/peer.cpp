@@ -407,7 +407,7 @@ bool peer::check_blk(blk* b) {
 }
 
 bool compare(blk* a, blk* b) {
-    if (a->height == b->height) return a>b;
+    // if (a->height == b->height) return a>b;
     if (a->height > b->height) {
         return true;
     }
