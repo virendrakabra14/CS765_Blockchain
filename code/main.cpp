@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]) {
         ("min_ngbrs", "minimum number of neighbors per node", cxxopts::value<int>()->default_value("4"))
         ("max_ngbrs", "maximum number of neighbors per node", cxxopts::value<int>()->default_value("8"))
         ("seed", "random seed", cxxopts::value<int>()->default_value("0"))
-        ("sim_time", "simulation time", cxxopts::value<int>()->default_value("10000"))
+        ("sim_time", "simulation time", cxxopts::value<ld>()->default_value("10000"))
     ;
 
     auto result = options.parse(argc, argv);
