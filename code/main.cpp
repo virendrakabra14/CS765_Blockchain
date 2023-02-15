@@ -14,7 +14,6 @@ int main(int argc, const char* argv[]) {
     ios_base::sync_with_stdio(false); cin.tie(0);
 
     // argument parser: https://github.com/jarro2783/cxxopts
-
     cxxopts::Options options(argv[0], "P2P Cryptocurrency Network");
 
     options.add_options()
