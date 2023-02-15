@@ -6,7 +6,7 @@ directory = "./outputs"
 plots_dir = "./plots/"
 pathlib.Path(plots_dir).mkdir(exist_ok=True)
 
-i = 0
+i = 1
 
 for dir in os.listdir(directory):
     filename = os.path.join(directory, dir, 'ratios.txt')
