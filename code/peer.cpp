@@ -396,10 +396,20 @@ bool peer::check_blk(blk* b) {
             tmp_balances[t->IDy] += t->C;
         }
     }
+    if (is_invalid(tmp_balances)) {
+        return false;
+    }
 
     // txns valid
     return true;
 
+}
+
+bool compare(blk* a, blk* b) {
+    if (a->height >= b->height) {
+        return true;
+    }
+    return false;
 }
 
 void peer::update_tree(simulator& sim, event* e) {
@@ -408,6 +418,10 @@ void peer::update_tree(simulator& sim, event* e) {
     if (latest_blk != nullptr) {
         cout << "update_tree: " << id << " current latest is " << latest_blk->blk_id  << " with height " << latest_blk->height << endl;
     }
+    for(int i = 0; i < this->curr_balances.size(); i++){
+        cout << this->curr_balances[i] << " ";
+    }
+    cout << endl;
     
     set<blk*> curr_chain;
     blk* b_iter = latest_blk;
@@ -426,11 +440,26 @@ void peer::update_tree(simulator& sim, event* e) {
         }
     }
 
+    // temporarily roll back
+    for (blk* b_iter:curr_chain) {
+        for (txn* t:b_iter->txns) {
+            // roll back
+            if (t->IDy == -1) {
+                curr_balances[t->IDx] -= t->C;
+            }
+            else {
+                curr_balances[t->IDx] += t->C;
+                curr_balances[t->IDy] -= t->C;
+            }
+            txns_not_included.insert(t);
+        }
+    }
+
     // update the tree
     bool pending = true;
     while (pending) {
         for (auto it = blks_not_included.begin(); it != blks_not_included.end();) {
-            if (check_blk(*it) && ((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end())) {
+            if (((*it)->parent == nullptr || curr_tree.find((*it)->parent) != curr_tree.end())) {
                 // adding block to tree
                 (*it)->update_parent((*it)->parent);
                 curr_tree.insert(*it);
@@ -444,7 +473,7 @@ void peer::update_tree(simulator& sim, event* e) {
         }
         pending = false;
         for (blk* b:blks_not_included) {
-            if (check_blk(b) && (b->parent == nullptr || curr_tree.find(b->parent) != curr_tree.end())) {
+            if ((b->parent == nullptr || curr_tree.find(b->parent) != curr_tree.end())) {
                 // more blocks can be added
                 pending = true;
                 break;
@@ -452,52 +481,63 @@ void peer::update_tree(simulator& sim, event* e) {
         }
     }
 
-    // find new longest chain block
+    // find new longest valid chain
+    vector<blk*> v(curr_tree.begin(),curr_tree.end());
+    sort(v.begin(),v.end(),compare);
+
     blk* last = latest_blk;
-    for (blk* b:curr_tree) {
-        if (b->height > last->height) {
-            last = b;
+    for (blk* b:v) {
+        if (b->height > latest_blk->height) {
+            b_iter = b;
+            vector<ld> tmp_balances = this->curr_balances;
+            while (b_iter != nullptr) {
+                for (txn* t:b_iter->txns) {
+                    // new txns
+                    if (t->IDy == -1) {
+                        tmp_balances[t->IDx] += t->C;
+                    }
+                    else {
+                        tmp_balances[t->IDx] -= t->C;
+                        tmp_balances[t->IDy] += t->C;
+                    }
+                }
+                b_iter = b_iter->parent;
+            }
+            if (!is_invalid(tmp_balances)) {
+                last = b;
+                break;
+            }
+        }
+        else {
+            break;
         }
     }
 
     // txns update
-    if (latest_blk != last) {
-        // old chain
-        for (blk* b_iter:curr_chain) {
-            for (txn* t:b_iter->txns) {
-                // roll back
-                if (t->IDy == -1) {
-                    curr_balances[t->IDx] -= t->C;
-                }
-                else {
-                    curr_balances[t->IDx] += t->C;
-                    curr_balances[t->IDy] -= t->C;
-                }
-                txns_not_included.insert(t);
+    b_iter = last;
+    while (b_iter != nullptr) {
+        for (txn* t:b_iter->txns) {
+            // new txns
+            if (t->IDy == -1) {
+                curr_balances[t->IDx] += t->C;
             }
-        }
-        // new chain
-        blk* b_iter = last;
-        while (b_iter != nullptr) {
-            for (txn* t:b_iter->txns) {
-                // new txns
-                if (t->IDy == -1) {
-                    curr_balances[t->IDx] += t->C;
-                }
-                else {
-                    curr_balances[t->IDx] -= t->C;
-                    curr_balances[t->IDy] += t->C;
-                }
-                txns_not_included.erase(t);
+            else {
+                curr_balances[t->IDx] -= t->C;
+                curr_balances[t->IDy] += t->C;
             }
-            b_iter = b_iter->parent;
+            txns_not_included.erase(t);
         }
-        latest_blk = last;
+        b_iter = b_iter->parent;
     }
+    latest_blk = last;
     
     if (last != nullptr) {
         cout << "update_tree: " << id << " updated latest block to " << last->blk_id << " with height " << last->height << endl;
     }
+    for(int i = 0; i < this->curr_balances.size(); i++){
+        cout << this->curr_balances[i] << " ";
+    }
+    cout << endl;
 
     // back to mining
     // event* mine = new event(e->timestamp, 4, this);
