@@ -99,6 +99,17 @@ int main(int argc, const char* argv[]) {
     sim.print_entire_tree(outfile);
     outfile.close();
 
+    ofstream out;
+    out.open("lengths.txt");
+    for (ll i=0; i<blk::curr_blk_id; i++) {
+        auto it = blk::blk_id_to_blk_ptr.find(i);
+        if(it == blk::blk_id_to_blk_ptr.end() || it->second==nullptr) continue;
+        if (it->second->children.size() == 0) {
+            out << it->second->height << endl;
+        }
+    }
+    out.close();
+
 	cout << "PROGRAM ENDING" << endl;
 
 }
