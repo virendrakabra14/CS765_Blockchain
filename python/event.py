@@ -8,7 +8,7 @@ class Event:
     '''Event'''
 
     # construct event
-    def __init__(self, timestamp, typ, peer:Peer, txn:Txn, fro:Peer, blk:Blk):
+    def __init__(self, timestamp, typ, peer:Peer = None, txn:Txn = None, fro:Peer = None, blk:Blk = None):
         '''constructor'''
         self.timestamp = timestamp
         self.type = typ

@@ -26,3 +26,7 @@ class Simulator:
         peers = []
         for i in range(n):
             peers.append([])
+    
+    # push events
+    def push(self, eve):
+        pass

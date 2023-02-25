@@ -14,12 +14,13 @@ class Blk:
     def __init__(self, miner:Peer, parent, txns:Txn):
         '''constructor'''
         self.blk_id = Blk.curr_blk_id
-        Blk.curr_blk_id += 1
         self.blk_size = 0
         self.miner = miner
         self.txns = txns
         self.invalid = False
         self.update_parent(parent)
+        Blk.blk_i2p[self.blk_id] = self
+        Blk.curr_blk_id += 1
 
     # update parent
     def update_parent(self, parent):
