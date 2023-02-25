@@ -11,7 +11,7 @@ class Blk:
     blk_i2p = {}
 
     # construct blk
-    def __init__(self, miner:Peer, parent, txns:Txn):
+    def __init__(self, miner:Peer, parent, txns:list[Txn]):
         '''constructor'''
         self.blk_id = Blk.curr_blk_id
         self.blk_size = 0

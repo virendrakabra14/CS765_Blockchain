@@ -1,4 +1,7 @@
+'''Import main, Txn, Blk, Event and Peer'''
 import main
+from peer import Peer
+
 import random
 import numpy as np
 
@@ -14,18 +17,17 @@ class Simulator:
         self.Ttx = Ttx
         self.Tblk = Tblk
         self.T = T
-        
         self.fls = 100 * (2 ** 20)
         self.sls = 5 * (2 ** 10)
         self.qdn = 96 * (2 ** 10)
-        
         n = Simulator.n
         self.slow = np.random.choice(n,int(z0 * n))
         self.low = np.random.choice(n,int(z1 * n))
-        
         peers = []
         for i in range(n):
-            peers.append([])
+            peers.append([Peer(i)])
+        self.adj = {}
+        self.rho = []
     
     # push events
     def push(self, eve):
