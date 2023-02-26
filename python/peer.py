@@ -1,26 +1,25 @@
-'''Import defaults, main, Txn, Blk, Event and Simulator'''
+'''Import defaults, Txn, Blk and Event'''
 from copy import copy, deepcopy
 import numpy as np
-import main
 from txn import Txn
 from block import Blk
 from event import Event
-from simulator import Simulator
 
 class Peer:
     '''Peer'''
 
     # genesis block
     genesis = Blk(None,None,[])
-    n = main.n
+    n = 0
 
     # construct peer
-    def __init__(self, pid):
+    def __init__(self, n, pid):
         '''constructor'''
+        self.n = n
         self.pid = pid
         self.slow = False
         self.low = False
-        self.curr_balance = []
+        self.curr_balance = [0 for _ in range(n)]
         self.latest_blk = Peer.genesis
         self.curr_tree = set()
         self.curr_tree.add(Peer.genesis)
@@ -28,15 +27,15 @@ class Peer:
         self.txn_all = set()
         self.txn_exc = set()
         self.txn_sent = {}
-        self.blk_all = {}
+        self.blk_all = {0:0}
         self.blk_exc = set()
         self.blk_trig = set()
         self.blk_sent = {}
 
     # generate txn
-    def generate_txn(self, sim:Simulator, eve:Event):
+    def generate_txn(self, sim, eve:Event):
         '''create a txn'''
-        idy = np.random.choice(Peer.n)
+        idy = np.random.choice(self.n)
         invalid = np.random.uniform(0.0,1.0) < 0.1
         if invalid:
             amt = self.curr_balance[self.pid] + np.random.uniform(1e-8,10.0)
@@ -45,44 +44,46 @@ class Peer:
         txn = Txn(self.pid,False,idy,amt)
         self.txn_all.add(txn.txn_id)
         self.txn_exc.add(txn.txn_id)
-        self.txn_sent[txn.txn_id] = set()
+        self.txn_sent.setdefault(txn.txn_id,set())
         fwd_eve = Event(eve.timestamp,2,self,txn,self)
         sim.push(fwd_eve)
-        time_txn = np.random.exponential(1.0/sim.Ttx)
+        time_txn = np.random.exponential(sim.Ttx)
         if eve.timestamp + time_txn < sim.T:
             next_eve = Event(eve.timestamp + time_txn,1,self)
             sim.push(next_eve)
 
     # forward txn
-    def forward_txn(self, sim:Simulator, eve:Event):
+    def forward_txn(self, sim, eve:Event):
         '''forward a txn'''
         for pid in sim.adj[self.pid]:
             if pid != self.pid and pid != eve.fro.pid and pid not in self.txn_sent[eve.txn.txn_id]:
+                self.txn_sent.setdefault(eve.txn.txn_id,set())
                 self.txn_sent[eve.txn.txn_id].add(pid)
             link_speed = sim.sls if self.slow or sim.peers[pid].slow else sim.fls
-            queuing_delay = np.random.exponential(link_speed/sim.qdn)
+            queuing_delay = np.random.exponential(sim.qdn/link_speed)
             latency = sim.rho[self.pid][pid] + queuing_delay + eve.txn.txn_size/link_speed
             hear_eve = Event(eve.timestamp + latency,3,sim.peers[pid],eve.txn,self)
             sim.push(hear_eve)
 
     # hear txn
-    def hear_txn(self, sim:Simulator, eve:Event):
+    def hear_txn(self, sim, eve:Event):
         '''hear a txn'''
         tid = eve.txn.txn_id
         if tid not in self.txn_all:
             self.txn_all.add(tid)
             self.txn_exc.add(tid)
-            self.txn_sent[tid] = set()
+            self.txn_sent.setdefault(tid,set())
             fwd_eve = Event(eve.timestamp,2,self,eve.txn,eve.fro)
             sim.push(fwd_eve)
 
     # generate txn
-    def generate_blk(self, sim:Simulator, eve:Event):
+    def generate_blk(self, sim, eve:Event):
         '''create a blk'''
         invalid = np.random.uniform(0.0,1.0) < 0.1
         blk_txns = set()
         cb_txn = Txn(self.pid,True,-1,Txn.coinbase_fee)
         self.txn_all.add(cb_txn.txn_id)
+        self.txn_exc.add(cb_txn.txn_id)
         blk_txns.add(cb_txn.txn_id)
         blk_size = cb_txn.txn_size
         self.curr_balance[cb_txn.idx] += cb_txn.amt
@@ -130,6 +131,7 @@ class Peer:
                     else:
                         self.curr_balance[txn.idx] += txn.amt
                         self.curr_balance[txn.idx] -= txn.amt
+                    self.txn_exc.add(tid)
             if blk.parent is None:
                 blk.update_parent(self.latest_blk)
                 for tid in self.txn_exc:
@@ -138,32 +140,34 @@ class Peer:
         self.latest_blk = blk
         blk.blk_size = blk_size
         self.blk_all[blk.blk_id] = eve.timestamp
-        self.blk_sent[blk.blk_id] = set()
+        self.blk_sent.setdefault(blk.blk_id,set())
         for tid in blk.txns:
             self.txn_exc.remove(tid)
-        blk_gen_delay = np.random.exponential(self.alpha/sim.Tblk)
+        blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
         fwd_eve = Event(eve.timestamp + blk_gen_delay,5,self,None,self,blk)
         sim.push(fwd_eve)
+        print(eve.timestamp,blk_gen_delay,sim.T)
         if eve.timestamp + blk_gen_delay < sim.T:
             mine = Event(eve.timestamp + blk_gen_delay,4,self)
             sim.push(mine)
 
     # forward txn
-    def forward_blk(self, sim:Simulator, eve:Event):
+    def forward_blk(self, sim, eve:Event):
         '''forward a blk'''
         blk = eve.blk
         if (blk.miner.pid == self.pid and blk == self.latest_blk) or blk.parent in self.curr_tree:
             for pid in sim.adj[self.pid]:
                 if pid != self.pid and pid != eve.fro.pid and pid not in self.blk_sent[blk.blk_id]:
+                    self.blk_sent.setdefault(blk.blk_id,set())
                     self.blk_sent[blk.blk_id].add(pid)
                     link_speed = sim.sls if self.slow or sim.peers[pid].slow else sim.fls
-                    queuing_delay = np.random.exponential(link_speed/sim.qdn)
+                    queuing_delay = np.random.exponential(sim.qdn/link_speed)
                     latency = sim.rho[self.pid][pid] + queuing_delay + blk.blk_size/link_speed
                     hear_eve = Event(eve.timestamp + latency,6,sim.peers[pid],None,self,blk)
                     sim.push(hear_eve)
 
     # hear txn
-    def hear_blk(self, sim:Simulator, eve:Event):
+    def hear_blk(self, sim, eve:Event):
         '''hear a blk'''
         blk = eve.blk
         if blk.blk_id not in self.blk_all:
@@ -172,20 +176,21 @@ class Peer:
             for tid in blk.txns:
                 self.txn_all.add(tid)
                 self.txn_exc.add(tid)
-            self.blk_sent[blk.blk_id] = set()
+            self.blk_sent.setdefault(blk.blk_id,set())
             if blk.parent in self.curr_tree:
                 tree = Event(eve.timestamp,7,self)
                 sim.push(tree)
 
     # update tree
-    def update_tree(self, sim:Simulator, eve:Event):
+    def update_tree(self, sim, eve:Event):
         '''update peer tree'''
         curr_chain = set()
         bptr = copy(self.latest_blk)
         while bptr is not None:
             curr_chain.add(bptr)
             for tid in bptr.txns:
-                self.txn_exc.remove(tid)
+                if tid in self.txn_exc:
+                    self.txn_exc.remove(tid)
             bptr = bptr.parent
         if self.latest_blk not in self.curr_tree:
             for blk in curr_chain:
@@ -223,7 +228,7 @@ class Peer:
                 if blk.parent is None or blk.parent in self.curr_tree:
                     pending = True
                     break
-        new_tree = sorted(self.curr_tree, key = lambda x: x.height, reversed = True)
+        new_tree = sorted(self.curr_tree, key = lambda x: x.height, reverse = True)
         last = self.latest_blk
         for blk in new_tree:
             if blk.height > self.latest_blk.height:
@@ -251,10 +256,10 @@ class Peer:
             for tid in bptr.txns:
                 txn = Txn.txn_i2p[tid]
                 if txn.idy == -1:
-                    temp_bal[txn.idx] += txn.amt
+                    self.curr_balance[txn.idx] += txn.amt
                 else:
-                    temp_bal[txn.idx] -= txn.amt
-                    temp_bal[txn.idx] += txn.amt
+                    self.curr_balance[txn.idx] -= txn.amt
+                    self.curr_balance[txn.idx] += txn.amt
                 self.txn_exc.remove(tid)
             bptr = bptr.parent
         self.latest_blk = last
@@ -262,7 +267,7 @@ class Peer:
     # print txns
     def print_txns(self):
         '''print txns'''
-        print(f'Peer {self.pid} txns:')
+        print(f'Peer {self.pid} txns:', end = ' ')
         for tid in self.txn_all:
             print(tid, end = ' ')
         print()
@@ -270,7 +275,7 @@ class Peer:
     # print longest chain
     def print_lc(self):
         '''longest chain'''
-        print(f'Peer {self.pid} longest chain:')
+        print(f'Peer {self.pid} longest chain:', end = ' ')
         bptr = self.latest_blk
         while bptr is not None:
             print(f'{bptr.blk_id} -> ', end = '')
@@ -288,7 +293,7 @@ class Peer:
     # check blk from genesis
     def check_blk(self, blk):
         '''check validity of block'''
-        temp_bal = [0 for _ in range(main.n)]
+        temp_bal = [0 for _ in range(self.n)]
         while blk is not None:
             for tid in blk.txns:
                 txn = Txn.txn_i2p[tid]

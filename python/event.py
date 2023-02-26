@@ -1,14 +1,13 @@
-'''Import Txn, Blk, Peer and Simulator'''
+'''Import Txn and Blk'''
 from txn import Txn
 from block import Blk
-from peer import Peer
-from simulator import Simulator
 
 class Event:
     '''Event'''
 
     # construct event
-    def __init__(self, timestamp, typ, peer:Peer = None, txn:Txn = None, fro:Peer = None, blk:Blk = None):
+    def __init__(self, timestamp, typ, peer = None, txn:Txn = None, fro = None,
+                 blk:Blk = None):
         '''constructor'''
         self.timestamp = timestamp
         self.type = typ
@@ -18,8 +17,9 @@ class Event:
         self.blk = blk
 
     # runner
-    def run(self, sim:Simulator):
+    def run(self, sim):
         '''event runner'''
+        print(f'Running event {self.type} (peer {self.peer.pid})')
         if self.type == 1:
             self.peer.generate_txn(sim, self)
         elif self.type == 2:

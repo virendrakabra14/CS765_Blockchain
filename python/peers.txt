@@ -1,0 +1,40 @@
+0
+id_0_time_0
+id_1_time_6199.5022181585255 id_0_time_0
+
+1
+id_0_time_0
+id_1_time_6267.613326498828 id_0_time_0
+
+2
+id_0_time_0
+id_1_time_6327.036928681909 id_0_time_0
+
+3
+id_0_time_0
+id_1_time_6327.530942097492 id_0_time_0
+
+4
+id_0_time_0
+id_1_time_6327.384560977188 id_0_time_0
+
+5
+id_0_time_0
+id_1_time_6283.23421702115 id_0_time_0
+
+6
+id_0_time_0
+id_1_time_6327.399397938145 id_0_time_0
+
+7
+id_0_time_0
+id_1_time_90.7385142856327 id_0_time_0
+
+8
+id_0_time_0
+id_1_time_6327.790900337272 id_0_time_0
+
+9
+id_0_time_0
+id_1_time_6327.990886466169 id_0_time_0
+

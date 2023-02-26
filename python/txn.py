@@ -1,6 +1,3 @@
-'''Import main'''
-import main
-
 class Txn:
     '''Transaction'''
 
@@ -9,12 +6,10 @@ class Txn:
     txn_size = 8 * (2 ** 10)
     coinbase_fee = 50
     txn_i2p = {}
-    n = main.n
 
     # construct txn
     def __init__(self, idx, coinbase = False, idy = -1, amt = -1):
         '''constructor'''
-        assert(idx >= 0 and idx <= Txn.n)
         self.txn_id = Txn.curr_txn_id
         self.idx = idx
         self.idy = idy

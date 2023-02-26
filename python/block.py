@@ -1,6 +1,5 @@
-'''Import Txn and Peer'''
+'''Import Txn'''
 from txn import Txn
-from peer import Peer
 
 class Blk:
     '''Block'''
@@ -11,7 +10,7 @@ class Blk:
     blk_i2p = {}
 
     # construct blk
-    def __init__(self, miner:Peer, parent, txns:list[Txn]):
+    def __init__(self, miner, parent, txns:list[Txn]):
         '''constructor'''
         self.blk_id = Blk.curr_blk_id
         self.blk_size = 0
