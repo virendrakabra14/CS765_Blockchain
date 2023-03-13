@@ -124,7 +124,7 @@ class Simulator:
     def push(self, eve):
         '''push events'''
         self.prioq.append(eve)
-        self.prioq = sorted(self.prioq, key = lambda x: x.timestamp)
+        self.prioq = sorted(self.prioq, key = lambda x: -x.timestamp)
 
     # print entire tree
     def print_tree(self, fptr:TextIOWrapper):
@@ -142,7 +142,7 @@ class Simulator:
                 else:
                     fptr.write(f'{blk.miner.pid}_')
                 fptr.write(f'inv_{blk.invalid} ')
-                fptr.write(f'id_{child.blk_id}_miner_{child.miner.pid}_invalid_{child.invalid}\n')
+                fptr.write(f'id_{child.blk_id}_miner_{child.miner.pid}_inv_{child.invalid}\n')
 
     # print lengths
     def print_lengths(self, fptr:TextIOWrapper):

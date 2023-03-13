@@ -1,40 +1,41 @@
 0
-id_0_time_0
-id_1_time_6199.5022181585255 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_9_time_586.2038564552494 id_0_time_0
+id_1_time_73542.11491183414 id_0_time_0
 1
-id_0_time_0
-id_1_time_6267.613326498828 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73528.53022911186 id_0_time_0
+id_3_time_211.89548458359695 id_0_time_0
 2
-id_0_time_0
-id_1_time_6327.036928681909 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73528.44441258138 id_0_time_0
+id_2_time_191.0136845569607 id_0_time_0
 3
-id_0_time_0
-id_1_time_6327.530942097492 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73528.54015294976 id_0_time_0
+id_10_time_1003.3267275763624 id_0_time_0
+id_11_time_8141.381076151138 id_10_time_1003.3267275763624
+id_12_time_8905.713471401608 id_11_time_8141.381076151138
 4
-id_0_time_0
-id_1_time_6327.384560977188 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73528.39295779051 id_0_time_0
+id_6_time_299.32320831273694 id_0_time_0
 5
-id_0_time_0
-id_1_time_6283.23421702115 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73538.78216211268 id_0_time_0
+id_4_time_246.94679664673794 id_0_time_0
 6
-id_0_time_0
-id_1_time_6327.399397938145 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73528.40849883783 id_0_time_0
+id_5_time_275.54888470676 id_0_time_0
 7
-id_0_time_0
+id_0_time_0 id_0_time_0
 id_1_time_90.7385142856327 id_0_time_0
-
 8
-id_0_time_0
-id_1_time_6327.790900337272 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_1_time_73528.46340572051 id_0_time_0
+id_7_time_385.0255095975015 id_0_time_0
 9
-id_0_time_0
-id_1_time_6327.990886466169 id_0_time_0
-
+id_0_time_0 id_0_time_0
+id_8_time_440.9786515418499 id_0_time_0
+id_1_time_73529.00019581678 id_0_time_0

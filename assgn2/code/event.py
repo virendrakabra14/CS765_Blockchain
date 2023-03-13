@@ -19,7 +19,6 @@ class Event:
     # runner
     def run(self, sim):
         '''event runner'''
-        print(f'Running event {self.type} (peer {self.peer.pid})')
         if self.type == 1:
             self.peer.generate_txn(sim, self)
         elif self.type == 2:
@@ -27,6 +26,7 @@ class Event:
         elif self.type == 3:
             self.peer.hear_txn(sim, self)
         elif self.type == 4:
+            print(f'Running event {self.type} (peer {self.peer.pid})')
             self.peer.generate_blk(sim, self)
         elif self.type == 5:
             self.peer.forward_blk(sim, self)

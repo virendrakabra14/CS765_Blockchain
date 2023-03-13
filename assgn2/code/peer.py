@@ -1,4 +1,5 @@
 '''Import defaults, Txn, Blk and Event'''
+from io import TextIOWrapper
 from copy import copy, deepcopy
 import numpy as np
 from txn import Txn
@@ -22,7 +23,7 @@ class Peer:
         self.curr_balance = [0 for _ in range(n)]
         self.latest_blk = Peer.genesis
         self.curr_tree = set()
-        self.curr_tree.add(Peer.genesis)
+        self.curr_tree.add(Peer.genesis.blk_id)
         self.alpha = 0
         self.txn_all = set()
         self.txn_exc = set()
@@ -155,7 +156,7 @@ class Peer:
     def forward_blk(self, sim, eve:Event):
         '''forward a blk'''
         blk = eve.blk
-        if (blk.miner.pid == self.pid and blk == self.latest_blk) or blk.parent in self.curr_tree:
+        if (blk.miner.pid == self.pid and blk == self.latest_blk) or blk.parent.blk_id in self.curr_tree:
             for pid in sim.adj[self.pid]:
                 if pid != self.pid and pid != eve.fro.pid and pid not in self.blk_sent[blk.blk_id]:
                     self.blk_sent.setdefault(blk.blk_id,set())
@@ -177,7 +178,7 @@ class Peer:
                 self.txn_all.add(tid)
                 self.txn_exc.add(tid)
             self.blk_sent.setdefault(blk.blk_id,set())
-            if blk.parent in self.curr_tree:
+            if blk.parent.blk_id in self.curr_tree:
                 tree = Event(eve.timestamp,7,self)
                 sim.push(tree)
 
@@ -192,9 +193,9 @@ class Peer:
                 if tid in self.txn_exc:
                     self.txn_exc.remove(tid)
             bptr = bptr.parent
-        if self.latest_blk not in self.curr_tree:
+        if self.latest_blk.blk_id not in self.curr_tree:
             for blk in curr_chain:
-                self.curr_tree.add(blk)
+                self.curr_tree.add(blk.blk_id)
         for blk in curr_chain:
             for tid in blk.txns:
                 txn = Txn.txn_i2p[tid]
@@ -211,9 +212,9 @@ class Peer:
                 blk = Blk.blk_i2p[bid]
                 if not self.check_blk(blk):
                     continue
-                if blk.parent is None or blk.parent in self.curr_tree:
+                if blk.parent is None or blk.parent.blk_id in self.curr_tree:
                     blk.update_parent(blk.parent)
-                    self.curr_tree.add(blk)
+                    self.curr_tree.add(blk.blk_id)
                     fwd_eve = Event(eve.timestamp,5,self,None,self,blk)
                     sim.push(fwd_eve)
                     temp_inc.add(bid)
@@ -225,12 +226,13 @@ class Peer:
                 blk = Blk.blk_i2p[bid]
                 if not self.check_blk(blk):
                     continue
-                if blk.parent is None or blk.parent in self.curr_tree:
+                if blk.parent is None or blk.parent.blk_id in self.curr_tree:
                     pending = True
                     break
-        new_tree = sorted(self.curr_tree, key = lambda x: x.height, reverse = True)
+        new_tree = sorted(self.curr_tree, key = lambda x: Blk.blk_i2p[x].height, reverse = True)
         last = self.latest_blk
-        for blk in new_tree:
+        for bid in new_tree:
+            blk = Blk.blk_i2p[bid]
             if blk.height > self.latest_blk.height:
                 bptr = blk
                 temp_bal = deepcopy(self.curr_balance)
@@ -265,22 +267,22 @@ class Peer:
         self.latest_blk = last
 
     # print txns
-    def print_txns(self):
+    def print_txns(self, fptr:TextIOWrapper):
         '''print txns'''
-        print(f'Peer {self.pid} txns:', end = ' ')
+        fptr.write(f'Peer {self.pid} txns: ')
         for tid in self.txn_all:
-            print(tid, end = ' ')
-        print()
+            fptr.write(f'{tid} ')
+        fptr.write('\n')
 
     # print longest chain
-    def print_lc(self):
+    def print_lc(self, fptr:TextIOWrapper):
         '''longest chain'''
-        print(f'Peer {self.pid} longest chain:', end = ' ')
+        fptr.write(f'Peer {self.pid} longest chain: ')
         bptr = self.latest_blk
         while bptr is not None:
-            print(f'{bptr.blk_id} -> ', end = '')
+            fptr.write(f'{bptr.blk_id} -> ')
             bptr = bptr.parent
-        print()
+        fptr.write('\n')
 
     # invalidity of balance
     def check_bal(self):
