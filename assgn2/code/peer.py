@@ -90,6 +90,7 @@ class Peer:
         self.curr_balance[cb_txn.idx] += cb_txn.amt
         blk = Blk(self,None,blk_txns)
         if invalid:
+            blk.invalid = True
             for tid in self.txn_exc:
                 txn = Txn.txn_i2p[tid]
                 if not self.check_bal() or blk_size + txn.txn_size > Blk.max_blk_size:
@@ -105,7 +106,7 @@ class Peer:
                 else:
                     self.curr_balance[txn.idx] -= txn.amt
                     self.curr_balance[txn.idx] += txn.amt
-            if blk.parent is None:
+            if blk.pid == -1:
                 blk.update_parent(self.latest_blk)
                 blk.txns = deepcopy(self.txn_exc)
         else:
@@ -132,8 +133,7 @@ class Peer:
                     else:
                         self.curr_balance[txn.idx] += txn.amt
                         self.curr_balance[txn.idx] -= txn.amt
-                    self.txn_exc.add(tid)
-            if blk.parent is None:
+            if blk.pid == -1:
                 blk.update_parent(self.latest_blk)
                 for tid in self.txn_exc:
                     if tid not in invalids:
@@ -144,6 +144,8 @@ class Peer:
         self.blk_sent.setdefault(blk.blk_id,set())
         for tid in blk.txns:
             self.txn_exc.remove(tid)
+        print(blk.txns)
+        print(self.curr_balance)
         blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
         fwd_eve = Event(eve.timestamp + blk_gen_delay,5,self,None,self,blk)
         sim.push(fwd_eve)
@@ -156,7 +158,7 @@ class Peer:
     def forward_blk(self, sim, eve:Event):
         '''forward a blk'''
         blk = eve.blk
-        if (blk.miner.pid == self.pid and blk == self.latest_blk) or blk.parent.blk_id in self.curr_tree:
+        if (blk.miner.pid == self.pid and blk == self.latest_blk) or blk.pid in self.curr_tree:
             for pid in sim.adj[self.pid]:
                 if pid != self.pid and pid != eve.fro.pid and pid not in self.blk_sent[blk.blk_id]:
                     self.blk_sent.setdefault(blk.blk_id,set())
@@ -178,21 +180,26 @@ class Peer:
                 self.txn_all.add(tid)
                 self.txn_exc.add(tid)
             self.blk_sent.setdefault(blk.blk_id,set())
-            if blk.parent.blk_id in self.curr_tree:
+            if blk.blk_id in self.blk_trig or blk.pid in self.curr_tree:
                 tree = Event(eve.timestamp,7,self)
                 sim.push(tree)
+            else:
+                self.blk_trig.add(blk.pid)
 
     # update tree
     def update_tree(self, sim, eve:Event):
         '''update peer tree'''
         curr_chain = set()
         bptr = copy(self.latest_blk)
-        while bptr is not None:
+        txns_inc = set()
+        while bptr.blk_id != 0:
             curr_chain.add(bptr)
             for tid in bptr.txns:
-                if tid in self.txn_exc:
-                    self.txn_exc.remove(tid)
-            bptr = bptr.parent
+                txns_inc.add(tid)
+            bptr = Blk.blk_i2p[bptr.pid]
+        for tid in txns_inc:
+            if tid in self.txn_exc:
+                self.txn_exc.remove(tid)
         if self.latest_blk.blk_id not in self.curr_tree:
             for blk in curr_chain:
                 self.curr_tree.add(blk.blk_id)
@@ -212,8 +219,8 @@ class Peer:
                 blk = Blk.blk_i2p[bid]
                 if not self.check_blk(blk):
                     continue
-                if blk.parent is None or blk.parent.blk_id in self.curr_tree:
-                    blk.update_parent(blk.parent)
+                if blk.pid == -1 or blk.pid in self.curr_tree:
+                    blk.update_parent(Blk.blk_i2p[blk.pid])
                     self.curr_tree.add(blk.blk_id)
                     fwd_eve = Event(eve.timestamp,5,self,None,self,blk)
                     sim.push(fwd_eve)
@@ -226,9 +233,12 @@ class Peer:
                 blk = Blk.blk_i2p[bid]
                 if not self.check_blk(blk):
                     continue
-                if blk.parent is None or blk.parent.blk_id in self.curr_tree:
+                if Blk.blk_i2p[blk.pid] is None or blk.pid in self.curr_tree:
                     pending = True
                     break
+        for bid in self.curr_tree:
+            if bid in self.blk_trig:
+                self.blk_trig.remove(bid)
         new_tree = sorted(self.curr_tree, key = lambda x: Blk.blk_i2p[x].height, reverse = True)
         last = self.latest_blk
         for bid in new_tree:
@@ -236,7 +246,7 @@ class Peer:
             if blk.height > self.latest_blk.height:
                 bptr = blk
                 temp_bal = deepcopy(self.curr_balance)
-                while bptr is not None:
+                while bptr.blk_id != 0:
                     for tid in bptr.txns:
                         txn = Txn.txn_i2p[tid]
                         if txn.idy == -1:
@@ -244,7 +254,7 @@ class Peer:
                         else:
                             temp_bal[txn.idx] -= txn.amt
                             temp_bal[txn.idx] += txn.amt
-                    bptr = bptr.parent
+                    bptr = Blk.blk_i2p[bptr.pid]
                 for bal in temp_bal:
                     if bal < 0:
                         break
@@ -254,7 +264,8 @@ class Peer:
             else:
                 break
         bptr = last
-        while bptr is not None:
+        txns_inc = set()
+        while bptr.blk_id != 0:
             for tid in bptr.txns:
                 txn = Txn.txn_i2p[tid]
                 if txn.idy == -1:
@@ -262,8 +273,11 @@ class Peer:
                 else:
                     self.curr_balance[txn.idx] -= txn.amt
                     self.curr_balance[txn.idx] += txn.amt
+                txns_inc.add(tid)
+            bptr = Blk.blk_i2p[bptr.pid]
+        for tid in txns_inc:
+            if tid in self.txn_exc:
                 self.txn_exc.remove(tid)
-            bptr = bptr.parent
         self.latest_blk = last
 
     # print txns
@@ -279,9 +293,10 @@ class Peer:
         '''longest chain'''
         fptr.write(f'Peer {self.pid} longest chain: ')
         bptr = self.latest_blk
-        while bptr is not None:
+        while bptr.blk_id != 0:
             fptr.write(f'{bptr.blk_id} -> ')
-            bptr = bptr.parent
+            bptr = Blk.blk_i2p[bptr.pid]
+        fptr.write(f'{bptr.blk_id}')
         fptr.write('\n')
 
     # invalidity of balance
@@ -296,7 +311,9 @@ class Peer:
     def check_blk(self, blk):
         '''check validity of block'''
         temp_bal = [0 for _ in range(self.n)]
-        while blk is not None:
+        while blk.blk_id != 0:
+            # print(blk.blk_id)
+            # print(temp_bal)
             for tid in blk.txns:
                 txn = Txn.txn_i2p[tid]
                 if txn.idy == -1:
@@ -304,7 +321,8 @@ class Peer:
                 else:
                     temp_bal[txn.idx] -= txn.amt
                     temp_bal[txn.idy] += txn.amt
-            blk = blk.parent
+            blk = Blk.blk_i2p[blk.pid]
+        # print(temp_bal)
         for bal in temp_bal:
             if bal < 0:
                 return False

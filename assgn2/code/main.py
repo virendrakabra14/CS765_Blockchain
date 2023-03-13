@@ -50,18 +50,18 @@ with open('peers.txt','w',encoding = 'utf-8') as f1:
                     print(f'{tid},', end = '')
                 print('),', end = ' ')
                 f1.write(f'id_{blk.blk_id}_time_{p.blk_all[blk.blk_id]}')
-                if blk.parent is not None:
-                    f1.write(f' id_{blk.parent.blk_id}_time_{p.blk_all[blk.parent.blk_id]}')
+                if blk.pid != -1:
+                    f1.write(f' id_{blk.pid}_time_{p.blk_all[blk.pid]}')
                 else:
                     f1.write(' id_0_time_0')
                 f1.write('\n')
             print()
             pre = 0
             bptr = copy(p.latest_blk)
-            while bptr.parent is not None:
+            while bptr.blk_id != 0:
                 if bptr.miner.pid == p.pid:
                     pre += 1
-                bptr = bptr.parent
+                bptr = Blk.blk_i2p[bptr.pid]
             tot = 0
             for bid in p.blk_all:
                 blk = Blk.blk_i2p[bid]
@@ -77,6 +77,9 @@ with open('peers.txt','w',encoding = 'utf-8') as f1:
             # print()
             with open(f'peer-files/peer{p.pid}-txns.txt','w',encoding = 'utf-8') as f5:
                 p.print_txns(f5)
+            print(list(p.blk_all))
+            print(list(p.blk_exc))
+            print(list(p.curr_balance))
             p.print_lc(stdout)
 with open('tree.txt','w',encoding = 'utf-8') as f3:
     sim.print_tree(f3)

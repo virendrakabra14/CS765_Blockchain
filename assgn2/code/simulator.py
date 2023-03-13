@@ -36,9 +36,9 @@ class Simulator:
                 self.peers[i].slow = True
             if i in self.low:
                 self.peers[i].low = True
-                self.peers[i].alpha = 10.0 / norm_fac
-            else:
                 self.peers[i].alpha = 1.0 / norm_fac
+            else:
+                self.peers[i].alpha = 10.0 / norm_fac
         for i in range(n):
             time_txn = np.random.exponential(self.Ttx)
             txn_eve = Event(time_txn,1,self.peers[i])

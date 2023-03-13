@@ -24,10 +24,11 @@ class Blk:
     # update parent
     def update_parent(self, parent):
         '''update parent of block'''
-        self.parent = parent
         if parent is not None:
+            self.pid = parent.blk_id
             parent.children.add(self)
             self.height = parent.height + 1
         else:
+            self.pid = -1
             self.height = 0
             self.children = set()
