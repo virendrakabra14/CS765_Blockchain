@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from sys import argv
 import os
 import pathlib
 
@@ -11,7 +12,7 @@ i = 0
 for dir in os.listdir(directory):
     # if dir!='19': continue
     # print(dir)
-    filename = os.path.join(directory, dir, 'ratios.txt')
+    filename = os.path.join(directory, dir, argv[1] + '-ratios.txt')
     # print(filename)
 
     with open(filename, 'r' , encoding='utf-8') as f:
@@ -65,6 +66,6 @@ for dir in os.listdir(directory):
         fig.set_size_inches(15, 8)
 
         # plt.show()
-        fig.savefig(os.path.join(plots_dir, f"ratios{dir}.png"), bbox_inches="tight")
+        fig.savefig(os.path.join(plots_dir, f"{argv[1]}-ratios{dir}.png"), bbox_inches="tight")
 
         i += 1

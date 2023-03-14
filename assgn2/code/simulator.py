@@ -9,7 +9,7 @@ from event import Event
 class Simulator:
     '''Simulator'''
 
-    def __init__(self, n, seed, z0, z1, zeta, frac, Ttx, Tblk, m, M, T):
+    def __init__(self, n, seed, z0, z1, mode, zeta, frac, Ttx, Tblk, m, M, T):
         self.n = n
         n -= 1
         self.seed = seed
@@ -17,6 +17,7 @@ class Simulator:
         np.random.seed(seed)
         self.z0 = min(1.0,max(0.0,z0))
         self.z1 = min(1.0,max(0.0,z1))
+        self.mode = mode
         self.zeta = zeta
         self.frac = frac
         self.Ttx = Ttx

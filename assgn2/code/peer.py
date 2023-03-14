@@ -204,25 +204,19 @@ class Peer:
                     self.txn_all.add(tid)
                     self.txn_exc.add(tid)
                 self.blk_sent.setdefault(blk.blk_id,set())
+            while len(self.own_chain) != 0 and blk.height >= self.own_chain[0].height:
+                fwd_eve = Event(eve.timestamp,5,self,None,self,self.own_chain.pop(0))
+                sim.push(fwd_eve)
+                print(eve.timestamp,sim.T)
             last = self.latest_blk
             if blk.height == last.height:
+                tree = Event(eve.timestamp,7,self)
+                sim.push(tree)
+            elif sim.mode == 'selfish' and blk.height == last.height - 1:
                 fwd_eve = Event(eve.timestamp,5,self,None,self,last)
                 sim.push(fwd_eve)
                 print(eve.timestamp,sim.T)
                 self.own_chain = []
-                tree = Event(eve.timestamp,7,self)
-                sim.push(tree)
-            elif blk.height == last.height - 1:
-                for bptr in self.own_chain:
-                    fwd_eve = Event(eve.timestamp,5,self,None,self,bptr)
-                    sim.push(fwd_eve)
-                    print(eve.timestamp,sim.T)
-                self.own_chain = []
-            else:
-                while len(self.own_chain) != 0 and blk.height >= self.own_chain[0].height:
-                    fwd_eve = Event(eve.timestamp,5,self,None,self,self.own_chain.pop(0))
-                    sim.push(fwd_eve)
-                    print(eve.timestamp,sim.T)
 
     # update tree
     def update_tree(self, sim, eve:Event):

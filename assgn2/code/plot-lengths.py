@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from sys import argv
 import os
 import pathlib
 
@@ -10,7 +11,7 @@ mean_lens = {}
 
 for dir in os.listdir(directory):
     j = int(dir)
-    filename = os.path.join(directory, dir, 'lengths.txt')
+    filename = os.path.join(directory, dir, argv[1] + '-lengths.txt')
 
     with open(filename, 'r' , encoding='utf-8') as f:
         sum_len = 0
@@ -38,4 +39,4 @@ ax.set_title('Mean Branch Lengths')
 fig.set_size_inches(15, 8)
 
 # plt.show()
-fig.savefig(os.path.join(plots_dir, f"lengths.png"), bbox_inches="tight")
+fig.savefig(os.path.join(plots_dir, argv[1] + '-lengths.png'), bbox_inches="tight")
