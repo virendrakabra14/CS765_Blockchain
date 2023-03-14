@@ -151,14 +151,14 @@ class Peer:
         for tid in blk.txns:
             self.txn_exc.remove(tid)
         self.curr_balance = temp_bal
+        blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
         if not self.adv:
-            blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
             fwd_eve = Event(eve.timestamp + blk_gen_delay,5,self,None,self,blk)
             sim.push(fwd_eve)
             print(eve.timestamp,blk_gen_delay,sim.T)
-            if eve.timestamp + blk_gen_delay < sim.T:
-                mine = Event(eve.timestamp + blk_gen_delay,4,self)
-                sim.push(mine)
+        if eve.timestamp + blk_gen_delay < sim.T:
+            mine = Event(eve.timestamp + blk_gen_delay,4,self)
+            sim.push(mine)
 
     # forward txn
     def forward_blk(self, sim, eve:Event):
