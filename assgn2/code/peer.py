@@ -18,6 +18,7 @@ class Peer:
         '''constructor'''
         self.n = n
         self.pid = pid
+        self.adv = False
         self.slow = False
         self.low = False
         self.curr_balance = [0 for _ in range(n)]

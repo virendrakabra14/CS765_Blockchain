@@ -9,13 +9,16 @@ from event import Event
 class Simulator:
     '''Simulator'''
 
-    def __init__(self, n, seed, z0, z1, Ttx, Tblk, m, M, T):
+    def __init__(self, n, seed, z0, z1, zeta, frac, Ttx, Tblk, m, M, T):
         self.n = n
+        n -= 1
         self.seed = seed
         random.seed(seed)
         np.random.seed(seed)
         self.z0 = min(1.0,max(0.0,z0))
         self.z1 = min(1.0,max(0.0,z1))
+        self.zeta = zeta
+        self.frac = frac
         self.Ttx = Ttx
         self.Tblk = Tblk
         self.T = T
@@ -27,18 +30,24 @@ class Simulator:
         self.slow = np.random.choice(n,int(z0 * n))
         self.low = np.random.choice(n,int(z1 * n))
         num_low = len(self.low)
-        norm_fac = 10.0 * (n - num_low) + num_low
+        tot_power = 10.0 * (n - num_low) + num_low
+        norm_fac = (tot_power) / (1 - self.frac)
         self.peers = []
         self.prioq = []
+        n += 1
         for i in range(n):
             self.peers.append(Peer(n,i))
-            if i in self.slow:
-                self.peers[i].slow = True
-            if i in self.low:
-                self.peers[i].low = True
-                self.peers[i].alpha = 1.0 / norm_fac
+            if i == n - 1:
+                self.peers[i].adv = True
+                self.peers[i].alpha = 1
             else:
-                self.peers[i].alpha = 10.0 / norm_fac
+                if i in self.slow:
+                    self.peers[i].slow = True
+                if i in self.low:
+                    self.peers[i].low = True
+                    self.peers[i].alpha = 1.0 / norm_fac
+                else:
+                    self.peers[i].alpha = 10.0 / norm_fac
         for i in range(n):
             time_txn = np.random.exponential(self.Ttx)
             txn_eve = Event(time_txn,1,self.peers[i])
@@ -79,22 +88,47 @@ class Simulator:
             while not done:
                 done = True
                 self.adj = {i:set() for i in range(n)}
-                for i in range(n):
-                    req_ngbrs = np.random.choice(range(self.m,self.M + 1)) - len(self.adj[i])
-                    if req_ngbrs < 0:
-                        done = False
-                        break
-                    new_ngbrs = np.random.choice(n,req_ngbrs)
-                    for j in new_ngbrs:
-                        if j == i or len(self.adj[j]) > self.M:
+                for i in reversed(range(n)):
+                    if i == n - 1:
+                        req_ngbrs = int(i * self.zeta) - len(self.adj[i])
+                        if req_ngbrs < 0:
                             done = False
                             break
-                        self.adj[i].add(j)
-                        self.adj[j].add(i)
-                    for j in range(n):
-                        if len(self.adj[j]) < self.m:
+                        new_ngbrs = np.random.choice(i,req_ngbrs,replace = False)
+                        for j in new_ngbrs:
+                            if j == i or len(self.adj[j]) > self.M:
+                                done = False
+                                break
+                            self.adj[i].add(j)
+                            self.adj[j].add(i)
+                        for j in range(n):
+                            if j == n - 1:
+                                if len(self.adj[j]) != int(j * self.zeta):
+                                    done = False
+                                    break
+                            if len(self.adj[j]) < self.m:
+                                done = False
+                                break
+                    else:
+                        req_ngbrs = np.random.choice(range(self.m,self.M + 1)) - len(self.adj[i])
+                        if req_ngbrs < 0:
                             done = False
                             break
+                        new_ngbrs = np.random.choice(n,req_ngbrs,replace = False)
+                        for j in new_ngbrs:
+                            if j == i or len(self.adj[j]) > self.M:
+                                done = False
+                                break
+                            self.adj[i].add(j)
+                            self.adj[j].add(i)
+                        for j in range(n):
+                            if j == n - 1:
+                                if len(self.adj[j]) != int(j * self.zeta):
+                                    done = False
+                                    break
+                            if len(self.adj[j]) < self.m:
+                                done = False
+                                break
                 if not done:
                     break
         for i in range(n):
