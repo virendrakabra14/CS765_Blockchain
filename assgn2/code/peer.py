@@ -164,8 +164,9 @@ class Peer:
     def forward_blk(self, sim, eve:Event):
         '''forward a blk'''
         blk = eve.blk
-        if blk.miner.adv or ((blk.miner.pid == self.pid and
-            blk == self.latest_blk) or blk.pid in self.curr_tree):
+        if (self.adv and blk.miner.pid == self.pid) or (not self.adv and
+            ((blk.miner.pid == self.pid and blk == self.latest_blk) or
+            blk.pid in self.curr_tree)):
             for pid in sim.adj[self.pid]:
                 if pid != self.pid and pid != eve.fro.pid and pid not in self.blk_sent[blk.blk_id]:
                     self.blk_sent.setdefault(blk.blk_id,set())
