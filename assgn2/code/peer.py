@@ -87,14 +87,15 @@ class Peer:
         self.txn_exc.add(cb_txn.txn_id)
         blk_txns.add(cb_txn.txn_id)
         blk_size = cb_txn.txn_size
-        self.curr_balance[cb_txn.idx] += cb_txn.amt
+        temp_bal = [0 for _ in range(self.n)]
+        temp_bal[cb_txn.idx] += cb_txn.amt
         blk = Blk(self,None,blk_txns)
         if invalid:
             blk.invalid = True
             for tid in self.txn_exc:
                 txn = Txn.txn_i2p[tid]
-                if not self.check_bal() or blk_size + txn.txn_size > Blk.max_blk_size:
-                    if not self.check_bal():
+                if not self.check_bal(temp_bal) or blk_size + txn.txn_size > Blk.max_blk_size:
+                    if not self.check_bal(temp_bal):
                         blk.invalid = True
                     blk.update_parent(self.latest_blk)
                     blk.txns = blk_txns
@@ -102,10 +103,10 @@ class Peer:
                 blk_size += txn.txn_size
                 blk_txns.add(tid)
                 if txn.idy == -1:
-                    self.curr_balance[txn.idx] += txn.amt
+                    temp_bal[txn.idx] += txn.amt
                 else:
-                    self.curr_balance[txn.idx] -= txn.amt
-                    self.curr_balance[txn.idx] += txn.amt
+                    temp_bal[txn.idx] -= txn.amt
+                    temp_bal[txn.idy] += txn.amt
             if blk.pid == -1:
                 blk.update_parent(self.latest_blk)
                 blk.txns = deepcopy(self.txn_exc)
@@ -120,19 +121,20 @@ class Peer:
                 blk_size += txn.txn_size
                 blk_txns.add(tid)
                 if txn.idy == -1:
-                    self.curr_balance[txn.idx] += txn.amt
+                    temp_bal[txn.idx] += txn.amt
                 else:
-                    self.curr_balance[txn.idx] -= txn.amt
-                    self.curr_balance[txn.idx] += txn.amt
-                if not self.check_bal():
+                    temp_bal[txn.idx] -= txn.amt
+                    temp_bal[txn.idy] += txn.amt
+                if not self.check_bal(temp_bal):
                     invalids.add(tid)
                     blk_size -= txn.txn_size
                     blk_txns.remove(tid)
                     if txn.idy == -1:
-                        self.curr_balance[txn.idx] -= txn.amt
+                        temp_bal[txn.idx] -= txn.amt
                     else:
-                        self.curr_balance[txn.idx] += txn.amt
-                        self.curr_balance[txn.idx] -= txn.amt
+                        temp_bal[txn.idx] += txn.amt
+                        temp_bal[txn.idy] -= txn.amt
+                # print('hmmm', temp_bal)
             if blk.pid == -1:
                 blk.update_parent(self.latest_blk)
                 for tid in self.txn_exc:
@@ -144,8 +146,7 @@ class Peer:
         self.blk_sent.setdefault(blk.blk_id,set())
         for tid in blk.txns:
             self.txn_exc.remove(tid)
-        print(blk.txns)
-        print(self.curr_balance)
+        self.curr_balance = temp_bal
         blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
         fwd_eve = Event(eve.timestamp + blk_gen_delay,5,self,None,self,blk)
         sim.push(fwd_eve)
@@ -210,7 +211,7 @@ class Peer:
                     self.curr_balance[txn.idx] -= txn.amt
                 else:
                     self.curr_balance[txn.idx] += txn.amt
-                    self.curr_balance[txn.idx] -= txn.amt
+                    self.curr_balance[txn.idy] -= txn.amt
                 self.txn_exc.add(tid)
         pending = True
         while pending:
@@ -253,7 +254,7 @@ class Peer:
                             temp_bal[txn.idx] += txn.amt
                         else:
                             temp_bal[txn.idx] -= txn.amt
-                            temp_bal[txn.idx] += txn.amt
+                            temp_bal[txn.idy] += txn.amt
                     bptr = Blk.blk_i2p[bptr.pid]
                 for bal in temp_bal:
                     if bal < 0:
@@ -272,7 +273,7 @@ class Peer:
                     self.curr_balance[txn.idx] += txn.amt
                 else:
                     self.curr_balance[txn.idx] -= txn.amt
-                    self.curr_balance[txn.idx] += txn.amt
+                    self.curr_balance[txn.idy] += txn.amt
                 txns_inc.add(tid)
             bptr = Blk.blk_i2p[bptr.pid]
         for tid in txns_inc:
@@ -300,10 +301,10 @@ class Peer:
         fptr.write('\n')
 
     # invalidity of balance
-    def check_bal(self):
+    def check_bal(self, balance):
         '''check balances'''
-        for bal in self.curr_balance:
-            if bal < 0:
+        for bal in balance:
+            if bal < -1e-5:
                 return False
         return True
 
@@ -312,8 +313,6 @@ class Peer:
         '''check validity of block'''
         temp_bal = [0 for _ in range(self.n)]
         while blk.blk_id != 0:
-            # print(blk.blk_id)
-            # print(temp_bal)
             for tid in blk.txns:
                 txn = Txn.txn_i2p[tid]
                 if txn.idy == -1:
@@ -322,8 +321,7 @@ class Peer:
                     temp_bal[txn.idx] -= txn.amt
                     temp_bal[txn.idy] += txn.amt
             blk = Blk.blk_i2p[blk.pid]
-        # print(temp_bal)
         for bal in temp_bal:
-            if bal < 0:
+            if bal < -1e-5:
                 return False
         return True

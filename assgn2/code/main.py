@@ -45,10 +45,10 @@ with open('peers.txt','w',encoding = 'utf-8') as f1:
             f1.write(f'{p.pid}\n')
             for bid in p.curr_tree:
                 blk = Blk.blk_i2p[bid]
-                print(f'{blk.blk_id}({p.blk_all[blk.blk_id]}):{blk.height}(', end = '')
-                for tid in blk.txns:
-                    print(f'{tid},', end = '')
-                print('),', end = ' ')
+                print(f'{blk.blk_id}({p.blk_all[blk.blk_id]}):{blk.height}, ', end = '')
+                # for tid in blk.txns:
+                #     print(f'{tid},', end = '')
+                # print('),', end = ' ')
                 f1.write(f'id_{blk.blk_id}_time_{p.blk_all[blk.blk_id]}')
                 if blk.pid != -1:
                     f1.write(f' id_{blk.pid}_time_{p.blk_all[blk.pid]}')
@@ -77,9 +77,6 @@ with open('peers.txt','w',encoding = 'utf-8') as f1:
             # print()
             with open(f'peer-files/peer{p.pid}-txns.txt','w',encoding = 'utf-8') as f5:
                 p.print_txns(f5)
-            print(list(p.blk_all))
-            print(list(p.blk_exc))
-            print(list(p.curr_balance))
             p.print_lc(stdout)
 with open('tree.txt','w',encoding = 'utf-8') as f3:
     sim.print_tree(f3)

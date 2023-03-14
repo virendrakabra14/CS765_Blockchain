@@ -29,10 +29,10 @@ class Event:
             print(f'Running event {self.type} (peer {self.peer.pid})')
             self.peer.generate_blk(sim, self)
         elif self.type == 5:
-            print(f'Running event {self.type} (peer {self.peer.pid})')
+            # print(f'Running event {self.type} (peer {self.peer.pid})')
             self.peer.forward_blk(sim, self)
         elif self.type == 6:
-            print(f'Running event {self.type} (peer {self.peer.pid})')
+            # print(f'Running event {self.type} (peer {self.peer.pid})')
             self.peer.hear_blk(sim, self)
         elif self.type == 7:
             self.peer.update_tree(sim, self)
