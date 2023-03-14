@@ -10,9 +10,9 @@ i = 0
 
 for dir in os.listdir(directory):
     # if dir!='19': continue
-    print(dir)
+    # print(dir)
     filename = os.path.join(directory, dir, 'ratios.txt')
-    print(filename)
+    # print(filename)
 
     with open(filename, 'r' , encoding='utf-8') as f:
         total = 0
@@ -24,7 +24,7 @@ for dir in os.listdir(directory):
         for line in f:
             line_split = line.strip().replace(':',' ').replace('(',' ').replace(')',' ').replace('|',' ').replace('  ',' ').split(' ')
             node_num = int(line_split[0])
-            print(line_split)
+            # print(line_split)
             if line_split[-1]=='-1':
                 line_split[-1] = '0'
             ratio = float(line_split[-1])
@@ -38,7 +38,7 @@ for dir in os.listdir(directory):
             else:
                 ratio_highCPU[node_num] = ratio
 
-        print(i, ratio_slow, ratio_fast, ratio_lowCPU, ratio_highCPU)
+        # print(i, ratio_slow, ratio_fast, ratio_lowCPU, ratio_highCPU)
 
         fig, (ax1, ax2) = plt.subplots(1,2)
 

@@ -23,6 +23,7 @@ class Peer:
         self.low = False
         self.curr_balance = [0 for _ in range(n)]
         self.latest_blk = Peer.genesis
+        self.own_chain = []
         self.curr_tree = set()
         self.curr_tree.add(Peer.genesis.blk_id)
         self.alpha = 0
@@ -142,25 +143,29 @@ class Peer:
                     if tid not in invalids:
                         blk.txns.add(tid)
         self.latest_blk = blk
+        if self.adv:
+            self.own_chain.append(blk)
         blk.blk_size = blk_size
         self.blk_all[blk.blk_id] = eve.timestamp
         self.blk_sent.setdefault(blk.blk_id,set())
         for tid in blk.txns:
             self.txn_exc.remove(tid)
         self.curr_balance = temp_bal
-        blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
-        fwd_eve = Event(eve.timestamp + blk_gen_delay,5,self,None,self,blk)
-        sim.push(fwd_eve)
-        print(eve.timestamp,blk_gen_delay,sim.T)
-        if eve.timestamp + blk_gen_delay < sim.T:
-            mine = Event(eve.timestamp + blk_gen_delay,4,self)
-            sim.push(mine)
+        if not self.adv:
+            blk_gen_delay = np.random.exponential(sim.Tblk/self.alpha)
+            fwd_eve = Event(eve.timestamp + blk_gen_delay,5,self,None,self,blk)
+            sim.push(fwd_eve)
+            print(eve.timestamp,blk_gen_delay,sim.T)
+            if eve.timestamp + blk_gen_delay < sim.T:
+                mine = Event(eve.timestamp + blk_gen_delay,4,self)
+                sim.push(mine)
 
     # forward txn
     def forward_blk(self, sim, eve:Event):
         '''forward a blk'''
         blk = eve.blk
-        if (blk.miner.pid == self.pid and blk == self.latest_blk) or blk.pid in self.curr_tree:
+        if blk.miner.adv or ((blk.miner.pid == self.pid and
+            blk == self.latest_blk) or blk.pid in self.curr_tree):
             for pid in sim.adj[self.pid]:
                 if pid != self.pid and pid != eve.fro.pid and pid not in self.blk_sent[blk.blk_id]:
                     self.blk_sent.setdefault(blk.blk_id,set())
@@ -175,18 +180,48 @@ class Peer:
     def hear_blk(self, sim, eve:Event):
         '''hear a blk'''
         blk = eve.blk
-        if blk.blk_id not in self.blk_all:
-            self.blk_all[blk.blk_id] = eve.timestamp
-            self.blk_exc.add(blk.blk_id)
-            for tid in blk.txns:
-                self.txn_all.add(tid)
-                self.txn_exc.add(tid)
-            self.blk_sent.setdefault(blk.blk_id,set())
-            if blk.blk_id in self.blk_trig or blk.pid in self.curr_tree:
+        if not self.adv:
+            # honest
+            if blk.blk_id not in self.blk_all:
+                self.blk_all[blk.blk_id] = eve.timestamp
+                self.blk_exc.add(blk.blk_id)
+                for tid in blk.txns:
+                    self.txn_all.add(tid)
+                    self.txn_exc.add(tid)
+                self.blk_sent.setdefault(blk.blk_id,set())
+                if blk.blk_id in self.blk_trig or blk.pid in self.curr_tree:
+                    tree = Event(eve.timestamp,7,self)
+                    sim.push(tree)
+                else:
+                    self.blk_trig.add(blk.pid)
+        else:
+            # adversary
+            if blk.blk_id not in self.blk_all:
+                self.blk_all[blk.blk_id] = eve.timestamp
+                self.blk_exc.add(blk.blk_id)
+                for tid in blk.txns:
+                    self.txn_all.add(tid)
+                    self.txn_exc.add(tid)
+                self.blk_sent.setdefault(blk.blk_id,set())
+            last = self.latest_blk
+            if blk.height == last.height:
+                fwd_eve = Event(eve.timestamp,5,self,None,self,last)
+                sim.push(fwd_eve)
+                print(eve.timestamp,sim.T)
+                self.own_chain = []
                 tree = Event(eve.timestamp,7,self)
                 sim.push(tree)
+            elif blk.height == last.height - 1:
+                for bptr in self.own_chain:
+                    fwd_eve = Event(eve.timestamp,5,self,None,self,bptr)
+                    sim.push(fwd_eve)
+                    print(eve.timestamp,sim.T)
+                self.own_chain = []
             else:
-                self.blk_trig.add(blk.pid)
+                while len(self.own_chain) != 0 and blk.height >= self.own_chain[0].height:
+                    fwd_eve = Event(eve.timestamp,5,self,None,self,self.own_chain.pop(0))
+                    sim.push(fwd_eve)
+                    print(eve.timestamp,sim.T)
 
     # update tree
     def update_tree(self, sim, eve:Event):
