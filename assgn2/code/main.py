@@ -36,8 +36,8 @@ sim = Simulator(n,s,z0,z1,Ttx,Tblk,m,M,T)
 sim.print_graph()
 sim.run()
 eve = Event(0,7)
-with open('peers.txt','w',encoding = 'utf-8') as f1:
-    with open('ratios.txt','w',encoding = 'utf-8') as f2:
+with open('data/0/peers.txt','w',encoding = 'utf-8') as f1:
+    with open('data/0/ratios.txt','w',encoding = 'utf-8') as f2:
         for p in sim.peers:
             p.update_tree(sim,eve)
             print(f'------------ PEER {p.pid} ------------')
@@ -75,10 +75,10 @@ with open('peers.txt','w',encoding = 'utf-8') as f1:
             # for tid in p.txn_exc:
             #     print(f'{tid} ', end = '')
             # print()
-            with open(f'peer-files/peer{p.pid}-txns.txt','w',encoding = 'utf-8') as f5:
-                p.print_txns(f5)
+            # with open(f'peer-files/peer{p.pid}-txns.txt','w',encoding = 'utf-8') as f5:
+            #     p.print_txns(f5)
             p.print_lc(stdout)
-with open('tree.txt','w',encoding = 'utf-8') as f3:
+with open('data/0/tree.txt','w',encoding = 'utf-8') as f3:
     sim.print_tree(f3)
-with open('lengths.txt','w',encoding = 'utf-8') as f4:
+with open('data/0/lengths.txt','w',encoding = 'utf-8') as f4:
     sim.print_lengths(f4)

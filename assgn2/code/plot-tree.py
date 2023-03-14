@@ -1,6 +1,6 @@
 import urllib.request
 
-filename = "tree.txt"
+filename = "data/0/tree.txt"
 
 edges = ""
 
