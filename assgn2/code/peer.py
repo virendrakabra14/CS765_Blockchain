@@ -31,8 +31,8 @@ class Peer:
         self.txn_exc = set()
         self.txn_sent = {}
         self.blk_all = {0:0}
-        self.blk_exc = set()
-        self.blk_trig = set()
+        self.blk_exc = set()        # blocks excluded from the tree
+        self.blk_trig = set()       # trigger set
         self.blk_sent = {}
 
     # generate txn
@@ -177,7 +177,7 @@ class Peer:
                     hear_eve = Event(eve.timestamp + latency,6,sim.peers[pid],None,self,blk)
                     sim.push(hear_eve)
 
-    # hear txn
+    # hear blk
     def hear_blk(self, sim, eve:Event):
         '''hear a blk'''
         blk = eve.blk

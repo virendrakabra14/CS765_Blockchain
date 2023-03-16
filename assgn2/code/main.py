@@ -9,8 +9,8 @@ from simulator import Simulator
 curr_time = 0.0
 
 parser = ap()
-parser.add_argument('-n', '--nodes', type = int, help = 'Number of nodes', default = 10)
-parser.add_argument('-z0', '--slow', type = float, help = 'Fraction of slow nodes', default = 0.2)
+parser.add_argument('-n', '--nodes', type = int, help = 'Number of nodes', default = 100)
+parser.add_argument('-z0', '--slow', type = float, help = 'Fraction of slow nodes', default = 0.5)
 parser.add_argument('-z1', '--low', type = float, help = 'Fraction of low CPU nodes', default = 0.2)
 parser.add_argument('-mode', '--mode', type = str, help = 'Mode of adversary', default = 'selfish')
 parser.add_argument('-zeta', '--zeta', type = float, help = 'Fraction of honest connected to adversary', default = 0.25)
@@ -23,6 +23,7 @@ parser.add_argument('-m', '--min-ngbrs', type = int, help = 'Min neighbors per n
 parser.add_argument('-M', '--max-ngbrs', type = int, help = 'Max neighbors per node', default = 8)
 parser.add_argument('-s', '--seed', type = int, help = 'Random seed', default = 0)
 parser.add_argument('-T', '--sim-time', type = int, help = 'Simulation time', default = 10000)
+parser.add_argument('-exp', '--exp', type = int, help = 'Experiment ID', default=0)
 
 args = parser.parse_args()
 n = args.nodes
@@ -37,13 +38,14 @@ m = args.min_ngbrs
 M = args.max_ngbrs
 s = args.seed
 T = args.sim_time
+exp_id = args.exp
 
 sim = Simulator(n + 1,s,z0,z1,mode,zeta,frac,Ttx,Tblk,m,M,T)
 sim.print_graph()
 sim.run()
 eve = Event(0,7)
-with open(f'data/0/{mode}-peers.txt','w',encoding = 'utf-8') as f1:
-    with open(f'data/0/{mode}-ratios.txt','w',encoding = 'utf-8') as f2:
+with open(f'data/{exp_id}/{mode}-peers.txt','w',encoding = 'utf-8') as f1:
+    with open(f'data/{exp_id}/{mode}-ratios.txt','w',encoding = 'utf-8') as f2:
         for p in sim.peers:
             p.update_tree(sim,eve)
             print(f'------------ PEER {p.pid} ------------')
@@ -84,7 +86,7 @@ with open(f'data/0/{mode}-peers.txt','w',encoding = 'utf-8') as f1:
             # with open(f'peer-files/peer{p.pid}-txns.txt','w',encoding = 'utf-8') as f5:
             #     p.print_txns(f5)
             p.print_lc(stdout)
-with open(f'data/0/{mode}-tree.txt','w',encoding = 'utf-8') as f3:
+with open(f'data/{exp_id}/{mode}-tree.txt','w',encoding = 'utf-8') as f3:
     sim.print_tree(f3)
-with open(f'data/0/{mode}-lengths.txt','w',encoding = 'utf-8') as f4:
+with open(f'data/{exp_id}/{mode}-lengths.txt','w',encoding = 'utf-8') as f4:
     sim.print_lengths(f4)
