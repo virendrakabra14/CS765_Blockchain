@@ -57,11 +57,12 @@ with open(f'data/{exp_id}/{mode}-peers.txt','w',encoding = 'utf-8') as f1:
                 # for tid in blk.txns:
                 #     print(f'{tid},', end = '')
                 # print('),', end = ' ')
-                f1.write(f'id_{blk.blk_id}_time_{p.blk_all[blk.blk_id]}')
+                f1.write(f'id_{blk.blk_id}_time_{round(p.blk_all[blk.blk_id])}_miner_{"G" if blk.miner is None else blk.miner.pid}_valid_{int(not blk.invalid)}')
                 if blk.pid != -1:
-                    f1.write(f' id_{blk.pid}_time_{p.blk_all[blk.pid]}')
+                    blk_parent = Blk.blk_i2p[blk.pid]
+                    f1.write(f' id_{blk.pid}_time_{round(p.blk_all[blk.pid])}_miner_{"G" if blk_parent.miner is None else blk_parent.miner.pid}_valid_{int(not blk_parent.invalid)}')
                 else:
-                    f1.write(' id_0_time_0')
+                    f1.write(' id_0_time_0_miner_G_valid_1')
                 f1.write('\n')
             print()
             pre = 0

@@ -79,7 +79,7 @@ class Peer:
             fwd_eve = Event(eve.timestamp,2,self,eve.txn,eve.fro)
             sim.push(fwd_eve)
 
-    # generate txn
+    # generate blk
     def generate_blk(self, sim, eve:Event):
         '''create a blk'''
         invalid = np.random.uniform(0.0,1.0) < 0.1
@@ -160,7 +160,7 @@ class Peer:
             mine = Event(eve.timestamp + blk_gen_delay,4,self)
             sim.push(mine)
 
-    # forward txn
+    # forward blk
     def forward_blk(self, sim, eve:Event):
         '''forward a blk'''
         blk = eve.blk

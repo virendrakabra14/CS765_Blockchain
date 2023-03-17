@@ -7,8 +7,8 @@ import pathlib
 
 n_vals = [10]     # 100
 Ttx_vals = [10]
-zetas = [0.25, 0.5]
-modes = ['selfish', 'stubborn']
+zetas = [0.25]
+modes = ['selfish']
 exp_id = 0
 
 executable = "python"
@@ -31,7 +31,8 @@ def run_command(command):
         print(out)
     
     if err:
-        print("-"*15+"EXP ERROR"+"-"*15, err)
+        print("-"*15+"EXP ERROR"+"-"*15)
+        print(err)
         sys.exit(1)
 
 
