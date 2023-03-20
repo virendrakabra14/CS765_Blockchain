@@ -22,4 +22,4 @@ with open(filename, 'r', encoding='utf-8') as f:
             continue
         edges += line_processed[0]+"->"+line_processed[1]+";"
 
-urllib.request.urlretrieve(f"https://chart.googleapis.com/chart?cht=gv&chl=digraph{{{edges}}}", f"{mode}-tree.png")
+urllib.request.urlretrieve(f"https://chart.googleapis.com/chart?cht=gv&chl=digraph{{{edges}}}", f"plots/{exp_id}/{mode}-tree.png")

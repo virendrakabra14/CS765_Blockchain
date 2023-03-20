@@ -93,8 +93,8 @@ ax1.scatter(mpus_adv.keys(), mpus_adv.values(), edgecolors='r', facecolors='none
 ax1.scatter(mpus_overall.keys(), mpus_overall.values(), edgecolors='b', facecolors='none', label='MPU_overall')
 ax2.scatter(mpus_ratio.keys(), mpus_ratio.values(), edgecolors='b', facecolors='none', label='MPU_ratio')
 
-ax1.set_xticks(list(range(len(mpus_adv))))
-ax2.set_xticks(list(range(len(mpus_ratio))))
+ax1.set_xticks(sorted(list(mpus_adv.keys())))
+ax2.set_xticks(sorted(list(mpus_ratio.keys())))
 ax1.set_yticks([e/10 for e in list(range(11))])
 ax2.set_ylim(bottom=0)
 

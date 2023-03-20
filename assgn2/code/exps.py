@@ -8,9 +8,9 @@ import pathlib
 n_vals = [10]
 Ttx_vals = [10]
 zetas = [0.25, 0.5, 0.75]
-fracs = [0.1]
-z0s = [0.5]
-z1s = [0.5]
+fracs = [0.1]   # attacker hashing power
+z0s = [0.5]     # slow
+z1s = [0.9]     # lowCPU
 modes = ['selfish', 'stubborn']
 exp_id = 0
 
@@ -48,7 +48,7 @@ for n, Ttx, zeta, frac, z0, z1, mode in list(itertools.product(n_vals, Ttx_vals,
     commands = [
         f"{executable} main.py -n {n} -Ttx {Ttx} -zeta {zeta} --frac {frac} -z0 {z0} -z1 {z1} -mode {mode} -exp {exp_id}",
         f"{executable} plot-tree.py -exp {exp_id} -mode {mode}",
-        f"{executable} plot-ptree.py -exp {exp_id} -mode {mode}",
+        # f"{executable} plot-ptree.py -exp {exp_id} -mode {mode}",
     ]
     print(commands[0], file=commands_file)
 
