@@ -16,10 +16,15 @@ class Event:
         self.fro = fro
         self.blk = blk
 
+    def __lt__(self, eve2):
+        return self.timestamp<eve2.timestamp
+    def __le__(self, eve2):
+        return self.timestamp<=eve2.timestamp
+
     # runner
     def run(self, sim):
         '''event runner'''
-        print(f'Running event {self.type}')
+        # print(f'Running event {self.type}')
         if self.type == 1:
             self.peer.generate_txn(sim, self)
         elif self.type == 2:
@@ -27,7 +32,7 @@ class Event:
         elif self.type == 3:
             self.peer.hear_txn(sim, self)
         elif self.type == 4:
-            # print(f'Running event {self.type} (peer {self.peer.pid})')
+            print(f'Running event {self.type} (peer {self.peer.pid})')
             self.peer.generate_blk(sim, self)
         elif self.type == 5:
             # print(f'Running event {self.type} (peer {self.peer.pid})')

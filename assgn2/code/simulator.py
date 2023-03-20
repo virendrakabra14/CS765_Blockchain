@@ -5,6 +5,7 @@ import numpy as np
 from block import Blk
 from peer import Peer
 from event import Event
+import heapq
 
 class Simulator:
     '''Simulator'''
@@ -150,7 +151,7 @@ class Simulator:
     def run(self):
         '''runner function'''
         while not len(self.prioq) == 0:
-            eve = self.prioq.pop()
+            _, _, eve = heapq.heappop(self.prioq)
             if eve.timestamp > self.T and (eve.type == 1 or eve.type == 4):
                 continue
             eve.run(self)
@@ -158,8 +159,9 @@ class Simulator:
     # push events
     def push(self, eve):
         '''push events'''
-        self.prioq.append(eve)
-        self.prioq = sorted(self.prioq, key = lambda x: -x.timestamp)
+        # self.prioq.append(eve)
+        heapq.heappush(self.prioq, (eve.timestamp, id(eve), eve))
+        # self.prioq = sorted(self.prioq, key = lambda x: -x.timestamp)
 
     # print entire tree [and other data]
     def print_tree_and_chains(self, fptr:TextIOWrapper):
