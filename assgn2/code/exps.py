@@ -5,7 +5,7 @@ import sys
 import os
 import pathlib
 
-n_vals = [10]
+n_vals = [10, 20, 30]
 Ttx_vals = [10]
 zetas = [0.25, 0.5, 0.75]
 fracs = [0.1]   # attacker hashing power
@@ -47,9 +47,12 @@ for n, Ttx, zeta, frac, z0, z1, mode in list(itertools.product(n_vals, Ttx_vals,
 
     commands = [
         f"{executable} main.py -n {n} -Ttx {Ttx} -zeta {zeta} --frac {frac} -z0 {z0} -z1 {z1} -mode {mode} -exp {exp_id}",
-        f"{executable} plot-tree.py -exp {exp_id} -mode {mode}",
+        # f"{executable} plot-tree.py -exp {exp_id} -mode {mode}",
         # f"{executable} plot-ptree.py -exp {exp_id} -mode {mode}",
     ]
+    if n==10:
+        commands.append(f"{executable} plot-tree.py -exp {exp_id} -mode {mode}")
+        commands.append(f"{executable} plot-ptree.py -exp {exp_id} -mode {mode}")
     print(commands[0], file=commands_file)
 
     for command in commands:

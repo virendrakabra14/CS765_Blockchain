@@ -1,64 +1,68 @@
+id_0_miner_G_inv_False id_14_miner_5_inv_False
 id_0_miner_G_inv_False id_5_miner_8_inv_False
 id_0_miner_G_inv_False id_2_miner_0_inv_False
 id_0_miner_G_inv_False id_1_miner_10_inv_False
-id_0_miner_G_inv_False id_14_miner_5_inv_False
 id_0_miner_G_inv_False id_7_miner_7_inv_False
 id_0_miner_G_inv_False id_8_miner_9_inv_False
 id_0_miner_G_inv_False id_3_miner_1_inv_False
 id_0_miner_G_inv_False id_6_miner_3_inv_False
-id_1_miner_10_inv_False id_10_miner_10_inv_False
 id_1_miner_10_inv_False id_11_miner_6_inv_False
+id_1_miner_10_inv_False id_10_miner_10_inv_False
 id_2_miner_0_inv_False id_4_miner_0_inv_False
 id_3_miner_1_inv_False id_9_miner_1_inv_False
+id_9_miner_1_inv_False id_16_miner_8_inv_False
+id_9_miner_1_inv_False id_18_miner_4_inv_True
 id_9_miner_1_inv_False id_13_miner_2_inv_False
+id_9_miner_1_inv_False id_17_miner_7_inv_False
 id_9_miner_1_inv_False id_12_miner_1_inv_False
 id_10_miner_10_inv_False id_15_miner_10_inv_False
-id_12_miner_1_inv_False id_19_miner_4_inv_False
-id_12_miner_1_inv_False id_17_miner_8_inv_False
-id_12_miner_1_inv_False id_18_miner_7_inv_False
-id_12_miner_1_inv_False id_22_miner_0_inv_True
-id_12_miner_1_inv_False id_27_miner_3_inv_False
-id_12_miner_1_inv_False id_16_miner_1_inv_False
-id_15_miner_10_inv_False id_20_miner_10_inv_False
-id_15_miner_10_inv_False id_37_miner_6_inv_False
-id_16_miner_1_inv_False id_44_miner_1_inv_False
-id_20_miner_10_inv_False id_21_miner_10_inv_False
-id_21_miner_10_inv_False id_23_miner_10_inv_False
-id_22_miner_0_inv_True id_33_miner_0_inv_False
-id_23_miner_10_inv_False id_24_miner_10_inv_False
-id_24_miner_10_inv_False id_25_miner_10_inv_False
-id_25_miner_10_inv_False id_26_miner_10_inv_False
-id_26_miner_10_inv_False id_28_miner_10_inv_False
+id_12_miner_1_inv_False id_22_miner_0_inv_False
+id_12_miner_1_inv_False id_20_miner_1_inv_False
+id_15_miner_10_inv_False id_19_miner_10_inv_False
+id_19_miner_10_inv_False id_21_miner_10_inv_False
+id_20_miner_1_inv_False id_23_miner_1_inv_False
+id_21_miner_10_inv_False id_24_miner_10_inv_False
+id_22_miner_0_inv_False id_25_miner_0_inv_False
+id_23_miner_1_inv_False id_30_miner_1_inv_False
+id_24_miner_10_inv_False id_27_miner_10_inv_False
+id_25_miner_0_inv_False id_26_miner_0_inv_False
+id_25_miner_0_inv_False id_33_miner_3_inv_False
+id_26_miner_0_inv_False id_40_miner_7_inv_False
+id_26_miner_0_inv_False id_34_miner_0_inv_False
+id_27_miner_10_inv_False id_28_miner_10_inv_False
 id_28_miner_10_inv_False id_29_miner_10_inv_False
-id_29_miner_10_inv_False id_30_miner_10_inv_False
-id_30_miner_10_inv_False id_31_miner_10_inv_False
-id_31_miner_10_inv_False id_32_miner_10_inv_False
-id_32_miner_10_inv_False id_34_miner_10_inv_False
-id_33_miner_0_inv_False id_45_miner_3_inv_False
-id_33_miner_0_inv_False id_35_miner_0_inv_False
-id_34_miner_10_inv_False id_36_miner_10_inv_False
-id_35_miner_0_inv_False id_41_miner_0_inv_False
+id_29_miner_10_inv_False id_31_miner_10_inv_True
+id_30_miner_1_inv_False id_32_miner_1_inv_False
+id_31_miner_10_inv_True id_36_miner_10_inv_False
+id_32_miner_1_inv_False id_35_miner_1_inv_False
+id_34_miner_0_inv_False id_47_miner_0_inv_False
+id_35_miner_1_inv_False id_37_miner_1_inv_False
 id_36_miner_10_inv_False id_39_miner_10_inv_False
-id_37_miner_6_inv_False id_38_miner_6_inv_False
-id_39_miner_10_inv_False id_40_miner_10_inv_False
-id_40_miner_10_inv_False id_43_miner_10_inv_False
-id_41_miner_0_inv_False id_42_miner_0_inv_False
-id_42_miner_0_inv_False id_47_miner_0_inv_True
-id_43_miner_10_inv_False id_46_miner_10_inv_False
-id_46_miner_10_inv_False id_49_miner_10_inv_False
-id_47_miner_0_inv_True id_48_miner_0_inv_False
-id_49_miner_10_inv_False id_50_miner_10_inv_False
-id_50_miner_10_inv_False id_51_miner_10_inv_False
-Peer 0 longest chain: 48 -> 47 -> 42 -> 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 1 longest chain: 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 2 longest chain: 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 3 longest chain: 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 4 longest chain: 24 -> 23 -> 21 -> 20 -> 15 -> 10 -> 1 -> 0
-Peer 5 longest chain: 24 -> 23 -> 21 -> 20 -> 15 -> 10 -> 1 -> 0
-Peer 6 longest chain: 38 -> 37 -> 15 -> 10 -> 1 -> 0
-Peer 7 longest chain: 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 8 longest chain: 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 9 longest chain: 41 -> 35 -> 33 -> 22 -> 12 -> 9 -> 3 -> 0
-Peer 10 longest chain: 51 -> 50 -> 49 -> 46 -> 43 -> 40 -> 39 -> 36 -> 34 -> 32 -> 31 -> 30 -> 29 -> 28 -> 26 -> 25 -> 24 -> 23 -> 21 -> 20 -> 15 -> 10 -> 1 -> 0
-Total blocks: 52
-Adversary blocks: 23
+id_37_miner_1_inv_False id_38_miner_1_inv_False
+id_38_miner_1_inv_False id_41_miner_1_inv_True
+id_39_miner_10_inv_False id_44_miner_6_inv_True
+id_39_miner_10_inv_False id_49_miner_10_inv_False
+id_41_miner_1_inv_True id_42_miner_1_inv_True
+id_42_miner_1_inv_True id_43_miner_1_inv_False
+id_43_miner_1_inv_False id_45_miner_1_inv_False
+id_45_miner_1_inv_False id_46_miner_1_inv_False
+id_46_miner_1_inv_False id_55_miner_1_inv_False
+id_47_miner_0_inv_False id_48_miner_0_inv_False
+id_48_miner_0_inv_False id_50_miner_0_inv_False
+id_49_miner_10_inv_False id_51_miner_10_inv_False
+id_51_miner_10_inv_False id_52_miner_10_inv_False
+id_52_miner_10_inv_False id_53_miner_10_inv_False
+id_53_miner_10_inv_False id_54_miner_10_inv_False
+Peer 0 longest chain: 50 -> 48 -> 47 -> 34 -> 26 -> 25 -> 22 -> 12 -> 9 -> 3 -> 0
+Peer 1 longest chain: 55 -> 46 -> 45 -> 43 -> 42 -> 41 -> 38 -> 37 -> 35 -> 32 -> 30 -> 23 -> 20 -> 12 -> 9 -> 3 -> 0
+Peer 2 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 3 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 4 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 5 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 6 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 7 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 8 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 9 longest chain: 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Peer 10 longest chain: 54 -> 53 -> 52 -> 51 -> 49 -> 39 -> 36 -> 31 -> 29 -> 28 -> 27 -> 24 -> 21 -> 19 -> 15 -> 10 -> 1 -> 0
+Total blocks: 56
+Adversary blocks: 17
