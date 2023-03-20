@@ -161,9 +161,9 @@ class Simulator:
         self.prioq.append(eve)
         self.prioq = sorted(self.prioq, key = lambda x: -x.timestamp)
 
-    # print entire tree
-    def print_tree(self, fptr:TextIOWrapper):
-        '''print tree'''
+    # print entire tree [and other data]
+    def print_tree_and_chains(self, fptr:TextIOWrapper):
+        '''print tree and chains (as seen by peers)'''
         for bid in range(Blk.curr_blk_id):
             blk = Blk.blk_i2p[bid]
             if blk is None:
@@ -178,6 +178,10 @@ class Simulator:
                     fptr.write(f'{blk.miner.pid}_')
                 fptr.write(f'inv_{blk.invalid} ')
                 fptr.write(f'id_{child.blk_id}_miner_{child.miner.pid}_inv_{child.invalid}\n')
+        for peer_id in range(self.n):   # only honest
+            self.peers[peer_id].print_lc(fptr)
+        fptr.write(f'Total blocks: {Blk.curr_blk_id}\n')
+        fptr.write(f'Adversary blocks: {Peer.adv_blks}')
 
     # print lengths
     def print_lengths(self, fptr:TextIOWrapper):

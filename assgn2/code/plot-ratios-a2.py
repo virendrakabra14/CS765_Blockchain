@@ -63,8 +63,8 @@ for dir in os.listdir(directory):
             for peer, chain in chains.items():
                 if peer==adv:
                     continue
+                num_chains += 1
                 for blk in chain:
-                    num_chains += 1
                     if blk==0:
                         continue
                     else:
@@ -96,7 +96,7 @@ ax2.scatter(mpus_ratio.keys(), mpus_ratio.values(), edgecolors='b', facecolors='
 ax1.set_xticks(list(range(len(mpus_adv))))
 ax2.set_xticks(list(range(len(mpus_ratio))))
 ax1.set_yticks([e/10 for e in list(range(11))])
-# ax2.set_yticks([e/10 for e in list(range(11))])
+ax2.set_ylim(bottom=0)
 
 ax1.legend()
 ax2.legend()

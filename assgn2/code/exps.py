@@ -5,10 +5,10 @@ import sys
 import os
 import pathlib
 
-n_vals = [10]     # 100
+n_vals = [100]
 Ttx_vals = [10]
-zetas = [0.25]
-modes = ['selfish']
+zetas = [0.25, 0.5, 0.75]
+modes = ['selfish', 'stubborn']
 exp_id = 0
 
 executable = "python"

@@ -11,7 +11,7 @@ curr_time = 0.0
 parser = ap()
 parser.add_argument('-n', '--nodes', type = int, help = 'Number of nodes', default = 10)
 parser.add_argument('-z0', '--slow', type = float, help = 'Fraction of slow nodes', default = 0.5)
-parser.add_argument('-z1', '--low', type = float, help = 'Fraction of low CPU nodes', default = 0.2)
+parser.add_argument('-z1', '--low', type = float, help = 'Fraction of low CPU nodes', default = 0.9)
 parser.add_argument('-mode', '--mode', type = str, help = 'Mode of adversary', default = 'selfish')
 parser.add_argument('-zeta', '--zeta', type = float, help = 'Fraction of honest connected to adversary', default = 0.25)
 parser.add_argument('-f', '--frac', type = float, help = 'Fraction of hashing power of adversary', default = 0.3)
