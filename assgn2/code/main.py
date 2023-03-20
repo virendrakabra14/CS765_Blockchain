@@ -9,7 +9,7 @@ from simulator import Simulator
 curr_time = 0.0
 
 parser = ap()
-parser.add_argument('-n', '--nodes', type = int, help = 'Number of nodes', default = 100)
+parser.add_argument('-n', '--nodes', type = int, help = 'Number of nodes', default = 10)
 parser.add_argument('-z0', '--slow', type = float, help = 'Fraction of slow nodes', default = 0.5)
 parser.add_argument('-z1', '--low', type = float, help = 'Fraction of low CPU nodes', default = 0.2)
 parser.add_argument('-mode', '--mode', type = str, help = 'Mode of adversary', default = 'selfish')
@@ -88,6 +88,6 @@ with open(f'data/{exp_id}/{mode}-peers.txt','w',encoding = 'utf-8') as f1:
             #     p.print_txns(f5)
             p.print_lc(stdout)
 with open(f'data/{exp_id}/{mode}-tree.txt','w',encoding = 'utf-8') as f3:
-    sim.print_tree(f3)
+    sim.print_tree_and_chains(f3)
 with open(f'data/{exp_id}/{mode}-lengths.txt','w',encoding = 'utf-8') as f4:
     sim.print_lengths(f4)

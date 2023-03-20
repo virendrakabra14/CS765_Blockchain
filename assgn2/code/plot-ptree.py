@@ -20,8 +20,6 @@ with open(filename, 'r', encoding='utf-8') as f:
     for line in f:
         line_processed = line.strip().split(" ")
         if len(line_processed)!=2:
-            if line_processed==["0"]:
-                continue
             urllib.request.urlretrieve(f"https://chart.googleapis.com/chart?cht=gv&chl=digraph{{{edges}}}", f"plots/{exp_id}/{mode}-peer{count}.png")
             count += 1
             edges = ""

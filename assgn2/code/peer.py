@@ -12,6 +12,7 @@ class Peer:
     # genesis block
     genesis = Blk(None,None,[])
     n = 0
+    adv_blks = 0        # number of blocks created by adversary
 
     # construct peer
     def __init__(self, n, pid):
@@ -144,6 +145,7 @@ class Peer:
                         blk.txns.add(tid)
         self.latest_blk = blk
         if self.adv:
+            Peer.adv_blks += 1
             self.own_chain.append(blk)
         blk.blk_size = blk_size
         self.blk_all[blk.blk_id] = eve.timestamp
