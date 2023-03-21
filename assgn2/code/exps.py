@@ -8,7 +8,7 @@ import pathlib
 n_vals = [100]
 Ttx_vals = [10]
 zetas = [0.25, 0.5, 0.75]
-fracs = [0.3]   # attacker hashing power
+fracs = [0.5]   # attacker hashing power
 z0s = [0.5]     # slow
 z1s = [0.9]     # lowCPU
 modes = ['selfish', 'stubborn']
