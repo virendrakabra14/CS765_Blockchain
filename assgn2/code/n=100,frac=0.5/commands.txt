@@ -1,6 +1,0 @@
-python main.py -n 100 -Ttx 10 -zeta 0.25 --frac 0.5 -z0 0.5 -z1 0.9 -mode selfish -T 5000 -exp 0
-python main.py -n 100 -Ttx 10 -zeta 0.25 --frac 0.5 -z0 0.5 -z1 0.9 -mode stubborn -T 5000 -exp 1
-python main.py -n 100 -Ttx 10 -zeta 0.5 --frac 0.5 -z0 0.5 -z1 0.9 -mode selfish -T 5000 -exp 2
-python main.py -n 100 -Ttx 10 -zeta 0.5 --frac 0.5 -z0 0.5 -z1 0.9 -mode stubborn -T 5000 -exp 3
-python main.py -n 100 -Ttx 10 -zeta 0.75 --frac 0.5 -z0 0.5 -z1 0.9 -mode selfish -T 5000 -exp 4
-python main.py -n 100 -Ttx 10 -zeta 0.75 --frac 0.5 -z0 0.5 -z1 0.9 -mode stubborn -T 5000 -exp 5
