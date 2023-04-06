@@ -9,7 +9,7 @@ w3 = Web3(provider)
 print(w3.is_connected())
 
 #replace the address with your contract address (!very important)
-deployed_contract_address = '0x8F046F919BA03C951C9E6c1A5439f6C62F7341bd'
+deployed_contract_address = '0x24FF87d5AfAAd68f8369Fa1d3b6d28d6ab2472ba'
 
 #path of the contract json file. edit it with your contract json file
 compiled_contract_path ="build/contracts/Payment.json"
