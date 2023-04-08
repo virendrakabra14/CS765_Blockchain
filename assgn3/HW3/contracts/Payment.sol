@@ -14,7 +14,7 @@ contract Payment{
     mapping(int => string) id_to_name;
     mapping(int => Edge[]) edges;
 
-    function registerUser (int user_id, string memory user_name) public {
+    function registerUser(int user_id, string memory user_name) public {
         id_to_index[user_id] = ids.length;
         ids.push(user_id);
         id_to_name[user_id] = user_name;
@@ -62,7 +62,11 @@ contract Payment{
         }
     }
 
-    function getEdges() public view returns (int[][] memory){
+    function getIndexFromId(int id) public view returns (uint) {
+        return id_to_index[id];
+    }
+
+    function getEdges() public view returns (int[][] memory) {
         int[][] memory arr = new int[][](ids.length);
         uint self_index;
         uint other_index;
