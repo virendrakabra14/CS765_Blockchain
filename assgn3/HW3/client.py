@@ -1,35 +1,13 @@
 import json
 from web3 import Web3
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
 
-#connect to the local ethereum blockchain
-provider = Web3.HTTPProvider('http://127.0.0.1:8545')
-w3 = Web3(provider)
-#check if ethereum is connected
-print(w3.is_connected())
-
-#replace the address with your contract address (!very important)
-deployed_contract_address = '0xb35A46Fb54C0216AeC0D3eb0f3Fd44f06be43d7C'
-
-#path of the contract json file. edit it with your contract json file
-compiled_contract_path ="build/contracts/Payment.json"
-with open(compiled_contract_path) as file:
-    contract_json = json.load(file)
-    contract_abi = contract_json['abi']
-contract = w3.eth.contract(address = deployed_contract_address, abi = contract_abi)
-
-'''
-#Calling a contract function createAcc(uint,uint,uint)
-txn_receipt = contract.functions.createAcc(1, 2, 5).transact({'txType':"0x3", 'from':w3.eth.accounts[0], 'gas':2409638})
-txn_receipt_json = json.loads(w3.to_json(txn_receipt))
-print(txn_receipt_json) # print transaction hash
-
-# print block info that has the transaction)
-print(w3.eth.get_transaction(txn_receipt_json)) 
-
-#Call a read only contract function by replacing transact() with call()
-
-'''
+"""
+Functions interacting with the contract
+"""
 
 def registerUser(user_id, user_name, contract, from_acc):
     contract.functions.registerUser(user_id, user_name).transact({'from':from_acc})
@@ -42,15 +20,16 @@ def createAcc(user_id_1, user_id_2, contract, from_acc, total_balance=None, mean
     assert total_balance%2 == 0
     contract.functions.createAcc(user_id_1, user_id_2, total_balance).transact({'from':from_acc})
 
-def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1):
+def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1, print_error=False):
     edges = contract.functions.getEdges().call()
     num_nodes = len(edges)
     index_1 = contract.functions.getIndexFromId(user_id_1).call()
     index_2 = contract.functions.getIndexFromId(user_id_2).call()
 
     if index_1>=num_nodes or index_2>=num_nodes:
-        print("transaction failure: nodes not present")
-        return
+        if print_error:
+            print("transaction failure: nodes not present")
+            return False
     
     visited = [-1 for i in range(num_nodes)]    # works as both `visited` and `distance` arrays
     parents = [set() for i in range(num_nodes)]
@@ -81,34 +60,99 @@ def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1):
     while node != index_1:
         path.insert(0, node)
         if len(parents[node]) == 0:
-            print("transaction failure: no path found")
-            return
+            if print_error:
+                print("transaction failure: no path found")
+                return False
         node = list(parents[node])[0]
     path.insert(0, index_1)
 
     for i in range(len(path)-1):
         id1 = contract.functions.getIdFromIndex(path[i]).call()
         id2 = contract.functions.getIdFromIndex(path[i+1]).call()
-        contract.functions.sendAmount(id1, id2, amount).transact({'from':from_acc})
+        try:
+            contract.functions.sendAmount(id1, id2, amount).transact({'from':from_acc})
+        except:
+            if print_error:
+                print("transaction failure: contract function raised an exception")
+            return False
+    
+    return True
 
 def closeAccount(user_id_1, user_id_2, contract, from_acc):
     contract.functions.closeAccount(user_id_1, user_id_2).transact({'from':from_acc})
 
-###
 
-# print(list(contract.functions))
+if __name__=="__main__":
+
+    """
+    Initial connection setup
+    """
+
+    # connect to the local ethereum blockchain
+    provider = Web3.HTTPProvider('http://127.0.0.1:8545')
+    w3 = Web3(provider)
+    # check if ethereum is connected
+    assert w3.is_connected() == True
+
+    # contract address
+    deployed_contract_address = '0x2b0B654c303DDdA4Ca4bA2349a5f7E582effedB8'
+
+    # path to contract json file
+    compiled_contract_path ="build/contracts/Payment.json"
+    with open(compiled_contract_path) as file:
+        contract_json = json.load(file)
+        contract_abi = contract_json['abi']
+    contract = w3.eth.contract(address = deployed_contract_address, abi = contract_abi)
 
 
-# registerUser(1, "user1", contract, w3.eth.accounts[0])    # use register, createAcc operations once
-# registerUser(5, "user5", contract, w3.eth.accounts[0])
-# registerUser(7, "user7", contract, w3.eth.accounts[0])
-# createAcc(1, 5, contract, w3.eth.accounts[0], 20)
-# createAcc(5, 7, contract, w3.eth.accounts[0], 10)
+    """
+    Simulation
+    """
 
-# sendAmount(1, 7, contract, w3.eth.accounts[0], 1)
+    num_users = 100
+    num_txns = 1000
+    ratio_interval = 100
+    ratios = {}
+    ratios_moving = {}
 
-edges = contract.functions.getEdges().call()
-print(edges)
+    # register users
 
-# txn_receipt_json = json.loads(w3.to_json(txn_receipt))
-# print(txn_receipt) # print transaction hash
+    for i in range(num_users):
+        registerUser(i, f"user{i}", contract, w3.eth.accounts[0])
+    user_ids = list(range(num_users))
+
+    # create connected graph, and joint accounts
+
+    graph = nx.powerlaw_cluster_graph(n=100, m=5, p=0.3)
+    while not nx.is_connected(graph):
+        graph = nx.powerlaw_cluster_graph(n=100, m=5, p=0.3)
+    
+    for edge in graph.edges:
+        createAcc(edge[0], edge[1], contract, w3.eth.accounts[0])   # mean balance: 10
+    
+    # perform transactions
+
+    successful_in_this_interval = 0
+    successful_total = 0
+
+    for i in range(num_txns):
+        user_1, user_2 = random.sample(user_ids, k=2)
+        if sendAmount(user_1, user_2, contract, w3.eth.accounts[0], amount=1):
+            successful_in_this_interval += 1
+            successful_total += 1
+        if i % ratio_interval == (ratio_interval-1):
+            ratios[i+1] = successful_in_this_interval/ratio_interval
+            ratios_moving[i+1] = successful_total/(i+1)
+            successful_in_this_interval = 0
+    
+    # plot
+
+    ratios = dict(sorted(ratios.items()))
+    ratios_moving = dict(sorted(ratios_moving.items()))
+    print(f"{ratios=}")
+    print(f"{ratios_moving=}")
+    
+    (fig, ax) = plt.subplots()
+    ax.scatter(ratios.keys(), ratios.values(), label='Ratio')
+    ax.scatter(ratios_moving.keys(), ratios_moving.values(), label='Moving Ratio')
+    fig.savefig("plot_ratios.png", bbox_inches="tight")
