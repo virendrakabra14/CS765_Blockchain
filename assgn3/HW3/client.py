@@ -29,7 +29,7 @@ def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1, print_error=F
     if index_1>=num_nodes or index_2>=num_nodes:
         if print_error:
             print("transaction failure: nodes not present")
-            return False
+        return False
     
     visited = [-1 for i in range(num_nodes)]    # works as both `visited` and `distance` arrays
     parents = [set() for i in range(num_nodes)]
@@ -42,9 +42,8 @@ def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1, print_error=F
     while not len(queue) == 0:
         node = queue.pop(0)
         for i in range(num_nodes):
-            if edges[node][i] >= amount:        # if only optimal paths to be considered,
-                                                # change `amount` to 1
-                                                # (anyways, `amount` is always 1 in doc)
+            if edges[node][i] >= 0:             # for considering paths having
+                                                # sufficient funds, use `>= amount`
                 if visited[i] == -1:
                     visited[i] = visited[node]+1
                     parents[i].add(node)
@@ -55,6 +54,7 @@ def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1, print_error=F
         if node == index_2:
             break
 
+    # get a shortest path
     path = []
     node = index_2
     while node != index_1:
@@ -62,9 +62,17 @@ def sendAmount(user_id_1, user_id_2, contract, from_acc, amount=1, print_error=F
         if len(parents[node]) == 0:
             if print_error:
                 print("transaction failure: no path found")
-                return False
-        node = list(parents[node])[0]
+            return False
+        parents[node] = sorted(parents[node], key=lambda x: -edges[x][node])
+        node = list(parents[node])[0]   # heuristic: parent with highest fund
     path.insert(0, index_1)
+
+    # check for sufficient funds along this path
+    for i in range(len(path)-1):
+        if edges[path[i]][path[i+1]] < amount:
+            if print_error:
+                print("transaction failure: insufficient funds along shortest path")
+            return
 
     for i in range(len(path)-1):
         id1 = contract.functions.getIdFromIndex(path[i]).call()
@@ -89,13 +97,13 @@ if __name__=="__main__":
     """
 
     # connect to the local ethereum blockchain
-    provider = Web3.HTTPProvider('http://127.0.0.1:8545')
+    provider = Web3.HTTPProvider('http://127.0.0.1:8545', request_kwargs={'timeout': 600})
     w3 = Web3(provider)
     # check if ethereum is connected
     assert w3.is_connected() == True
 
     # contract address
-    deployed_contract_address = '0x2b0B654c303DDdA4Ca4bA2349a5f7E582effedB8'
+    deployed_contract_address = '0x11f8e63aD45d88097d55e24047A1c092866B667A'
 
     # path to contract json file
     compiled_contract_path ="build/contracts/Payment.json"
@@ -141,6 +149,7 @@ if __name__=="__main__":
             successful_in_this_interval += 1
             successful_total += 1
         if i % ratio_interval == (ratio_interval-1):
+            print(i)
             ratios[i+1] = successful_in_this_interval/ratio_interval
             ratios_moving[i+1] = successful_total/(i+1)
             successful_in_this_interval = 0
