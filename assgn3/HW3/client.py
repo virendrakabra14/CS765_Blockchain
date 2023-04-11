@@ -121,7 +121,7 @@ if __name__=="__main__":
     assert w3.is_connected() == True
 
     # contract address
-    deployed_contract_address = '0xd42383151bE5FF14210dEdE8f548Ef0B6b584F86'
+    deployed_contract_address = '0x7b3b490B2D42521Abb60EeE2dd870DA82c0bd706'
 
     # path to contract json file
     compiled_contract_path ="build/contracts/Payment.json"
@@ -187,12 +187,20 @@ if __name__=="__main__":
     print(f"{ratios=}")
     print(f"{ratios_moving=}")
 
+    # for shortest path (`>= 0`):
     # ratios={100: 0.78, 200: 0.84, 300: 0.83, 400: 0.82, 500: 0.81, 600: 0.8, 700: 0.76, 800: 0.7, 900: 0.73, 1000: 0.74}
     # ratios_moving={100: 0.78, 200: 0.81, 300: 0.8166666666666667, 400: 0.8175, 500: 0.816, 600: 0.8133333333333334, 700: 0.8057142857142857, 800: 0.7925, 900: 0.7855555555555556, 1000: 0.781}
+
+    # for optimal path with sufficient funds (`>= amount`)
+    # ratios={100: 1.0, 200: 1.0, 300: 1.0, 400: 1.0, 500: 1.0, 600: 0.99, 700: 1.0, 800: 1.0, 900: 0.99, 1000: 1.0}
+    # ratios_moving={100: 1.0, 200: 1.0, 300: 1.0, 400: 1.0, 500: 1.0, 600: 0.9983333333333333, 700: 0.9985714285714286, 800: 0.99875, 900: 0.9977777777777778, 1000: 0.998}
     
     (fig, ax) = plt.subplots()
     ax.plot(ratios.keys(), ratios.values(), marker='o', label='Ratio')
-    ax.plot(ratios_moving.keys(), ratios_moving.values(), marker='o', label='Moving Ratio')
-    ax.set_ylim(0,1)
-    ax.legend()
-    fig.savefig("plot_ratios.png", bbox_inches="tight")
+    ax.plot(ratios_moving.keys(), ratios_moving.values(), linestyle='--', marker='o', label='Moving Ratio')
+    ax.set_ylim(0,1.1)
+    ax.set_xticks(list(ratios.keys()))
+    ax.set_xlabel('Total number of payments tried')
+    ax.set_ylabel('Fraction of successful payments')
+    ax.legend(loc='lower right')
+    fig.savefig("ratios_shortest-path.png", bbox_inches="tight")
