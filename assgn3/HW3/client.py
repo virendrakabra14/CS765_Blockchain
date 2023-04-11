@@ -121,7 +121,7 @@ if __name__=="__main__":
     assert w3.is_connected() == True
 
     # contract address
-    deployed_contract_address = '0x8218D770803932e684312F56aae68ee0b096aE75'
+    deployed_contract_address = '0xd42383151bE5FF14210dEdE8f548Ef0B6b584F86'
 
     # path to contract json file
     compiled_contract_path ="build/contracts/Payment.json"
@@ -170,12 +170,12 @@ if __name__=="__main__":
     successful_total = 0
 
     for i in range(num_txns):
+        print(i)
         user_1, user_2 = random.sample(user_ids, k=2)
         if interact_obj.sendAmount(user_1, user_2, amount=1):
             successful_in_this_interval += 1
             successful_total += 1
         if i % ratio_interval == (ratio_interval-1):
-            print(i)
             ratios[i+1] = successful_in_this_interval/ratio_interval
             ratios_moving[i+1] = successful_total/(i+1)
             successful_in_this_interval = 0
@@ -186,8 +186,13 @@ if __name__=="__main__":
     ratios_moving = dict(sorted(ratios_moving.items()))
     print(f"{ratios=}")
     print(f"{ratios_moving=}")
+
+    # ratios={100: 0.78, 200: 0.84, 300: 0.83, 400: 0.82, 500: 0.81, 600: 0.8, 700: 0.76, 800: 0.7, 900: 0.73, 1000: 0.74}
+    # ratios_moving={100: 0.78, 200: 0.81, 300: 0.8166666666666667, 400: 0.8175, 500: 0.816, 600: 0.8133333333333334, 700: 0.8057142857142857, 800: 0.7925, 900: 0.7855555555555556, 1000: 0.781}
     
     (fig, ax) = plt.subplots()
-    ax.scatter(ratios.keys(), ratios.values(), label='Ratio')
-    ax.scatter(ratios_moving.keys(), ratios_moving.values(), label='Moving Ratio')
+    ax.plot(ratios.keys(), ratios.values(), marker='o', label='Ratio')
+    ax.plot(ratios_moving.keys(), ratios_moving.values(), marker='o', label='Moving Ratio')
+    ax.set_ylim(0,1)
+    ax.legend()
     fig.savefig("plot_ratios.png", bbox_inches="tight")
