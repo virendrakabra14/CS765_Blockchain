@@ -3,6 +3,7 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Payment {
 
+    // edge in the network
     struct Edge {
         int other_id;
         int self_bal;
@@ -10,10 +11,13 @@ contract Payment {
     }
 
     int[] ids;
+
+    // mapping to store data
     mapping(int => uint) id_to_index;
     mapping(int => string) id_to_name;
     mapping(int => Edge[]) edges;
 
+    // register user
     function registerUser(int user_id, string memory user_name) public {
         id_to_index[user_id] = ids.length;
         ids.push(user_id);
@@ -21,15 +25,19 @@ contract Payment {
         // edges[user_id] default to []
     }
 
+    // create account
     function createAcc(int user_id_1, int user_id_2, int balance) public {
         require(balance%2 == 0, "Initial balance must be divisible by 2");
         edges[user_id_1].push(Edge(user_id_2, balance/2, balance/2));
         edges[user_id_2].push(Edge(user_id_1, balance/2, balance/2));
     }
 
+    // transaction
     function sendAmount(int user_id_1, int user_id_2, int amount) public {
         // python client ensures that there is an account
         uint i;
+
+        // validating joint accounts
         for(i=0; i<edges[user_id_1].length; i++) {
             if(edges[user_id_1][i].other_id == user_id_2) {
                 require(edges[user_id_1][i].self_bal >= amount);
@@ -46,6 +54,7 @@ contract Payment {
         }
     }
 
+    // remove edge
     function closeAccount(int user_id_1, int user_id_2) public {
         uint i;
         for(i=0; i<edges[user_id_1].length; i++) {

@@ -5,7 +5,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
-
 class Interact:
     """
     Class for interaction with the contract
@@ -16,9 +15,11 @@ class Interact:
         self.from_acc = from_acc
         self.adj_matrix = None
 
+    # register
     def registerUser(self, user_id, user_name):
         self.contract.functions.registerUser(user_id, user_name).transact({'from':self.from_acc})
 
+    # create edge
     def createAcc(self, user_id_1, user_id_2, total_balance=None, mean_balance=10):
         if total_balance is None:
             total_balance = int(np.random.exponential(scale=mean_balance))
@@ -27,9 +28,11 @@ class Interact:
         assert total_balance%2 == 0
         self.contract.functions.createAcc(user_id_1, user_id_2, total_balance).transact({'from':self.from_acc})
 
+    # fetch the matrix
     def get_matrix(self):
         self.adj_matrix = self.contract.functions.getEdges().call()
 
+    # transaction
     def sendAmount(self, user_id_1, user_id_2, amount=1, print_error=False):
         # Not calling getEdges() every time, as the simulation
         # does not involve creating/closing accounts after txns start.
@@ -101,9 +104,10 @@ class Interact:
                 if print_error:
                     print("transaction failure: contract function raised an exception")
                 return False
-        
+
         return True
 
+    # remove edge
     def closeAccount(self, user_id_1, user_id_2, from_acc):
         self.contract.functions.closeAccount(user_id_1, user_id_2).transact({'from':from_acc})
 
@@ -121,7 +125,7 @@ if __name__=="__main__":
     assert w3.is_connected() == True
 
     # contract address
-    deployed_contract_address = '0x7b3b490B2D42521Abb60EeE2dd870DA82c0bd706'
+    deployed_contract_address = '0x921e68d32E9cA7422d2154021C8Bf900713bdb21'
 
     # path to contract json file
     compiled_contract_path ="build/contracts/Payment.json"
@@ -129,7 +133,6 @@ if __name__=="__main__":
         contract_json = json.load(file)
         contract_abi = contract_json['abi']
     contract = w3.eth.contract(address = deployed_contract_address, abi = contract_abi)
-
 
     """
     Simulation
@@ -144,9 +147,8 @@ if __name__=="__main__":
     interact_obj = Interact(contract=contract, from_acc=w3.eth.accounts[0])
 
     # register users
-
-    for i in range(num_users):
-        interact_obj.registerUser(i, f"user{i}")
+    for j in range(num_users):
+        interact_obj.registerUser(j, f"user{j}")
     user_ids = list(range(num_users))
 
     # create connected graph, and joint accounts
@@ -157,10 +159,10 @@ if __name__=="__main__":
     graph = nx.powerlaw_cluster_graph(n=100, m=5, p=0.3)
     while not nx.is_connected(graph):
         graph = nx.powerlaw_cluster_graph(n=100, m=5, p=0.3)
-    
+
     for edge in graph.edges:
         interact_obj.createAcc(edge[0], edge[1])   # mean balance: 10
-    
+
     # get matrix
     interact_obj.get_matrix()
 
@@ -179,28 +181,32 @@ if __name__=="__main__":
             ratios[i+1] = successful_in_this_interval/ratio_interval
             ratios_moving[i+1] = successful_total/(i+1)
             successful_in_this_interval = 0
-    
+
     # plot
 
     ratios = dict(sorted(ratios.items()))
     ratios_moving = dict(sorted(ratios_moving.items()))
     print(f"{ratios=}")
     print(f"{ratios_moving=}")
-
-    # for shortest path (`>= 0`):
-    # ratios={100: 0.78, 200: 0.84, 300: 0.83, 400: 0.82, 500: 0.81, 600: 0.8, 700: 0.76, 800: 0.7, 900: 0.73, 1000: 0.74}
-    # ratios_moving={100: 0.78, 200: 0.81, 300: 0.8166666666666667, 400: 0.8175, 500: 0.816, 600: 0.8133333333333334, 700: 0.8057142857142857, 800: 0.7925, 900: 0.7855555555555556, 1000: 0.781}
-
-    # for optimal path with sufficient funds (`>= amount`)
-    # ratios={100: 1.0, 200: 1.0, 300: 1.0, 400: 1.0, 500: 1.0, 600: 0.99, 700: 1.0, 800: 1.0, 900: 0.99, 1000: 1.0}
-    # ratios_moving={100: 1.0, 200: 1.0, 300: 1.0, 400: 1.0, 500: 1.0, 600: 0.9983333333333333, 700: 0.9985714285714286, 800: 0.99875, 900: 0.9977777777777778, 1000: 0.998}
     
     (fig, ax) = plt.subplots()
     ax.plot(ratios.keys(), ratios.values(), marker='o', label='Ratio')
-    ax.plot(ratios_moving.keys(), ratios_moving.values(), linestyle='--', marker='o', label='Moving Ratio')
+    ax.plot(ratios_moving.keys(), ratios_moving.values(),linestyle='--', marker='o', label='Moving Ratio')
     ax.set_ylim(0,1.1)
     ax.set_xticks(list(ratios.keys()))
     ax.set_xlabel('Total number of payments tried')
     ax.set_ylabel('Fraction of successful payments')
     ax.legend(loc='lower right')
     fig.savefig("ratios_shortest-path.png", bbox_inches="tight")
+
+################################# one of our simulations ###########################
+
+# for shortest path (`>= 0`):
+# ratios={100: 0.78, 200: 0.84, 300: 0.83, 400: 0.82, 500: 0.81, 600: 0.8, 700: 0.76, 800: 0.7, 900: 0.73, 1000: 0.74}
+# ratios_moving={100: 0.78, 200: 0.81, 300: 0.8166666666666667, 400: 0.8175, 500: 0.816, 600: 0.8133333333333334, 700: 0.8057142857142857, 800: 0.7925, 900: 0.7855555555555556, 1000: 0.781}
+
+# for optimal path with sufficient funds (`>= amount`)
+# ratios={100: 1.0, 200: 1.0, 300: 1.0, 400: 1.0, 500: 1.0, 600: 0.99, 700: 1.0, 800: 1.0, 900: 0.99, 1000: 1.0}
+# ratios_moving={100: 1.0, 200: 1.0, 300: 1.0, 400: 1.0, 500: 1.0, 600: 0.9983333333333333, 700: 0.9985714285714286, 800: 0.99875, 900: 0.9977777777777778, 1000: 0.998}
+
+####################################################################################
