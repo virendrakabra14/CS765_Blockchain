@@ -192,7 +192,7 @@ if __name__=="__main__":
     (fig, ax) = plt.subplots()
     ax.plot(ratios.keys(), ratios.values(), marker='o', label='Ratio')
     ax.plot(ratios_moving.keys(), ratios_moving.values(),linestyle='--', marker='o', label='Moving Ratio')
-    ax.set_ylim(0,1.1)
+    ax.set_ylim(0.6,0.9)
     ax.set_xticks(list(ratios.keys()))
     ax.set_xlabel('Total number of payments tried')
     ax.set_ylabel('Fraction of successful payments')
